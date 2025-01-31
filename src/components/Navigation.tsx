@@ -16,6 +16,11 @@ export default function Navigation() {
                     </Link>
                 </li>
                 <li>
+                    <Link href="/infrastructure" className="navigation__link">
+                        인프라
+                    </Link>
+                </li>
+                <li>
                     <Link href="/materials" className="navigation__link">
                         재료
                     </Link>

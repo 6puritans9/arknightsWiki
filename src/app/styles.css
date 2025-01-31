@@ -4,14 +4,23 @@ html {
 }
 
 body {
+  margin: 0;
+}
+body > :not(header) {
   padding: 0 3rem;
+}
+
+p {
+  font-size: 1.7rem;
 }
 
 header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: 1rem;
+  padding: 1rem 3rem 1rem 3rem;
+  margin-bottom: 1rem;
+  background-color: bisque;
 }
 
 .title-section__link {
@@ -48,6 +57,19 @@ header {
 }
 .navigation__link:hover {
   background-color: rgba(0, 0, 0, 0.1);
+}
+
+.cards-overview {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-gap: 1rem;
+}
+.cards-overview a {
+  text-decoration: none;
+  color: inherit;
+}
+.cards-overview__icon:hover {
+  transform: scale(1.1);
 }
 
 /*# sourceMappingURL=styles.css.map */

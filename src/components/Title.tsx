@@ -14,6 +14,7 @@ const Title: React.FC = () => {
                     height={50}
                     className="title-section__image"
                 />
+                {/* 이미지 - 코코넛콘 */}
             </Link>
         </section>
     );

@@ -10,6 +10,7 @@
         "sass": "sass src/sass/main.scss src/app/styles.css -w"
     },
     "dependencies": {
+        "@supabase/supabase-js": "^2.47.16",
         "next": "15.1.4",
         "react": "^19.0.0",
         "react-dom": "^19.0.0"
@@ -22,6 +23,7 @@
         "eslint": "^9",
         "eslint-config-next": "15.1.4",
         "sass": "^1.83.1",
+        "supabase": "^2.6.8",
         "typescript": "^5"
     }
 }
