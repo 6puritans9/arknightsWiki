@@ -1,14 +1,19 @@
-.cards-overview {
+.op-details {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    grid-gap: 1rem;
 
-    a {
-        text-decoration: none;
-        color: inherit;
+    &__header {
+        display: flex;
     }
 
-    &__icon:hover {
-        transform: scale(1.1);
+    &__content {
+    }
+
+    &__tabs {
+        cursor: pointer;
+        // background-color: #36373d;
+        // border: solid #484950;
+        // border-width: 2px 2px 5px;
+        // color: #fff;
+        // opacity: 1;
     }
 }

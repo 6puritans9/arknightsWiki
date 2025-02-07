@@ -1,6 +1,23 @@
 html {
     background-color: beige;
-    font-size: 0.625rem; // 10px
+    box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+a {
+    // color: abstracts.$brand-color;
+    text-decoration: none;
+    color: inherit;
+
+    // @include abstracts.on-event {
+    //     color: abstracts.$text-color;
+    //     text-decoration: underline;
+    // }
 }
 
 body {
@@ -8,8 +25,4 @@ body {
         padding: 0 3rem;
     }
     margin: 0;
-    // max-width: 100%;
-    // width: 100vw;
-    // overflow-x: auto;
-    // white-space: nowrap;
 }

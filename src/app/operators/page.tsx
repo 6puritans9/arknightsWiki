@@ -1,10 +1,8 @@
 "use client";
 
-import Overview from "@/components/Overview";
-import Details from "@/components/Details";
-import getOperators from "@/lib/apiOperators";
-import { Database } from "@/lib/supabase";
-import supabase from "@/lib/supabaseClient";
+import Icon from "@/components/Icon";
+import { getOperators, getOperator } from "@/lib/apiOperators";
+import { Operator } from "@/lib/types";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
@@ -34,10 +32,10 @@ const Operators = () => {
     if (loading) return <div>Loading...</div>;
 
     return (
-        <section className="cards-overview">
+        <section className="grid grid__icon">
             {operators.map((operator) => (
                 <Link key={operator.id} href={`/operators/${operator.name_en}`}>
-                    <Overview operator={operator} />
+                    <Icon operator={operator} />
                 </Link>
             ))}
         </section>
