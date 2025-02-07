@@ -1,18 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Details from "@/components/Details";
-import { getOperator } from "@/lib/apiOperators";
-import { Database } from "@/lib/supabase";
 import { useParams } from "next/navigation";
+import Details from "@/components/Details";
+import { Operator } from "@/lib/types";
+import { getOperator } from "@/lib/apiOperators";
 
-type Operator = Database["public"]["Tables"]["operators"]["Row"];
-
-interface OperatorDetailProps {
-    name: string;
-}
-
-const OperatorDetail: React.FC<OperatorDetailProps> = () => {
+const OperatorDetail = () => {
     const params = useParams();
     const { name_en } = params;
     const [operator, setOperator] = useState<Operator | null>(null);

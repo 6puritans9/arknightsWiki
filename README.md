@@ -1,36 +1,105 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# <span style="color:white">ArknightsWiki</span>
 
-## Getting Started
+Greetings Doctor!
+This is (yet another) Arknights Wiki, which is my first web project🥹.
 
-First, run the development server:
+It provides character profiles with dynamic tags, tier list, squad with faction relations, base skill relations and some other features.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+It also offers language options among English, Korean and Chinese.
+
+I'm delighted that I did have made a thing that I hoped, and wish you find it useful.
+
+Enjoy!🦄
+
+## Tools
+
+![Next.js](./public/docs/next-js.svg)
+![Typescript](./public/docs/typescript.svg)
+![Sass](./public/docs/sass.svg)
+![Supabase](./public/docs/supabase.svg)
+
+## Architecture
+
+### Frontend
+
+```
+                    home
+                     |
+    -----------------------------------------
+    |          |          |                 |
+/operators    /tierlist   /infrastructure   /materials
+    |
+  [name]
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### DB
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Operators | Operators_Factions | Factions |
+| --------- | ------------------ | -------- |
+| id        | Title              | id       |
+| Paragraph | Text               | 1        |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Implements
 
-## Learn More
+### React
 
-To learn more about Next.js, take a look at the following resources:
+_Home_
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+[]
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+_Operators_
 
-## Deploy on Vercel
+```
+[] Tab Selection(useState)
+[] Filter by category
+  [] name
+  [] rarity
+  [] class
+    [] branch?
+  [] faction
+[] Tags
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### CSS
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+_Home_
+
+```
+[] Banners(Carousel)
+```
+
+_Operators_Overall_
+
+```
+[] Grid(_grid.scss)
+  [] 6 repeated columns
+  [] when hovered, the icon shines according to its rarity
+  []
+[] Modal
+  [] when hovered, a preview pops up as a modal
+  []
+[]
+```
+
+_Operators_Details_
+
+```
+[]
+```
+
+_Tierlist_
+
+_Infrastructure_
+
+### DB
+
+_Operators_Join_
+
+### Deploy
+
+```
+[]
+[] 2
+```

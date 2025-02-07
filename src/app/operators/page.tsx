@@ -6,30 +6,29 @@ import { Operator } from "@/lib/types";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
-type Operator = Database["public"]["Tables"]["operators"]["Row"];
-
 const Operators = () => {
     const [operators, setOperators] = useState<Operator[]>([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchOperators = async () => {
-            const { data, error } = await supabase
-                .from("operators")
-                .select("id, name_en, class_en, branch_en, rarity");
-
-            if (error) {
-                console.error(error);
-            } else {
+            try {
+                const data = await getOperators();
                 setOperators(data);
+            } catch (error) {
+                console.error(error);
+                setError("Failed to fetch operators");
+            } finally {
+                setLoading(false);
             }
-            setLoading(false);
         };
 
         fetchOperators();
     }, []);
 
     if (loading) return <div>Loading...</div>;
+    if (error) return <div>{error}</div>;
 
     return (
         <section className="grid grid__icon">

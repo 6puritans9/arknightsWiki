@@ -1,3 +1,23 @@
+.op-grid {
+    display: grid;
+
+    &__header {
+        display: flex;
+    }
+
+    &__content {
+    }
+
+    &__tabs {
+        cursor: pointer;
+        // background-color: #36373d;
+        // border: solid #484950;
+        // border-width: 2px 2px 5px;
+        // color: #fff;
+        // opacity: 1;
+    }
+}
+
 .op-details {
     display: grid;
 
