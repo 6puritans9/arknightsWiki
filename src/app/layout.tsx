@@ -3,6 +3,7 @@ import { Paperlogy } from "./styles/fonts";
 import "./styles.css";
 import Navigation from "../components/Navigation";
 import Title from "@/components/Title";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
     title: "명일방주 위키",
@@ -24,6 +25,7 @@ export default function RootLayout({
                     </nav>
                 </header>
                 {children}
+                <Footer />
             </body>
         </html>
     );
