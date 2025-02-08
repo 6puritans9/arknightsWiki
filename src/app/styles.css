@@ -324,6 +324,7 @@ a {
 }
 
 body {
+  overflow-x: hidden;
   margin: 0;
 }
 body > :not(header) {
@@ -331,6 +332,7 @@ body > :not(header) {
 }
 
 html {
+  font-family: "Paperlogy", sans-serif;
   font-size: 0.625rem;
 }
 

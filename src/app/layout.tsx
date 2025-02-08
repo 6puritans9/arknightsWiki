@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Paperlogy } from "./styles/fonts";
 import "./styles.css";
 import Navigation from "../components/Navigation";
 import Title from "@/components/Title";
@@ -14,7 +15,7 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="ko">
+        <html lang="en" className={`${Paperlogy}`}>
             <body className={"home"}>
                 <header>
                     <Title />

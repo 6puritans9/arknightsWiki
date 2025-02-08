@@ -21,6 +21,8 @@ a {
 }
 
 body {
+    overflow-x: hidden;
+
     > :not(header) {
         padding: 0 3rem;
     }
