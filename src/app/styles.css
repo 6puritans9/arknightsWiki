@@ -448,7 +448,22 @@ header {
   display: flex;
 }
 .op-details__tabs {
+  display: flex;
+  justify-content: space-between;
   cursor: pointer;
+  background-color: #29c8cc;
+  font-style: italic;
+}
+.op-details__tabs > *:hover {
+  background-color: #36373d;
+  color: #fff;
+  opacity: 0.3;
+}
+.op-details__contents {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-gap: 1rem;
 }
 
 /*# sourceMappingURL=styles.css.map */

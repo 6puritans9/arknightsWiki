@@ -1,3 +1,5 @@
+@use "../abstracts/index" as vars;
+
 .op-grid {
     display: grid;
 
@@ -25,15 +27,26 @@
         display: flex;
     }
 
-    &__content {
+    &__tabs {
+        display: flex;
+        justify-content: space-between;
+        cursor: pointer;
+        background-color: vars.$base-color;
+        font-style: italic;
+
+        & > * {
+            &:hover {
+                background-color: #36373d;
+                color: #fff;
+                opacity: 0.3;
+            }
+        }
     }
 
-    &__tabs {
-        cursor: pointer;
-        // background-color: #36373d;
-        // border: solid #484950;
-        // border-width: 2px 2px 5px;
-        // color: #fff;
-        // opacity: 1;
+    &__contents {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        grid-gap: 1rem;
     }
 }

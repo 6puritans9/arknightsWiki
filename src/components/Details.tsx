@@ -24,9 +24,11 @@ const Details = ({ operator }: OperatorProps) => {
                     height={500}
                 ></Image>
             </section>
-            <section className="op-details__content">
+            <section>
                 <div className="op-details__tabs">
                     <Tabs onClick={(index) => () => setTab(index)} />
+                </div>
+                <div className="op-details__contents">
                     {tab === 0 && <Attributes operator={operator} />}
                     {tab === 1 && <Skills operator={operator} />}
                     {tab === 2 && <Review operator={operator} />}
@@ -51,22 +53,22 @@ const Tabs = ({ onClick }: onClickProps) => {
 
 const Attributes = ({ operator }: OperatorProps) => {
     return (
-        <div>
+        <>
             <p>{`Class: ${operator.class_en}`}</p>
-            <p>{operator.branch_en}</p>
+            <p>{`Branch: ${operator.branch_en}`}</p>
             <p>{operator.gender}</p>
             <p>{operator.position_en}</p>
-            <p>{operator.rarity}</p>
+            <p>{`Rarity: ${operator.rarity}`}</p>
             <h1>TAGS</h1>
-        </div>
+        </>
     );
 };
 
 const Skills = ({ operator }: OperatorProps) => {
     return (
-        <div>
+        <>
             <h1 style={{ color: "red" }}>SKILLS</h1>
-        </div>
+        </>
     );
 };
 
