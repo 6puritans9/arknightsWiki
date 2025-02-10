@@ -47,13 +47,13 @@ _Home_
 _Operators_
 
 ```
-[] Tab Selection(useState)
 [] Filter by category
   [] name
   [] rarity
   [] class
     [] branch?
   [] faction
+[x] Tab Selection(useState)
 [] Tags | Votes(to draw or not)
   [] Votes could be represented in shpae of rope fight
 ```
@@ -64,6 +64,8 @@ _Home_
 
 ```
 [] Banners(Carousel)
+[] Footer
+  [] Make it stick to the bottom
 ```
 
 _Operators_Overall_
