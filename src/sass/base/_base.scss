@@ -1,5 +1,4 @@
 html {
-    background-color: beige;
     box-sizing: border-box;
 }
 
@@ -10,14 +9,8 @@ html {
 }
 
 a {
-    // color: abstracts.$brand-color;
     text-decoration: none;
     color: inherit;
-
-    // @include abstracts.on-event {
-    //     color: abstracts.$text-color;
-    //     text-decoration: underline;
-    // }
 }
 
 body {

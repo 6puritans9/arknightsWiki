@@ -1,0 +1,25 @@
+.home {
+    display: flex;
+
+    &__image {
+    }
+
+    &__image--centered {
+        align-self: center;
+    }
+
+    &__banner {
+        &__notice {
+            margin-top: 5rem;
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        &__image {
+            width: 100vw;
+            max-width: 100%;
+            overflow: hidden;
+        }
+    }
+}

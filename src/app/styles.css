@@ -308,7 +308,6 @@ template {
 }
 
 html {
-  background-color: beige;
   box-sizing: border-box;
 }
 
@@ -346,7 +345,7 @@ header {
   justify-content: space-between;
   padding: 1rem 3rem 1rem 3rem;
   margin-bottom: 1rem;
-  background-color: bisque;
+  background-color: #29c8cc;
 }
 
 .title-section__link {
@@ -357,9 +356,6 @@ header {
   font-size: 2.5rem;
   font-weight: bold;
   color: #333;
-}
-.title-section__image {
-  align-self: center;
 }
 
 .navigation {
@@ -415,6 +411,24 @@ header {
   margin-top: 3rem;
   line-height: 1.5rem;
   text-align: right;
+}
+
+.home {
+  display: flex;
+}
+.home__image--centered {
+  align-self: center;
+}
+.home__banner__notice {
+  margin-top: 5rem;
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+}
+.home__banner__image {
+  width: 100vw;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .op-grid {

@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en" className={`${Paperlogy}`}>
-            <body className={"home"}>
+            <body>
                 <header>
                     <Title />
                     <nav>

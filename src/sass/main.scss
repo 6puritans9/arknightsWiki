@@ -3,9 +3,12 @@
 @use "./base/base";
 @use "./base/typography";
 
+@use "./components/carousel";
+
 @use "./layout/header";
 @use "./layout/navigation";
 @use "./layout/grid";
 @use "./layout/footer";
 
+@use "./pages/home";
 @use "./pages/operators";
