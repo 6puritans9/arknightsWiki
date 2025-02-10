@@ -1,15 +1,7 @@
-# <span style="color:white">ArknightsWiki</span>
+# ArknightsWiki
 
-Greetings Doctor!
-This is (yet another) Arknights Wiki, which is my first web project🥹.
-
-It provides character profiles with dynamic tags, tier list, squad with faction relations, base skill relations and some other features.
-
-It also offers language options among English, Korean and Chinese.
-
-I'm delighted that I did have made a thing that I hoped, and wish you find it useful.
-
-Enjoy!🦄
+Greetings Doctor!\
+Currently under construction.👷‍♂️🔨🚧
 
 ## Tools
 
@@ -20,7 +12,7 @@ Enjoy!🦄
 
 ## Architecture
 
-### Frontend
+### Routing
 
 ```
                     home
@@ -34,19 +26,22 @@ Enjoy!🦄
 
 ### DB
 
-| Operators | Operators_Factions | Factions |
-| --------- | ------------------ | -------- |
-| id        | Title              | id       |
-| Paragraph | Text               | 1        |
+![db_flow](./public/docs/db_flow.png)
 
-## Implements
+## Features
 
 ### React
+
+[] Language Support
 
 _Home_
 
 ```
-[]
+[] Sticky navigation
+  [] With opacity
+[] Event Banners
+  [] Carousel with swiper
+[] Better footer
 ```
 
 _Operators_
@@ -59,7 +54,8 @@ _Operators_
   [] class
     [] branch?
   [] faction
-[] Tags
+[] Tags | Votes(to draw or not)
+  [] Votes could be represented in shpae of rope fight
 ```
 
 ### CSS
@@ -79,7 +75,6 @@ _Operators_Overall_
   []
 [] Modal
   [] when hovered, a preview pops up as a modal
-  []
 []
 ```
 
@@ -95,11 +90,8 @@ _Infrastructure_
 
 ### DB
 
-_Operators_Join_
-
 ### Deploy
 
 ```
 []
-[] 2
 ```
