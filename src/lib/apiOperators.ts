@@ -3,7 +3,9 @@ import supabase from "./supabaseClient";
 const getOperators = async () => {
     const { data: operators, error } = await supabase
         .from("operators")
-        .select("*");
+        .select("*")
+        .order("rarity", { ascending: false })
+        .order("name_en");
     if (error) {
         console.error(error);
         throw new Error("Failed to fetch operators");
