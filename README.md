@@ -47,12 +47,16 @@ _Home_
 _Operators_
 
 ```
+\\ Overview
+[] View with class grouping
 [] Filter by category
   [] name
   [] rarity
   [] class
     [] branch?
   [] faction
+
+\\ Details
 [x] Tab Selection(useState)
 [] Tags | Votes(to draw or not)
   [] Votes could be represented in shpae of rope fight
