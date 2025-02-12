@@ -6,18 +6,22 @@ type IconProps = {
 };
 
 const Icon = ({ operator }: IconProps) => {
+    const paddedCode =
+        operator.code.toString().length < 3
+            ? operator.code.toString().padStart(3, "0")
+            : operator.code.toString();
+
+    const operatorPath = `char_${paddedCode}_${operator.pathname}`;
+
     return (
         <div>
             <Image
-                src={`/operators/icons/${operator.name_en.toLowerCase()}_s.webp`}
+                src={`/operators/${operatorPath}/icons/${operatorPath}.png`}
                 alt={operator.name_en}
                 width={90}
                 height={90}
             ></Image>
             <h2>{operator.name_en}</h2>
-            {/* <p>{operator.class_en}</p>
-            <p>{operator.branch_en}</p>
-            <p>{`Rarity: ${operator.rarity}`}</p> */}
         </div>
     );
 };

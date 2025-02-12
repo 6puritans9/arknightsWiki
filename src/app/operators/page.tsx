@@ -1,7 +1,7 @@
 "use client";
 
 import Icon from "@/components/Icon";
-import { getOperators, getOperator } from "@/lib/apiOperators";
+import { getOperators } from "@/lib/apiOperators";
 import { Operator } from "@/lib/types";
 import { useState, useEffect } from "react";
 import Link from "next/link";

@@ -13,12 +13,19 @@ type onClickProps = {
 const Details = ({ operator }: OperatorProps) => {
     const [tab, setTab] = useState<number>(0);
 
+    const paddedCode =
+        operator.code.toString().length < 3
+            ? operator.code.toString().padStart(3, "0")
+            : operator.code.toString();
+
+    const operatorPath = `char_${paddedCode}_${operator.pathname}`;
+
     return (
         <article className="op-details">
             <section className="op-details__header">
                 <h2>{operator.name_en}</h2>
                 <Image
-                    src={`/operators/details/${operator.name_en.toLowerCase()}.png`}
+                    src={`/operators/${operatorPath}/${operatorPath}_1.png`}
                     alt={operator.name_en}
                     width={500}
                     height={500}

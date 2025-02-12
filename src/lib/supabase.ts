@@ -36,67 +36,100 @@ export type Database = {
     Tables: {
       factions: {
         Row: {
-          description: string | null
+          description_en: string | null
           id: number
-          name: string
+          name_en: string
         }
         Insert: {
-          description?: string | null
+          description_en?: string | null
           id?: number
-          name: string
+          name_en: string
         }
         Update: {
-          description?: string | null
+          description_en?: string | null
           id?: number
-          name?: string
+          name_en?: string
         }
         Relationships: []
+      }
+      operator_factions: {
+        Row: {
+          faction_id: number
+          operator_id: number
+        }
+        Insert: {
+          faction_id: number
+          operator_id: number
+        }
+        Update: {
+          faction_id?: number
+          operator_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "operator_factions_faction_id_fkey"
+            columns: ["faction_id"]
+            isOneToOne: false
+            referencedRelation: "factions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "operator_factions_operator_id_fkey"
+            columns: ["operator_id"]
+            isOneToOne: false
+            referencedRelation: "operators"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       operators: {
         Row: {
           base_op: string | null
-          birthday: string | null
           branch_en: string
           class_en: string
-          faction_en: string
+          code: number | null
+          created_at: string
           gender: string
           id: number
           is_alter: boolean
           name_en: string
+          obtain: string[]
           position_en: string
-          race_en: string
+          race_en: string[]
           rarity: number
-          recruitment: string
+          updated_at: string | null
         }
         Insert: {
           base_op?: string | null
-          birthday?: string | null
           branch_en: string
           class_en: string
-          faction_en: string
+          code?: number | null
+          created_at?: string
           gender: string
           id?: number
           is_alter: boolean
           name_en: string
+          obtain: string[]
           position_en: string
-          race_en: string
+          race_en: string[]
           rarity: number
-          recruitment: string
+          updated_at?: string | null
         }
         Update: {
           base_op?: string | null
-          birthday?: string | null
           branch_en?: string
           class_en?: string
-          faction_en?: string
+          code?: number | null
+          created_at?: string
           gender?: string
           id?: number
           is_alter?: boolean
           name_en?: string
+          obtain?: string[]
           position_en?: string
-          race_en?: string
+          race_en?: string[]
           rarity?: number
-          recruitment?: string
+          updated_at?: string | null
         }
         Relationships: []
       }

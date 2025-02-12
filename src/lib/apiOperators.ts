@@ -5,7 +5,7 @@ const getOperators = async () => {
         .from("operators")
         .select("*")
         .order("rarity", { ascending: false })
-        .order("name_en");
+        .order("code", { ascending: false });
     if (error) {
         console.error(error);
         throw new Error("Failed to fetch operators");
