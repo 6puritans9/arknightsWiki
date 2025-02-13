@@ -55,9 +55,11 @@ _Operators_
   [] class
     [] branch?
   [] faction
+[] Refactor with react-query for caching
 
 \\ Details
 [x] Tab Selection(useState)
+[] Faction fetching
 [] Tags | Votes(to draw or not)
   [] Votes could be represented in shpae of rope fight
 ```
@@ -72,7 +74,7 @@ _Home_
   [] Make it stick to the bottom
 ```
 
-_Operators_Overall_
+_Operators_Grid_
 
 ```
 [] Grid(_grid.scss)
@@ -85,6 +87,7 @@ _Operators_Overall_
 ```
 
 _Operators_Details_
+![Details_Layout](./public/docs/details_Layout.png)
 
 ```
 []
