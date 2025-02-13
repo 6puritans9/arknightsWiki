@@ -87,7 +87,7 @@ _Operators_Grid_
 ```
 
 _Operators_Details_
-![Details_Layout](./public/docs/details_Layout.png)
+![details_layout](./public/docs/details_layout.png)
 
 ```
 []
