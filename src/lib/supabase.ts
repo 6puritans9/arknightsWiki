@@ -34,6 +34,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      base: {
+        Row: {
+          description: string
+          id: number
+          name: string
+          obtain_at: string | null
+          owners: string[]
+          relations: string[] | null
+        }
+        Insert: {
+          description: string
+          id?: number
+          name: string
+          obtain_at?: string | null
+          owners: string[]
+          relations?: string[] | null
+        }
+        Update: {
+          description?: string
+          id?: number
+          name?: string
+          obtain_at?: string | null
+          owners?: string[]
+          relations?: string[] | null
+        }
+        Relationships: []
+      }
       factions: {
         Row: {
           description_en: string | null
@@ -51,6 +78,36 @@ export type Database = {
           name_en?: string
         }
         Relationships: []
+      }
+      operator_base: {
+        Row: {
+          base_id: number
+          operator_id: number
+        }
+        Insert: {
+          base_id: number
+          operator_id: number
+        }
+        Update: {
+          base_id?: number
+          operator_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "operator_base_base_id_fkey"
+            columns: ["base_id"]
+            isOneToOne: false
+            referencedRelation: "base"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "operator_base_operator_id_fkey"
+            columns: ["operator_id"]
+            isOneToOne: false
+            referencedRelation: "operators"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       operator_factions: {
         Row: {
@@ -87,13 +144,14 @@ export type Database = {
           base_op: string | null
           branch_en: string
           class_en: string
-          code: number | null
+          code: number
           created_at: string
           gender: string
           id: number
           is_alter: boolean
           name_en: string
           obtain: string[]
+          pathname: string
           position_en: string
           race_en: string[]
           rarity: number
@@ -103,13 +161,14 @@ export type Database = {
           base_op?: string | null
           branch_en: string
           class_en: string
-          code?: number | null
+          code: number
           created_at?: string
           gender: string
           id?: number
           is_alter: boolean
           name_en: string
           obtain: string[]
+          pathname: string
           position_en: string
           race_en: string[]
           rarity: number
@@ -119,13 +178,14 @@ export type Database = {
           base_op?: string | null
           branch_en?: string
           class_en?: string
-          code?: number | null
+          code?: number
           created_at?: string
           gender?: string
           id?: number
           is_alter?: boolean
           name_en?: string
           obtain?: string[]
+          pathname?: string
           position_en?: string
           race_en?: string[]
           rarity?: number
