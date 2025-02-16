@@ -24,24 +24,30 @@ const Details = ({ operator }: OperatorProps) => {
         <article className="op-details">
             <section className="op-details__header">
                 <h2>{operator.name_en}</h2>
+            </section>
+            <div className="op-details__image-container">
                 <Image
                     src={`/operators/${operatorPath}/${operatorPath}_1.png`}
                     alt={operator.name_en}
                     width={500}
                     height={500}
                 ></Image>
+            </div>
+            <section className="op-details__tabs">
+                <Tabs onClick={(index) => () => setTab(index)} />
             </section>
-            <section>
-                <div className="op-details__tabs">
-                    <Tabs onClick={(index) => () => setTab(index)} />
-                </div>
-                <div className="op-details__contents">
-                    {tab === 0 && <Attributes operator={operator} />}
-                    {tab === 1 && <Skills operator={operator} />}
-                    {tab === 2 && <Review operator={operator} />}
-                    {tab === 3 && <Synergy operator={operator} />}
-                    {tab === 4 && <Lore operator={operator} />}
-                </div>
+            <section className="op-details__contents">
+                {tab === 0 && <Attributes operator={operator} />}
+                {tab === 1 && <Skills operator={operator} />}
+                {tab === 2 && <Review operator={operator} />}
+                {tab === 3 && <Synergy operator={operator} />}
+                {tab === 4 && <Lore operator={operator} />}
+            </section>
+            <section className="op-details__tags">
+                <h1>TAGS</h1>
+            </section>
+            <section className="op-details__vote">
+                <h1>VOTE</h1>
             </section>
         </article>
     );
@@ -66,7 +72,6 @@ const Attributes = ({ operator }: OperatorProps) => {
             <p>{operator.gender}</p>
             <p>{operator.position_en}</p>
             <p>{`Rarity: ${operator.rarity}`}</p>
-            <h1>TAGS</h1>
         </>
     );
 };
