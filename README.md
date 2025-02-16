@@ -64,6 +64,14 @@ _Operators_
   [] Votes could be represented in shpae of rope fight
 ```
 
+_Infra_
+
+```
+[] Query operators JOIN base
+  [] When an operator is selected, filter view to its realtions
+[] ?Save preset
+```
+
 ### CSS
 
 _Home_
@@ -95,9 +103,12 @@ _Operators_Details_
 
 _Tierlist_
 
-_Infrastructure_
+_Base_
 
 ### DB
+
+_Operators_
+[] UPDATE COLUMN name_en TO name
 
 ### Deploy
 
