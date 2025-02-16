@@ -88,7 +88,7 @@ _Operators_Grid_
 [] Grid(_grid.scss)
   [] 6 repeated columns
   [] when hovered, the icon shines according to its rarity
-  []
+  [] Dropdown rarity bar to show/hide corresponding operators
 [] Modal
   [] when hovered, a preview pops up as a modal
 []
