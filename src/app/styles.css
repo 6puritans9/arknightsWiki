@@ -339,6 +339,28 @@ p {
   font-size: 1.7rem;
 }
 
+.filter__container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  margin: 2rem 0;
+  width: 100%;
+}
+.filter__rarity {
+  display: flex;
+  justify-content: space-evenly;
+}
+.filter__class {
+  display: flex;
+  justify-content: space-evenly;
+  color: green;
+}
+.filter__faction {
+  display: flex;
+  justify-content: space-evenly;
+  color: blue;
+}
+
 header {
   display: flex;
   align-items: center;
@@ -405,6 +427,11 @@ header {
 .grid > *:hover img {
   transition: filter 0.3s;
   animation: flicker 0.8s infinite;
+}
+
+.flex {
+  display: flex;
+  justify-content: center;
 }
 
 .footer {

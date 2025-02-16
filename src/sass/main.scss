@@ -6,10 +6,12 @@
 @use "./base/typography";
 
 @use "./components/carousel";
+@use "./components/filter";
 
 @use "./layout/header";
 @use "./layout/navigation";
 @use "./layout/grid";
+@use "./layout/flex";
 @use "./layout/footer";
 
 @use "./pages/home";

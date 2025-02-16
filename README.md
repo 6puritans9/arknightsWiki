@@ -49,12 +49,12 @@ _Operators_
 ```
 \\ Overview
 [] View with class grouping
-[] Filter by category
+[x] Filter by category
   [] name
-  [] rarity
-  [] class
+  [x] rarity
+  [x] class
     [] branch?
-  [] faction
+  [x] faction
 [] Refactor with react-query for caching
 
 \\ Details
