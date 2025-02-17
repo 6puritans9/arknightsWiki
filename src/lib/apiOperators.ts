@@ -3,7 +3,12 @@ import supabase from "./supabaseClient";
 const getOperators = async () => {
     const { data: operators, error } = await supabase
         .from("operators")
-        .select("*")
+        .select(
+            `*, 
+            operator_faction(
+            faction_id, factions(*))`
+        )
+
         .order("rarity", { ascending: false })
         .order("code", { ascending: false });
     if (error) {

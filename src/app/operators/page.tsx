@@ -3,17 +3,20 @@
 import Icon from "@/components/Icon";
 import Filter from "@/components/Filter";
 import { getOperators } from "@/lib/apiOperators";
-import { Operator } from "@/lib/types";
+import { OperatorWithFaction, FilterCondition } from "@/lib/types";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
 const Operators = () => {
-    const [operators, setOperators] = useState<Operator[]>([]);
+    const [operators, setOperators] = useState<OperatorWithFaction[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [filter, setFilter] = useState<string>("");
+    const [filter, setFilter] = useState<FilterCondition>({
+        category: null,
+        value: "",
+    });
 
-    const filterHandler = (condition: string) => {
+    const filterHandler = (condition: FilterCondition) => {
         setFilter(condition);
     };
 
@@ -37,14 +40,14 @@ const Operators = () => {
     if (error) return <div>{error}</div>;
 
     const filteredOperators = operators.filter((operator) => {
-        if (filter === "") {
+        if (!filter.category) {
             return operators;
-        } else if (filter === "6") {
-            return operator.rarity === Number(filter);
-        } else if (filter === "5") {
-            return operator.rarity === Number(filter);
+        } else if (filter.category === "class") {
+            return operator.class_en === filter.value;
+        } else if (filter.category === "faction") {
+            return operator.operator_faction.factions.name_en === filter.value;
         } else {
-            return operator.class_en === filter;
+            return operator.rarity === filter.value;
         }
     });
 
