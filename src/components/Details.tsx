@@ -23,12 +23,12 @@ const Details = ({ operator }: OperatorProps) => {
     return (
         <article className="op-details">
             <section className="op-details__header">
-                <h2>{operator.name_en}</h2>
+                <h2>{operator.name}</h2>
             </section>
             <div className="op-details__image-container">
                 <Image
                     src={`/operators/${operatorPath}/${operatorPath}_1.png`}
-                    alt={operator.name_en}
+                    alt={operator.name}
                     width={500}
                     height={500}
                 ></Image>
@@ -67,10 +67,12 @@ const Tabs = ({ onClick }: onClickProps) => {
 const Attributes = ({ operator }: OperatorProps) => {
     return (
         <>
-            <p>{`Class: ${operator.class_en}`}</p>
-            <p>{`Branch: ${operator.branch_en}`}</p>
-            <p>{operator.gender}</p>
-            <p>{operator.position_en}</p>
+            <p>{`Class: ${operator.class}`}</p>
+            <p>{`Branch: ${operator.branch}`}</p>
+            <p>{`Faction: ${operator.faction}`}</p>
+            <p>{`Race: ${operator.race}`}</p>
+            <p>{`Gender: ${operator.gender}`}</p>
+            <p>{`Position: ${operator.position}`}</p>
             <p>{`Rarity: ${operator.rarity}`}</p>
         </>
     );
@@ -103,7 +105,7 @@ const Synergy = ({ operator }: OperatorProps) => {
 const Lore = ({ operator }: OperatorProps) => {
     return (
         <div>
-            <h1 style={{ color: "red" }}>{operator.faction_en}</h1>
+            <h1 style={{ color: "red" }}>{operator.faction}</h1>
         </div>
     );
 };

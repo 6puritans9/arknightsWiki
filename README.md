@@ -86,7 +86,7 @@ _Operators_Grid_
 
 ```
 [] Grid(_grid.scss)
-  [] 6 repeated columns
+  [x] 6 repeated columns
   [] when hovered, the icon shines according to its rarity
   [] Dropdown rarity bar to show/hide corresponding operators
 [] Modal
@@ -108,7 +108,7 @@ _Base_
 ### DB
 
 _Operators_
-[] UPDATE COLUMN name_en TO name
+[x] UPDATE COLUMN name_en TO name
 
 ### Deploy
 

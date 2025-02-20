@@ -43,9 +43,9 @@ const Operators = () => {
         if (!filter.category) {
             return operators;
         } else if (filter.category === "class") {
-            return operator.class_en === filter.value;
+            return operator.class === filter.value;
         } else if (filter.category === "faction") {
-            return operator.operator_faction.factions.name_en === filter.value;
+            return operator.faction === filter.value;
         } else {
             return operator.rarity === filter.value;
         }
@@ -60,7 +60,7 @@ const Operators = () => {
                 {filteredOperators.map((operator) => (
                     <Link
                         key={operator.id}
-                        href={`/operators/${operator.name_en}`}
+                        href={`/operators/${operator.name}`}
                     >
                         <Icon operator={operator} />
                     </Link>

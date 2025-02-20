@@ -17,11 +17,11 @@ const Icon = ({ operator }: IconProps) => {
         <div>
             <Image
                 src={`/operators/${operatorPath}/icons/${operatorPath}.png`}
-                alt={operator.name_en}
+                alt={operator.name}
                 width={90}
                 height={90}
             ></Image>
-            <h2>{operator.name_en}</h2>
+            <h2>{operator.name}</h2>
         </div>
     );
 };

@@ -8,15 +8,15 @@ import { getOperator } from "@/lib/apiOperators";
 
 const OperatorDetail = () => {
     const params = useParams();
-    const { name_en } = params;
+    const { name } = params;
     const [operator, setOperator] = useState<Operator | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (name_en) {
+        if (name) {
             const fetchOperator = async () => {
                 try {
-                    const data = await getOperator(name_en as string);
+                    const data = await getOperator(name as string);
                     setOperator(data);
                 } catch (error) {
                     console.error(error);
@@ -29,7 +29,7 @@ const OperatorDetail = () => {
         } else {
             console.error("No name provided");
         }
-    }, [name_en]);
+    }, [name]);
 
     if (loading) return <div>Loading...</div>;
     if (!operator) return <div>Operator not found</div>;

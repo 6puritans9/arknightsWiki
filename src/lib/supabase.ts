@@ -65,17 +65,17 @@ export type Database = {
                 Row: {
                     description_en: string | null;
                     id: number;
-                    name_en: string;
+                    name: string;
                 };
                 Insert: {
                     description_en?: string | null;
                     id?: number;
-                    name_en: string;
+                    name: string;
                 };
                 Update: {
                     description_en?: string | null;
                     id?: number;
-                    name_en?: string;
+                    name?: string;
                 };
                 Relationships: [];
             };
@@ -99,95 +99,90 @@ export type Database = {
                         isOneToOne: false;
                         referencedRelation: "base";
                         referencedColumns: ["id"];
-                    },
-                    {
-                        foreignKeyName: "operator_base_operator_id_fkey";
-                        columns: ["operator_id"];
-                        isOneToOne: false;
-                        referencedRelation: "operators";
-                        referencedColumns: ["id"];
                     }
                 ];
             };
             operator_faction: {
                 Row: {
                     faction_id: number;
-                    operator_id: number;
                 };
                 Insert: {
                     faction_id: number;
-                    operator_id: number;
                 };
                 Update: {
                     faction_id?: number;
-                    operator_id?: number;
                 };
                 Relationships: [
                     {
-                        foreignKeyName: "operator_faction_faction_id_fkey";
+                        foreignKeyName: "operator_factions_faction_id_fkey";
                         columns: ["faction_id"];
                         isOneToOne: false;
                         referencedRelation: "factions";
-                        referencedColumns: ["id"];
-                    },
-                    {
-                        foreignKeyName: "operator_faction_operator_id_fkey";
-                        columns: ["operator_id"];
-                        isOneToOne: false;
-                        referencedRelation: "operators";
                         referencedColumns: ["id"];
                     }
                 ];
             };
             operators: {
                 Row: {
-                    base_op: string | null;
-                    branch_en: string;
-                    class_en: string;
+                    alter_op: string | null;
+                    branch: string;
+                    class: string;
                     code: number;
                     created_at: string;
+                    faction: string | null;
                     gender: string;
+                    has_alter: boolean;
+                    has_promotion: boolean | null;
                     id: number;
-                    is_alter: boolean;
-                    name_en: string;
+                    is_cn: boolean | null;
+                    name: string;
                     obtain: string[];
                     pathname: string;
-                    position_en: string;
-                    race_en: string[];
+                    position: string;
+                    promotion_op: string[] | null;
+                    race: string[] | null;
                     rarity: number;
                     updated_at: string | null;
                 };
                 Insert: {
-                    base_op?: string | null;
-                    branch_en: string;
-                    class_en: string;
+                    alter_op?: string | null;
+                    branch: string;
+                    class: string;
                     code: number;
                     created_at?: string;
+                    faction?: string | null;
                     gender: string;
+                    has_alter?: boolean;
+                    has_promotion?: boolean | null;
                     id?: number;
-                    is_alter: boolean;
-                    name_en: string;
+                    is_cn?: boolean | null;
+                    name: string;
                     obtain: string[];
                     pathname: string;
-                    position_en: string;
-                    race_en: string[];
+                    position: string;
+                    promotion_op?: string[] | null;
+                    race?: string[] | null;
                     rarity: number;
                     updated_at?: string | null;
                 };
                 Update: {
-                    base_op?: string | null;
-                    branch_en?: string;
-                    class_en?: string;
+                    alter_op?: string | null;
+                    branch?: string;
+                    class?: string;
                     code?: number;
                     created_at?: string;
+                    faction?: string | null;
                     gender?: string;
+                    has_alter?: boolean;
+                    has_promotion?: boolean | null;
                     id?: number;
-                    is_alter?: boolean;
-                    name_en?: string;
+                    is_cn?: boolean | null;
+                    name?: string;
                     obtain?: string[];
                     pathname?: string;
-                    position_en?: string;
-                    race_en?: string[];
+                    position?: string;
+                    promotion_op?: string[] | null;
+                    race?: string[] | null;
                     rarity?: number;
                     updated_at?: string | null;
                 };
