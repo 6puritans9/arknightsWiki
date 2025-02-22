@@ -3,12 +3,12 @@
 import Icon from "@/components/Icon";
 import Filter from "@/components/Filter";
 import { getOperators } from "@/lib/apiOperators";
-import { OperatorWithFaction, FilterCondition } from "@/lib/types";
+import { Operator, FilterCondition } from "@/lib/types";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
 const Operators = () => {
-    const [operators, setOperators] = useState<OperatorWithFaction[]>([]);
+    const [operators, setOperators] = useState<Operator[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [filter, setFilter] = useState<FilterCondition>({
