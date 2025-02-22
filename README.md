@@ -110,6 +110,9 @@ _Base_
 _Operators_
 [x] UPDATE COLUMN name_en TO name
 
+_base_
+[x] connect operators with base
+
 ### Deploy
 
 ```
