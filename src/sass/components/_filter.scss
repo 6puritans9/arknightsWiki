@@ -20,9 +20,16 @@
         color: green;
     }
 
+    &__branch {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        // width: 100%;
+        color: darkorange;
+    }
+
     &__faction {
-        display: flex;
-        justify-content: space-evenly;
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
         // width: 30rem;
         color: blue;
     }

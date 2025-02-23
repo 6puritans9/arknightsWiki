@@ -16,10 +16,6 @@ const Operators = () => {
         value: "",
     });
 
-    const filterHandler = (condition: FilterCondition) => {
-        setFilter(condition);
-    };
-
     useEffect(() => {
         const fetchOperators = async () => {
             try {
@@ -39,6 +35,24 @@ const Operators = () => {
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
 
+    const filterHandler = (condition: FilterCondition) => {
+        setFilter(condition);
+    };
+
+    const classSet = new Set(operators.map((operator) => operator.class));
+    const branchSet = new Set(operators.map((operator) => operator.branch));
+    const factionSet = new Set(operators.map((operator) => operator.faction));
+
+    const filterArgs = [
+        {
+            category: "rarity",
+            values: Array.from({ length: 6 }, (_, i) => 6 - i),
+        },
+        { category: "class", values: Array.from(classSet) },
+        { category: "branch", values: Array.from(branchSet) },
+        { category: "faction", values: Array.from(factionSet) },
+    ];
+
     const filteredOperators = operators.filter((operator) => {
         if (!filter.category) {
             return operators;
@@ -46,6 +60,8 @@ const Operators = () => {
             return operator.class === filter.value;
         } else if (filter.category === "faction") {
             return operator.faction === filter.value;
+        } else if (filter.category === "branch") {
+            return operator.branch === filter.value;
         } else {
             return operator.rarity === filter.value;
         }
@@ -54,7 +70,7 @@ const Operators = () => {
     return (
         <>
             <div className="flex">
-                <Filter onClick={filterHandler} />
+                <Filter filterArgs={filterArgs} onClick={filterHandler} />
             </div>
             <section className="grid grid__icon">
                 {filteredOperators.map((operator) => (

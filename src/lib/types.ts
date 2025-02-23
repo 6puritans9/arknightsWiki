@@ -5,6 +5,7 @@ type Operator = Database["public"]["Tables"]["operators"]["Row"];
 type OperatorWithBase = {
     id: number;
     name: string;
+    code: number;
     pathname: string;
     operator_base: {
         operator_id: number;

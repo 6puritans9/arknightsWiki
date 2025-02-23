@@ -4,6 +4,7 @@ const getOperatorsWithBase = async () => {
     const { data, error } = await supabase.from("operators").select(`
             id,
             name,
+            code,
             pathname,
             operator_base:operator_base!inner(
                 operator_id,

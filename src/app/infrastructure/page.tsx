@@ -3,11 +3,17 @@
 import { useEffect, useState } from "react";
 import { getOperatorsWithBase } from "@/lib/apiBase";
 import { OperatorWithBase } from "@/lib/types";
+import Filter from "@/components/Filter";
+import Icon from "@/components/Icon";
 
 const Infrastructure = () => {
     const [data, setData] = useState<OperatorWithBase[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+
+    const filterHandler = (condition: FilterCondition) => {
+        setFilter(condition);
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -32,19 +38,24 @@ const Infrastructure = () => {
 
     return (
         <>
-            <h1>Infra Builder</h1>
-            <div>
-                {data.map((operator) =>
-                    operator.operator_base.map((row) => (
-                        <div key={row.base_id}>
-                            <p>{operator.name}</p>
-                            <p>{row.base.name}</p>
-                            <p>{row.base.description}</p>
-                            {/* Render other base details as needed */}
-                        </div>
-                    ))
-                )}
+            <div className="flex">
+                <h2>Filter</h2>
+                <Filter onClick={filterHandler} />
             </div>
+            <section className="grid grid__icon">
+                {data.map((operator) => (
+                    <div key={operator.id}>
+                        <Icon operator={operator} />
+                        <p>{operator.name}</p>
+                        {operator.operator_base.map((row, index) => (
+                            <div key={row.base_id}>
+                                <p>{`${index + 1} ${row.base.name}`}</p>
+                                <p>{row.base.description}</p>
+                            </div>
+                        ))}
+                    </div>
+                ))}
+            </section>
         </>
     );
 };
