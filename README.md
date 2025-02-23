@@ -33,6 +33,7 @@ Currently under construction.👷‍♂️🔨🚧
 ### React
 
 [] Language Support
+[] Search
 
 _Home_
 
@@ -50,10 +51,9 @@ _Operators_
 \\ Overview
 [] View with class grouping
 [x] Filter by category
-  [] name
   [x] rarity
   [x] class
-    [] branch?
+    [x] branch?
   [x] faction
 [] Refactor with react-query for caching
 
