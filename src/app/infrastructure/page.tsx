@@ -120,7 +120,6 @@ const Infrastructure = () => {
                 {filteredData.map((operator) => (
                     <div key={operator.id}>
                         <Icon operator={operator} />
-                        <p>{operator.name}</p>
                         {operator.operator_base.map((row, index) => (
                             <article
                                 key={row.base_id}

@@ -67,8 +67,8 @@ _Operators_
 _Infra_
 
 ```
-[] Query operators JOIN base
-  [] When an operator is selected, filter view to its realtions
+[x] Query operators JOIN base
+  [x] When an operator is selected, filter view to its realtions
 [] ?Save preset
 ```
 
