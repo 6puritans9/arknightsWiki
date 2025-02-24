@@ -18,7 +18,9 @@ type OperatorWithBase = {
             description: string;
             effects: string[];
             owners: string[];
-            obtain_later: string[] | null;
+            obtain_at_e2: string[] | null;
+            obtain_at_e1: string[] | null;
+            obtain_at_30: string[] | null;
             replace_skill: string | null;
             can_overlap: boolean | null;
             pathname: string;

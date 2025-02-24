@@ -48,3 +48,6 @@ next-env.d.ts
 /public/operators
 /public/building
 /public/banners
+/public/building_misc
+/public/op_misc
+/public/skills
