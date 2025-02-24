@@ -16,21 +16,41 @@
     &__class {
         display: flex;
         justify-content: space-evenly;
-        // width: 100%;
-        color: green;
+        :not(:first-child) {
+            color: green;
+        }
     }
 
     &__branch {
         display: grid;
         grid-template-columns: repeat(6, 1fr);
-        // width: 100%;
-        color: darkorange;
+        :not(:first-child) {
+            color: darkorange;
+        }
     }
 
     &__faction {
         display: grid;
         grid-template-columns: repeat(6, 1fr);
-        // width: 30rem;
-        color: blue;
+        :not(:first-child) {
+            color: blue;
+        }
+    }
+
+    &__facility {
+        display: flex;
+        justify-content: space-evenly;
+        :not(:first-child) {
+            color: blueviolet;
+        }
+    }
+
+    &__effects {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        :not(:first-child) {
+            // width: 30rem;
+            color: lightcoral;
+        }
     }
 }

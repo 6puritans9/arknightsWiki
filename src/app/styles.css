@@ -353,17 +353,37 @@ p {
 .filter__class {
   display: flex;
   justify-content: space-evenly;
+}
+.filter__class :not(:first-child) {
   color: green;
 }
 .filter__branch {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
+}
+.filter__branch :not(:first-child) {
   color: darkorange;
 }
 .filter__faction {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
+}
+.filter__faction :not(:first-child) {
   color: blue;
+}
+.filter__facility {
+  display: flex;
+  justify-content: space-evenly;
+}
+.filter__facility :not(:first-child) {
+  color: blueviolet;
+}
+.filter__effects {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+}
+.filter__effects :not(:first-child) {
+  color: lightcoral;
 }
 
 header {

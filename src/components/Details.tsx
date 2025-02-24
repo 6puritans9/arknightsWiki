@@ -27,7 +27,7 @@ const Details = ({ operator }: OperatorProps) => {
             </section>
             <div className="op-details__image-container">
                 <Image
-                    src={`/operators/${operatorPath}/${operatorPath}_1.png`}
+                    src={`/operators/${operatorPath}/${operatorPath}_1.webp`}
                     alt={operator.name}
                     width={500}
                     height={500}

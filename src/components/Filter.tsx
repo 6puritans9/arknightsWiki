@@ -1,13 +1,11 @@
-import { FilterCondition } from "@/lib/types";
+import { UnifiedFilterCondition } from "@/lib/types";
 
 type filterProps = {
-    filterArgs: { category: string; values: string[] | number[] }[];
-    onClick: (condition: FilterCondition) => void;
+    filterArgs: { category: string; values: (string | number | null)[] }[];
+    onClick: (condition: UnifiedFilterCondition) => void;
 };
 
 const Filter = ({ filterArgs, onClick }: filterProps) => {
-    console.log(filterArgs);
-
     return (
         <div className="filter__container">
             {filterArgs.map((arg, index) => (
@@ -20,7 +18,7 @@ const Filter = ({ filterArgs, onClick }: filterProps) => {
                                 onClick({ category: arg.category, value })
                             }
                         >
-                            {value}{" "}
+                            {value}
                         </h1>
                     ))}
                 </div>
@@ -28,7 +26,7 @@ const Filter = ({ filterArgs, onClick }: filterProps) => {
 
             <h1
                 style={{ color: "red", textAlign: "center" }}
-                onClick={() => onClick({})}
+                onClick={() => onClick({ category: null, value: null })}
             >
                 RESET
             </h1>

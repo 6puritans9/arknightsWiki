@@ -16,10 +16,11 @@ const getOperators = async () => {
 };
 
 const getOperator = async (name: string) => {
+    const decodedName = decodeURIComponent(name);
     const { data, error } = await supabase
         .from("operators")
         .select("*")
-        .eq("name", name)
+        .eq("name", decodedName)
         .single();
     if (error) {
         throw new Error("Failed to fetch operator");
