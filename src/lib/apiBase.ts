@@ -6,6 +6,8 @@ const getOperatorsWithBase = async () => {
             name,
             code,
             pathname,
+            race,
+            faction,
             operator_base:operator_base!inner(
                 operator_id,
                 base_id,
@@ -13,7 +15,7 @@ const getOperatorsWithBase = async () => {
                 id,
                 name,
                 description,
-                effect,
+                effects,
                 owners,
                 obtain_later,
                 can_overlap,

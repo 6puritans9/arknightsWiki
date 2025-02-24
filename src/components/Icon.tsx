@@ -16,7 +16,7 @@ const Icon = ({ operator }: IconProps) => {
     return (
         <div>
             <Image
-                src={`/operators/${operatorPath}/icons/${operatorPath}.png`}
+                src={`/operators/${operatorPath}/icons/${operatorPath}.webp`}
                 alt={operator.name}
                 width={90}
                 height={90}

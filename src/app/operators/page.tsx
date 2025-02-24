@@ -54,7 +54,7 @@ const Operators = () => {
     ];
 
     const filteredOperators = operators.filter((operator) => {
-        if (!filter.category) {
+        if (!filter.value) {
             return operators;
         } else if (filter.category === "class") {
             return operator.class === filter.value;
