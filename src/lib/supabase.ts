@@ -48,7 +48,7 @@ export type Database = {
           owners: string[]
           pathname: string
           related_effects: string[] | null
-          related_facility: string | null
+          related_facilities: string[] | null
           related_faction: string | null
           related_ops: string[] | null
           related_race: string | null
@@ -67,7 +67,7 @@ export type Database = {
           owners: string[]
           pathname: string
           related_effects?: string[] | null
-          related_facility?: string | null
+          related_facilities?: string[] | null
           related_faction?: string | null
           related_ops?: string[] | null
           related_race?: string | null
@@ -86,7 +86,7 @@ export type Database = {
           owners?: string[]
           pathname?: string
           related_effects?: string[] | null
-          related_facility?: string | null
+          related_facilities?: string[] | null
           related_faction?: string | null
           related_ops?: string[] | null
           related_race?: string | null
@@ -156,12 +156,14 @@ export type Database = {
           id: number
           is_cn: boolean | null
           name: string
+          nickname: string | null
           obtain: string[]
           pathname: string
           position: string
           promotion_op: string[] | null
-          race: string[] | null
+          races: string[] | null
           rarity: number
+          sub_factions: string[] | null
           updated_at: string | null
         }
         Insert: {
@@ -177,12 +179,14 @@ export type Database = {
           id?: number
           is_cn?: boolean | null
           name: string
+          nickname?: string | null
           obtain: string[]
           pathname: string
           position: string
           promotion_op?: string[] | null
-          race?: string[] | null
+          races?: string[] | null
           rarity: number
+          sub_factions?: string[] | null
           updated_at?: string | null
         }
         Update: {
@@ -198,12 +202,14 @@ export type Database = {
           id?: number
           is_cn?: boolean | null
           name?: string
+          nickname?: string | null
           obtain?: string[]
           pathname?: string
           position?: string
           promotion_op?: string[] | null
-          race?: string[] | null
+          races?: string[] | null
           rarity?: number
+          sub_factions?: string[] | null
           updated_at?: string | null
         }
         Relationships: []
