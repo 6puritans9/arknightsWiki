@@ -25,6 +25,7 @@ const Infrastructure = () => {
                 const data = await getOperatorsWithBase();
                 // @ts-expect-error: type inference issue
                 setData(data);
+                console.log(data);
             } catch (error) {
                 console.error(error);
                 setError("Failed to fetch data");
@@ -38,7 +39,6 @@ const Infrastructure = () => {
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
-    // console.log(data);
 
     const filterHandler = (condition: UnifiedFilterCondition) => {
         console.log("filterHandler");
@@ -94,8 +94,6 @@ const Infrastructure = () => {
         ) {
             return effects.includes(filter.value);
         } else if (filter.category === "relations") {
-            // console.log("Filtering with relations value:", filter.value);
-
             return (
                 (filter.value.r_effects &&
                     filter.value.r_effects.some((r_effect) =>
@@ -131,8 +129,8 @@ const Infrastructure = () => {
                                             r_ops: row.base.related_ops,
                                             r_faction: row.base.related_faction,
                                             r_race: row.base.related_race,
-                                            r_facility:
-                                                row.base.related_facility,
+                                            r_facilities:
+                                                row.base.related_facilities,
                                         },
                                     })
                                 }

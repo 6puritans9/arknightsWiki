@@ -7,7 +7,7 @@ type OperatorWithBase = {
     name: string;
     code: number;
     pathname: string;
-    race: string;
+    races: string[];
     faction: string;
     operator_base: {
         operator_id: number;
@@ -17,19 +17,19 @@ type OperatorWithBase = {
             name: string;
             description: string;
             effects: string[];
-            owners: string[];
-            obtain_at_e2: string[] | null;
-            obtain_at_e1: string[] | null;
-            obtain_at_30: string[] | null;
             replace_skill: string | null;
             can_overlap: boolean | null;
-            pathname: string;
             related_effects: string[] | null;
             related_ops: string[] | null;
             related_faction: string | null;
             related_race: string | null;
-            related_facility: string | null;
+            owners: string[];
+            obtain_at_e2: string[] | null;
+            pathname: string;
             facility: string;
+            obtain_at_e1: string[] | null;
+            obtain_at_30: string[] | null;
+            related_facilities: string[] | null;
         };
     }[];
 };
@@ -44,7 +44,7 @@ export type RelationsValue = {
     r_ops: string[] | null;
     r_faction: string | null;
     r_race: string | null;
-    r_facility: string | null;
+    r_facilities: string[] | null;
 };
 
 export type BaseFilterCondition = {
