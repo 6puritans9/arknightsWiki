@@ -59,6 +59,7 @@ const OperatorsGridClient = ({ initialData }: OperatorsGridClientProps) => {
                     <Link
                         key={operator.id}
                         href={`/operators/${operator.name}`}
+                        passHref
                     >
                         <Icon operator={operator} />
                     </Link>

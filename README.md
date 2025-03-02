@@ -55,11 +55,11 @@ _Operators_
   [x] class
     [x] branch?
   [x] faction
-[] Refactor with react-query for caching
+[x] Refactor to server-side data fetching
 
 \\ Details
 [x] Tab Selection(useState)
-[] Faction fetching
+[x] Every column fetching
 [] Tags | Votes(to draw or not)
   [] Votes could be represented in shpae of rope fight
 ```
@@ -69,6 +69,8 @@ _Infra_
 ```
 [x] Query operators JOIN base
   [x] When an operator is selected, filter view to its realtions
+[x] Refactor to server-side data fetching
+[] Fix filtering sub_factions
 [] ?Save preset
 ```
 

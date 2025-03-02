@@ -1,40 +1,17 @@
-"use client";
-
-import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
-import Details from "@/components/Details";
-import { Operator } from "@/lib/types";
+import OperatorDetailClient from "./clientPage";
 import { getOperator } from "@/lib/apiOperators";
 
-const OperatorDetail = () => {
-    const params = useParams();
+type OperatorDetailProps = {
+    params: {
+        name: string;
+    };
+};
+
+const OperatorDetail = async ({ params }: OperatorDetailProps) => {
     const { name } = params;
-    const [operator, setOperator] = useState<Operator | null>(null);
-    const [loading, setLoading] = useState(true);
+    const data = await getOperator(name);
 
-    useEffect(() => {
-        if (name) {
-            const fetchOperator = async () => {
-                try {
-                    const data = await getOperator(name as string);
-                    setOperator(data);
-                } catch (error) {
-                    console.error(error);
-                } finally {
-                    setLoading(false);
-                }
-            };
-
-            fetchOperator();
-        } else {
-            console.error("No name provided");
-        }
-    }, [name]);
-
-    if (loading) return <div>Loading...</div>;
-    if (!operator) return <div>Operator not found</div>;
-
-    return <Details operator={operator} />;
+    return <OperatorDetailClient initialData={data} />;
 };
 
 export default OperatorDetail;
