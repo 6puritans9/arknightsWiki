@@ -1,18 +1,19 @@
 import supabase from "./supabaseClient";
 
-const getOperators = async () => {
-    const { data: operators, error } = await supabase
-        .from("operators")
-        .select(`*`)
-        .order("is_cn", { ascending: false })
-        .order("rarity", { ascending: false })
-        .order("code", { ascending: false });
-    if (error) {
-        console.error(error);
-        throw new Error("Failed to fetch operators");
-    }
+const operatorsQuery = supabase
+    .from("operators")
+    .select(
+        `id, name, nickname, pathname, code, rarity, class, branch, faction, is_cn, has_promotion`
+    )
+    .order("is_cn", { ascending: false })
+    .order("rarity", { ascending: false })
+    .order("code", { ascending: false });
 
-    return operators;
+const getOperators = async () => {
+    const { data, error } = await operatorsQuery;
+    if (error) throw error;
+
+    return data;
 };
 
 const getOperator = async (name: string) => {
@@ -22,11 +23,9 @@ const getOperator = async (name: string) => {
         .select("*")
         .eq("name", decodedName)
         .single();
-    if (error) {
-        throw new Error("Failed to fetch operator");
-    }
+    if (error) throw error;
 
     return data;
 };
 
-export { getOperators, getOperator };
+export { getOperators, getOperator, operatorsQuery };

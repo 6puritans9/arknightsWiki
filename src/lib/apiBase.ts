@@ -1,7 +1,7 @@
 import supabase from "./supabaseClient";
+import { QueryData } from "@supabase/supabase-js";
 
-const getOperatorsWithBase = async () => {
-    const { data, error } = await supabase.from("operators").select(`
+const operatorsWithBaseQuery = supabase.from("operators").select(`
             id,
             name,
             code,
@@ -34,12 +34,16 @@ const getOperatorsWithBase = async () => {
             )
         `);
 
-    if (error) {
-        console.error(error);
-        throw new Error("Failed to fetch operators");
-    }
+export type OperatorsWithBase = QueryData<typeof operatorsWithBaseQuery>;
 
-    return data;
-};
+const { data, error } = await operatorsWithBaseQuery;
+if (error) throw error;
+const operatorsWithBase: OperatorsWithBase = data;
 
-export { getOperatorsWithBase };
+// if (error) {
+//     throw new Error("Failed to fetch operators");
+// }
+
+// return data;
+
+export default operatorsWithBase;

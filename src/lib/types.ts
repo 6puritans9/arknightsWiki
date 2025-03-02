@@ -1,6 +1,10 @@
 import { Database } from "./supabase";
+import { QueryData } from "@supabase/supabase-js";
+import { operatorsQuery } from "./apiOperators";
 
 type Operator = Database["public"]["Tables"]["operators"]["Row"];
+
+type QueryOperators = QueryData<typeof operatorsQuery>;
 
 type OperatorWithBase = {
     id: number;
@@ -54,4 +58,4 @@ export type BaseFilterCondition = {
 
 export type UnifiedFilterCondition = FilterCondition | BaseFilterCondition;
 
-export type { Operator, OperatorWithBase };
+export type { Operator, OperatorWithBase, QueryOperators };
