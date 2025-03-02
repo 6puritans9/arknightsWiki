@@ -4,15 +4,17 @@ import { useState } from "react";
 import Image from "next/image";
 import { Operator } from "@/lib/types";
 
+type OperatorDetailClientProps = {
+    initialData: Operator;
+};
+type TabProps = {
+    operator: Operator;
+};
 type onClickProps = {
     onClick: (index: number) => () => void;
 };
 
-type OperatorProps = {
-    initialData: Operator;
-};
-
-const OperatorDetailClient = ({ initialData }: OperatorProps) => {
+const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
     const [tab, setTab] = useState<number>(0);
 
     const operator = initialData;
@@ -66,7 +68,7 @@ const Tabs = ({ onClick }: onClickProps) => {
     ));
 };
 
-const Attributes = ({ operator }: OperatorProps) => {
+const Attributes = ({ operator }: TabProps) => {
     return (
         <>
             <p>{`Class: ${operator.class}`}</p>
@@ -80,7 +82,7 @@ const Attributes = ({ operator }: OperatorProps) => {
     );
 };
 
-const Skills = ({ operator }: OperatorProps) => {
+const Skills = ({ operator }: TabProps) => {
     return (
         <>
             <h1 style={{ color: "red" }}>SKILLS</h1>
@@ -88,7 +90,7 @@ const Skills = ({ operator }: OperatorProps) => {
     );
 };
 
-const Review = ({ operator }: OperatorProps) => {
+const Review = ({ operator }: TabProps) => {
     return (
         <div>
             <h1 style={{ color: "red" }}>REVIEW</h1>
@@ -96,7 +98,7 @@ const Review = ({ operator }: OperatorProps) => {
     );
 };
 
-const Synergy = ({ operator }: OperatorProps) => {
+const Synergy = ({ operator }: TabProps) => {
     return (
         <div>
             <h1 style={{ color: "red" }}>SYNERGY</h1>
@@ -104,7 +106,7 @@ const Synergy = ({ operator }: OperatorProps) => {
     );
 };
 
-const Lore = ({ operator }: OperatorProps) => {
+const Lore = ({ operator }: TabProps) => {
     return (
         <div>
             <h1 style={{ color: "red" }}>{operator.faction}</h1>

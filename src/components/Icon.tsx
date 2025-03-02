@@ -1,8 +1,8 @@
 import Image from "next/image";
-import { Operator, OperatorWithBase } from "@/lib/types";
+import { QueryOperator } from "@/lib/types";
 
 type IconProps = {
-    operator: Operator | OperatorWithBase;
+    operator: QueryOperator;
 };
 
 const Icon = ({ operator }: IconProps) => {

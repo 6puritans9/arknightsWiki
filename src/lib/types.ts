@@ -5,6 +5,7 @@ import { operatorsQuery } from "./apiOperators";
 type Operator = Database["public"]["Tables"]["operators"]["Row"];
 
 type QueryOperators = QueryData<typeof operatorsQuery>;
+type QueryOperator = QueryData<typeof operatorsQuery>["0"];
 
 type OperatorWithBase = {
     id: number;
@@ -56,6 +57,17 @@ export type BaseFilterCondition = {
     value: string | RelationsValue | null;
 };
 
+type OpsFilterCondition = {
+    category: string | null;
+    value: number | string | null;
+};
+
 export type UnifiedFilterCondition = FilterCondition | BaseFilterCondition;
 
-export type { Operator, OperatorWithBase, QueryOperators };
+export type {
+    Operator,
+    OperatorWithBase,
+    QueryOperators,
+    QueryOperator,
+    OpsFilterCondition,
+};

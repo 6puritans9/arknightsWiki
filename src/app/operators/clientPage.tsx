@@ -3,21 +3,21 @@
 import { useState } from "react";
 import Link from "next/link";
 import Icon from "@/components/Icon";
-import Filter from "@/components/Filter";
-import { QueryOperators, FilterCondition } from "@/lib/types";
+import { OpsFilter } from "@/components/Filter";
+import { QueryOperators, OpsFilterCondition } from "@/lib/types";
 
 type OperatorsGridClientProps = {
     initialData: QueryOperators;
 };
 
 const OperatorsGridClient = ({ initialData }: OperatorsGridClientProps) => {
-    const [operators, setOperators] = useState<QueryOperators>(initialData);
-    const [filter, setFilter] = useState<FilterCondition>({
+    const [filter, setFilter] = useState<OpsFilterCondition>({
         category: null,
         value: "",
     });
 
-    const filterHandler = (condition: FilterCondition) => {
+    const operators = initialData;
+    const filterHandler = (condition: OpsFilterCondition) => {
         setFilter(condition);
     };
 
@@ -52,7 +52,7 @@ const OperatorsGridClient = ({ initialData }: OperatorsGridClientProps) => {
     return (
         <>
             <div className="flex">
-                <Filter filterArgs={filterArgs} onClick={filterHandler} />
+                <OpsFilter filterArgs={filterArgs} onClick={filterHandler} />
             </div>
             <section className="grid grid__icon">
                 {filteredOperators.map((operator) => (
