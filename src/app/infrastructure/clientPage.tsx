@@ -59,7 +59,6 @@ const InfrastructureClient = ({ initialData }: InfrastructureClientProps) => {
         const skill = operator.operator_base.map((row) => row.base);
         const effects = skill.flatMap((row) => row.effects);
         const facility = skill.map((row) => row.facility);
-        console.log(operator.sub_factions);
 
         if (!filter.value) {
             return true;
