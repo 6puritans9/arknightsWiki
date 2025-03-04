@@ -329,6 +329,7 @@ body > :not(header) {
 
 ul {
   list-style: none;
+  padding: 0;
 }
 
 a {
@@ -339,6 +340,10 @@ a {
 html {
   font-family: "Paperlogy", sans-serif;
   font-size: 0.625rem;
+}
+
+.header {
+  color: #333333;
 }
 
 p {
@@ -352,6 +357,7 @@ p {
 .filter__container {
   display: flex;
   justify-content: space-evenly;
+  flex-wrap: wrap;
   flex-direction: column;
   margin: 2rem 0;
   width: 100%;
@@ -359,10 +365,12 @@ p {
 .filter__rarity {
   display: flex;
   justify-content: flex-start;
+  flex-wrap: wrap;
 }
 .filter__class {
   display: flex;
   justify-content: flex-start;
+  flex-wrap: wrap;
 }
 .filter__class :not(:first-child) {
   color: green;
@@ -384,6 +392,7 @@ p {
 .filter__facility {
   display: flex;
   justify-content: space-evenly;
+  flex-wrap: wrap;
 }
 .filter__facility :not(:first-child) {
   color: blueviolet;
@@ -403,31 +412,33 @@ p {
 }
 .header__container {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   flex-wrap: wrap;
 }
 
-.navigation {
-  display: inline-block;
-  padding: 1rem 0;
-}
-.navigation__list {
+.title__container {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  list-style: none;
-  margin: 0;
 }
-.navigation__link {
-  text-decoration: none;
-  font-size: 1.5rem;
+.title__text {
+  font-size: 2.5rem;
   font-weight: bold;
-  color: inherit;
-  padding: 1rem;
-  transition: background-color 0.3s;
 }
-.navigation__link:hover {
-  background-color: rgba(0, 0, 0, 0.1);
+
+.nav__container {
+  display: flex;
+  align-items: center;
+  margin-left: 3rem;
+  flex-basis: 13rem;
+}
+.nav__links {
+  display: flex;
+  justify-content: space-between;
+  flex-grow: 1;
+}
+.nav__item {
+  font-size: 1.2rem;
+  font-weight: 600;
 }
 
 @keyframes flicker {

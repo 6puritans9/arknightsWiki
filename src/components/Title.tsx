@@ -1,13 +1,12 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 
-const Title: React.FC = () => {
+const Title = () => {
     return (
-        <section className="title-section">
-            <Link href="/" className="title-section__link">
-                <h1 className="title-section__title">명일방주</h1>
-            </Link>
-        </section>
+        <Link href="/" className="title__container">
+            <h1 className="title__text">Arknights</h1>
+        </Link>
     );
 };
 

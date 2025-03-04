@@ -1,4 +1,15 @@
 .flex {
-    display: flex;
-    justify-content: center;
+    &-container {
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+
+    &__center {
+        justify-content: center;
+    }
+
+    &__evenly {
+        justify-content: space-evenly;
+    }
 }

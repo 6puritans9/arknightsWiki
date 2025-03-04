@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Paperlogy } from "./styles/fonts";
 import "./styles/styles.css";
-import Navigation from "../components/Navigation";
+import Nav from "../components/Nav";
 import Title from "@/components/Title";
 import Footer from "@/components/Footer";
 
@@ -19,9 +19,9 @@ export default function RootLayout({
         <html lang="en" className={`${Paperlogy}`}>
             <body>
                 <header className="header">
-                    <div className="flex-container">
+                    <div className="header__container">
                         <Title />
-                        <Navigation />
+                        <Nav />
                     </div>
                 </header>
                 {children}

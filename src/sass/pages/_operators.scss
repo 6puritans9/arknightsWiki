@@ -3,6 +3,11 @@
 .op-grid {
     display: grid;
 
+    &__container {
+        display: flex;
+        justify-content: center;
+    }
+
     &__header {
         display: flex;
     }

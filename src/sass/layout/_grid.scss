@@ -11,8 +11,17 @@
 .grid {
     display: grid;
 
+    &-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+    }
+    &-container-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+    }
+
     &__icon {
-        grid-template-columns: repeat(6, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         grid-gap: 1rem;
     }
 

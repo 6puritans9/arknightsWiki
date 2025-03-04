@@ -1,0 +1,19 @@
+.nav {
+    &__container {
+        display: flex;
+        align-items: center;
+        margin-left: 3rem;
+        flex-basis: 13rem;
+    }
+
+    &__links {
+        display: flex;
+        justify-content: space-between;
+        flex-grow: 1;
+    }
+
+    &__item {
+        font-size: 1.2rem;
+        font-weight: 600;
+    }
+}

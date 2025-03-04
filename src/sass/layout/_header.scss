@@ -6,6 +6,6 @@
     background-color: vars.$base-color;
 
     &__container {
-        @include vars.flex-start-wrap;
+        @include vars.flex-between-wrap;
     }
 }

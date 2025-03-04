@@ -1,53 +1,54 @@
+@use "../abstracts/index" as vars;
+
 .filter {
     &__container {
-        display: flex;
+        @include vars.flex-evenly-wrap;
         flex-direction: column;
-        justify-content: space-evenly;
         margin: 2rem 0;
         width: 100%;
     }
 
     &__rarity {
-        display: flex;
-        justify-content: space-evenly;
+        @include vars.flex-start-wrap;
         // width: 30rem;
     }
 
     &__class {
-        display: flex;
-        justify-content: space-evenly;
+        @include vars.flex-start-wrap;
         :not(:first-child) {
             color: green;
         }
     }
 
     &__branch {
-        display: grid;
-        grid-template-columns: repeat(6, 1fr);
+        @include vars.grid-rep-6;
         :not(:first-child) {
             color: darkorange;
         }
     }
 
     &__faction {
-        display: grid;
-        grid-template-columns: repeat(6, 1fr);
+        @include vars.grid-rep-6;
+        // display: grid;
+        // grid-template-columns: repeat(6, 1fr);
         :not(:first-child) {
             color: blue;
         }
     }
 
     &__facility {
-        display: flex;
-        justify-content: space-evenly;
+        @include vars.flex-evenly-wrap;
+        // display: flex;
+        // justify-content: space-evenly;
         :not(:first-child) {
             color: blueviolet;
         }
     }
 
     &__effects {
-        display: grid;
-        grid-template-columns: repeat(6, 1fr);
+        @include vars.grid-rep-6;
+        // display: grid;
+        // grid-template-columns: repeat(6, 1fr);
         :not(:first-child) {
             // width: 30rem;
             color: lightcoral;

@@ -1,6 +1,12 @@
+@use "../abstracts/index" as vars;
+
 html {
     font-family: "Paperlogy", sans-serif;
     font-size: 0.625rem; // 10px
+}
+
+.header {
+    color: vars.$header-text-color;
 }
 
 p {

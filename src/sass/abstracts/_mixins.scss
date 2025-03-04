@@ -1,21 +1,18 @@
-@mixin flex-center {
-    display: flex;
-    justify-content: space-evenly;
-}
-
-@mixin flex-evenly {
-    display: flex;
-    justify-content: space-evenly;
-}
-
-@mixin flex-start {
-    display: flex;
-    justify-content: flex-start;
-}
-
 @mixin flex-start-wrap {
     display: flex;
     justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+@mixin flex-between-wrap {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+@mixin flex-evenly-wrap {
+    display: flex;
+    justify-content: space-evenly;
     flex-wrap: wrap;
 }
 
