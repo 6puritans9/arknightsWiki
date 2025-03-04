@@ -309,9 +309,10 @@ template {
   display: none;
 }
 
-html {
+html,
+body {
+  height: 100%;
   box-sizing: border-box;
-  width: 100%;
 }
 
 *,
@@ -322,9 +323,6 @@ html {
 
 body {
   overflow-x: hidden;
-}
-body > :not(header) {
-  padding: 0 3rem;
 }
 
 ul {
@@ -405,9 +403,14 @@ p {
   color: lightcoral;
 }
 
+.page__container {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
+}
+
 .header {
   padding: 1rem 3rem 1rem 3rem;
-  margin-bottom: 1rem;
   background-color: #29c8cc;
 }
 .header__container {
@@ -439,6 +442,23 @@ p {
 .nav__item {
   font-size: 1.2rem;
   font-weight: 600;
+}
+
+.content {
+  position: relative;
+  padding: 0 3rem;
+  overflow: hidden;
+  height: 100%;
+}
+.content__video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -1;
+  opacity: 0.5;
 }
 
 @keyframes flicker {
@@ -488,24 +508,27 @@ p {
 }
 
 .footer {
-  margin-top: 3rem;
   line-height: 1.5rem;
   text-align: right;
+  background-color: #29c8cc;
 }
 
-.home {
+.home__container {
   display: flex;
+  flex-direction: column;
 }
-.home__image--centered {
-  align-self: center;
+.home__content {
+  display: flex;
+  justify-content: center;
+  height: 10vh;
 }
-.home__banner__notice {
-  margin-top: 5rem;
+.home__banners__notice {
+  margin-top: 3rem;
   font-size: 2rem;
   font-weight: bold;
   text-align: center;
 }
-.home__banner__image {
+.home__banners__image {
   width: 100vw;
   max-width: 100%;
   overflow: hidden;

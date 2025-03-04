@@ -8,9 +8,11 @@
 @use "./components/carousel";
 @use "./components/filter";
 
+@use "./layout/page";
 @use "./layout/header";
 @use "./layout/title";
 @use "./layout/nav";
+@use "./layout/content";
 @use "./layout/grid";
 @use "./layout/flex";
 @use "./layout/footer";

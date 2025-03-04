@@ -18,14 +18,25 @@ export default function RootLayout({
     return (
         <html lang="en" className={`${Paperlogy}`}>
             <body>
-                <header className="header">
-                    <div className="header__container">
-                        <Title />
-                        <Nav />
-                    </div>
-                </header>
-                {children}
-                <Footer />
+                <div className="page__container">
+                    <header className="header">
+                        <div className="header__container">
+                            <Title />
+                            <Nav />
+                        </div>
+                    </header>
+                    <main className="content">
+                        <video autoPlay muted loop className="content__video">
+                            <source
+                                src="/background/sarkaz-arknights.1920x1080.mp4"
+                                type="video/mp4"
+                            />
+                            Your browser does not support the video tag.
+                        </video>
+                        {children}
+                    </main>
+                    <Footer />
+                </div>
             </body>
         </html>
     );

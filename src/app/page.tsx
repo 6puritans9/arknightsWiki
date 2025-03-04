@@ -2,31 +2,39 @@ import Image from "next/image";
 
 export default function Home() {
     return (
-        <>
-            <div className="home">
-                <p>명일방주 한국어 위키 페이지입니다</p>
+        <div className="home__container">
+            <div className="home__content">
+                <p className="home__content__text">Welcome to ArknightsWiki</p>
                 {/* 이미지 - 코코넛콘 */}
-                <Image
-                    className="home__image--centered"
+                {/* <Image
                     src="/kal'tsit.gif"
                     alt="kalt'sit"
                     width={50}
                     height={50}
                     unoptimized={true}
-                />
+                /> */}
             </div>
-            <div className="home__banner">
-                <p className="home__banner__notice">Ongoing Event</p>
+
+            <article className="home__banners">
+                <p className="home__banners__notice">Ongoing Events</p>
                 <Image
-                    className="home__banner__image"
-                    src="/banners/EN_A_Kazdelian_Rescue_banner.webp"
-                    alt="banner"
+                    className="home__banners__image"
+                    src="/banners/EN_Come_Catastrophes_or_Wakes_of_Vultures_Rerun_banner.webp"
+                    alt="ongoing"
                     layout="responsive"
                     width={100}
                     height={100}
                 />
-                <p className="home__banner__notice">Upcoming Event</p>
-            </div>
-        </>
+                <p className="home__banners__notice">Upcoming Events</p>
+                <Image
+                    className="home__banners__image"
+                    src="/banners/CN_Delicious_on_Terra_banner.webp"
+                    alt="upcoming"
+                    layout="responsive"
+                    width={100}
+                    height={100}
+                />
+            </article>
+        </div>
     );
 }

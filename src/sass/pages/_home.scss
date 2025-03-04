@@ -1,16 +1,18 @@
 .home {
-    display: flex;
-
-    &__image {
+    &__container {
+        display: flex;
+        flex-direction: column;
     }
 
-    &__image--centered {
-        align-self: center;
+    &__content {
+        display: flex;
+        justify-content: center;
+        height: 10vh;
     }
 
-    &__banner {
+    &__banners {
         &__notice {
-            margin-top: 5rem;
+            margin-top: 3rem;
             font-size: 2rem;
             font-weight: bold;
             text-align: center;

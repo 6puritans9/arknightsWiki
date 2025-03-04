@@ -1,6 +1,7 @@
-html {
+html,
+body {
+    height: 100%;
     box-sizing: border-box;
-    width: 100%;
 }
 
 *,
@@ -11,10 +12,6 @@ html {
 
 body {
     overflow-x: hidden;
-
-    > :not(header) {
-        padding: 0 3rem;
-    }
 }
 
 ul {

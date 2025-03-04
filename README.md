@@ -42,7 +42,6 @@ _Home_
   [] With opacity
 [] Event Banners
   [] Carousel with swiper
-[] Better footer
 ```
 
 _Operators_
@@ -76,17 +75,32 @@ _Infra_
 
 ### CSS
 
+_Header_
+
+```
+[x] Nav
+[] Sticky
+```
+
 _Home_
 
 ```
+[x] Background Video
 [] Banners(Carousel)
-[] Footer
-  [] Make it stick to the bottom
 ```
 
-_Operators_Grid_
+_Footer_
 
 ```
+[x] Background color
+[] Version
+[] Stick to the bottom
+```
+
+_Operators_
+
+```
+[] Background Color(dark)
 [] Grid(_grid.scss)
   [x] 6 repeated columns
   [] when hovered, the icon shines according to its rarity

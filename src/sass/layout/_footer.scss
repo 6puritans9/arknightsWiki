@@ -1,5 +1,8 @@
+@use "../abstracts/index" as vars;
+
 .footer {
-    margin-top: 3rem;
+    // margin-top: 3rem;
     line-height: 1.5rem;
     text-align: right;
+    background-color: vars.$base-color;
 }
