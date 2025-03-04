@@ -6,8 +6,8 @@ import Title from "@/components/Title";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-    title: "명일방주 위키",
-    description: "명일방주 한국어 위키 페이지입니다",
+    title: "Arknights Wiki",
+    description: "Arknights Wiki",
 };
 
 export default function RootLayout({
