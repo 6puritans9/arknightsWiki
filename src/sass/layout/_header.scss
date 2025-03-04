@@ -1,23 +1,11 @@
 @use "../abstracts/index" as vars;
 
-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.header {
     padding: 1rem 3rem 1rem 3rem;
     margin-bottom: 1rem;
     background-color: vars.$base-color;
-}
 
-.title-section {
-    &__link {
-        display: flex;
-        text-decoration: none;
-    }
-
-    &__title {
-        font-size: 2.5rem;
-        font-weight: bold;
-        color: #333;
+    &__container {
+        @include vars.flex-start-wrap;
     }
 }

@@ -1,0 +1,25 @@
+@mixin flex-center {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+@mixin flex-evenly {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+@mixin flex-start {
+    display: flex;
+    justify-content: flex-start;
+}
+
+@mixin flex-start-wrap {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+@mixin grid-rep-6 {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+}

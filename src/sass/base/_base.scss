@@ -1,5 +1,6 @@
 html {
     box-sizing: border-box;
+    width: 100%;
 }
 
 *,
@@ -8,16 +9,19 @@ html {
     box-sizing: inherit;
 }
 
-a {
-    text-decoration: none;
-    color: inherit;
-}
-
 body {
     overflow-x: hidden;
 
     > :not(header) {
         padding: 0 3rem;
     }
-    margin: 0;
+}
+
+ul {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
 }

@@ -51,3 +51,5 @@ next-env.d.ts
 /public/building_misc
 /public/op_misc
 /public/skills
+
+*.gif

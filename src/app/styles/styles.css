@@ -152,7 +152,8 @@ textarea {
  * 1. Show the overflow in Edge.
  */
 button,
-input { /* 1 */
+input {
+  /* 1 */
   overflow: visible;
 }
 
@@ -161,7 +162,8 @@ input { /* 1 */
  * 1. Remove the inheritance of text transform in Firefox.
  */
 button,
-select { /* 1 */
+select {
+  /* 1 */
   text-transform: none;
 }
 
@@ -309,6 +311,7 @@ template {
 
 html {
   box-sizing: border-box;
+  width: 100%;
 }
 
 *,
@@ -317,17 +320,20 @@ html {
   box-sizing: inherit;
 }
 
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
 body {
   overflow-x: hidden;
-  margin: 0;
 }
 body > :not(header) {
   padding: 0 3rem;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
 }
 
 html {
@@ -339,20 +345,24 @@ p {
   font-size: 1.7rem;
 }
 
+.grid-3-font {
+  font-size: 1rem;
+}
+
 .filter__container {
   display: flex;
-  flex-direction: column;
   justify-content: space-evenly;
+  flex-direction: column;
   margin: 2rem 0;
   width: 100%;
 }
 .filter__rarity {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: flex-start;
 }
 .filter__class {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: flex-start;
 }
 .filter__class :not(:first-child) {
   color: green;
@@ -386,23 +396,15 @@ p {
   color: lightcoral;
 }
 
-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.header {
   padding: 1rem 3rem 1rem 3rem;
   margin-bottom: 1rem;
   background-color: #29c8cc;
 }
-
-.title-section__link {
+.header__container {
   display: flex;
-  text-decoration: none;
-}
-.title-section__title {
-  font-size: 2.5rem;
-  font-weight: bold;
-  color: #333;
+  justify-content: flex-start;
+  flex-wrap: wrap;
 }
 
 .navigation {
@@ -439,8 +441,16 @@ header {
 .grid {
   display: grid;
 }
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.grid-container-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
 .grid__icon {
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   grid-gap: 1rem;
 }
 .grid > * {
@@ -454,9 +464,16 @@ header {
   animation: flicker 0.8s infinite;
 }
 
-.flex {
+.flex-container {
   display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+.flex__center {
   justify-content: center;
+}
+.flex__evenly {
+  justify-content: space-evenly;
 }
 
 .footer {
@@ -485,6 +502,10 @@ header {
 
 .op-grid {
   display: grid;
+}
+.op-grid__container {
+  display: flex;
+  justify-content: center;
 }
 .op-grid__header {
   display: flex;

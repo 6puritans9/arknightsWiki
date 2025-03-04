@@ -7,7 +7,7 @@
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
-        "sass": "sass src/sass/main.scss src/app/styles.css -w"
+        "sass": "sass src/sass/main.scss src/app/styles/styles.css -w"
     },
     "dependencies": {
         "@supabase/supabase-js": "^2.47.16",
