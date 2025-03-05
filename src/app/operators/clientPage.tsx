@@ -51,9 +51,7 @@ const OperatorsGridClient = ({ initialData }: OperatorsGridClientProps) => {
 
     return (
         <>
-            <div className="flex">
-                <OpsFilter filterArgs={filterArgs} onClick={filterHandler} />
-            </div>
+            <OpsFilter filterArgs={filterArgs} onClick={filterHandler} />
             <section className="grid grid__icon">
                 {filteredOperators.map((operator) => (
                     <Link

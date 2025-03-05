@@ -47,13 +47,17 @@ _Home_
 _Operators_
 
 ```
-\\ Overview
-[] View with class grouping
+\\ Filter
 [x] Filter by category
   [x] rarity
   [x] class
-    [x] branch?
+    [x] branch
+    [] Pop corresponding branches up when a class is selected
   [x] faction
+[] Apply accordion to faction
+
+\\ Overview
+[] View operators with rarity grouping
 [x] Refactor to server-side data fetching
 
 \\ Details

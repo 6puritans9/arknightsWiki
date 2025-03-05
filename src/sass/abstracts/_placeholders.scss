@@ -1,0 +1,6 @@
+@use "../abstracts/index" as vars;
+
+%filter-flex {
+    @include vars.flex-start-wrap;
+    align-items: center;
+}

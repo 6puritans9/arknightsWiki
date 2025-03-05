@@ -352,6 +352,13 @@ p {
   font-size: 1rem;
 }
 
+.filter__rarity, .filter__class {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
 .filter__container {
   display: flex;
   justify-content: space-evenly;
@@ -360,47 +367,64 @@ p {
   margin: 2rem 0;
   width: 100%;
 }
-.filter__rarity {
-  display: flex;
-  justify-content: flex-start;
-  flex-wrap: wrap;
+.filter__title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-right: 1rem;
 }
-.filter__class {
-  display: flex;
-  justify-content: flex-start;
-  flex-wrap: wrap;
+.filter__icon__container {
+  position: relative;
+  width: fit-content;
+  height: fit-content;
 }
-.filter__class :not(:first-child) {
-  color: green;
+.filter__icon__container:hover .filter__icon__desc {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) translateY(1.5rem);
+}
+.filter__icon__text {
+  position: relative;
+  cursor: pointer;
+}
+.filter__icon__image {
+  background-color: black;
+  position: relative;
+  width: 100%;
+  height: auto;
+  cursor: pointer;
+}
+.filter__icon__desc {
+  display: block;
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  white-space: nowrap;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
+  z-index: 1;
 }
 .filter__branch {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
 }
-.filter__branch :not(:first-child) {
-  color: darkorange;
-}
 .filter__faction {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-}
-.filter__faction :not(:first-child) {
-  color: blue;
 }
 .filter__facility {
   display: flex;
   justify-content: space-evenly;
   flex-wrap: wrap;
 }
-.filter__facility :not(:first-child) {
-  color: blueviolet;
-}
 .filter__effects {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-}
-.filter__effects :not(:first-child) {
-  color: lightcoral;
 }
 
 .page__container {

@@ -1,4 +1,5 @@
 @use "../abstracts/index" as vars;
+@use "../abstracts/placeholders";
 
 .filter {
     &__container {
@@ -8,50 +9,77 @@
         width: 100%;
     }
 
+    &__title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-right: 1rem;
+    }
+
+    &__icon {
+        &__container {
+            position: relative;
+            width: fit-content;
+            height: fit-content;
+
+            &:hover .filter__icon__desc {
+                visibility: visible;
+                opacity: 1;
+                transform: translateX(-50%) translateY(1.5rem);
+            }
+        }
+
+        &__text {
+            position: relative;
+            cursor: pointer;
+        }
+
+        &__image {
+            background-color: black;
+            position: relative;
+            width: 100%;
+            height: auto;
+            cursor: pointer;
+        }
+
+        &__desc {
+            display: block;
+            position: absolute;
+            bottom: 100%; // Position above the image
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8); // Semi-transparent background
+            color: white;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            white-space: nowrap;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
+            z-index: 1;
+        }
+    }
+
     &__rarity {
-        @include vars.flex-start-wrap;
-        // width: 30rem;
+        @extend %filter-flex;
     }
 
     &__class {
-        @include vars.flex-start-wrap;
-        :not(:first-child) {
-            color: green;
-        }
+        @extend %filter-flex;
     }
 
     &__branch {
         @include vars.grid-rep-6;
-        :not(:first-child) {
-            color: darkorange;
-        }
     }
 
     &__faction {
         @include vars.grid-rep-6;
-        // display: grid;
-        // grid-template-columns: repeat(6, 1fr);
-        :not(:first-child) {
-            color: blue;
-        }
     }
 
     &__facility {
         @include vars.flex-evenly-wrap;
-        // display: flex;
-        // justify-content: space-evenly;
-        :not(:first-child) {
-            color: blueviolet;
-        }
     }
 
     &__effects {
         @include vars.grid-rep-6;
-        // display: grid;
-        // grid-template-columns: repeat(6, 1fr);
-        :not(:first-child) {
-            // width: 30rem;
-            color: lightcoral;
-        }
     }
 }
