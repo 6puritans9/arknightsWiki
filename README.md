@@ -55,9 +55,9 @@ _Operators_
     [x] Pop corresponding branches up when a class is selected
   [x] faction
 [x] Custom Sort for className
-[] Implement overlapping conditions
-  [] Class with corresponding branches
-  [] Rarity - Class(branch) - Faction
+[x] Implement overlapping conditions
+  [x] Class with corresponding branches
+  [x] Rarity - Class(branch) - Faction
   [] Clicking twice will unselect the selected
 
 
