@@ -9,8 +9,8 @@ type BranchListProps = {
 
 const BranchList = ({ branches, onClick }: BranchListProps) => {
     return (
-        <div className="filter__branch-container">
-            <ul className="filter__branch">
+        <ul>
+            <div className="filter__branch__container">
                 {branches.map((branch, index) => (
                     <li
                         key={index}
@@ -29,37 +29,11 @@ const BranchList = ({ branches, onClick }: BranchListProps) => {
                             width={30}
                             alt="branch"
                         />
+                        <p className="filter__icon__desc">{branch}</p>
                     </li>
                 ))}
-            </ul>
-
-            {/* <ul className="filter__branch">
-                {classTree[value] &&
-                    classTree[value].map((branch, index) => (
-                        <>
-                            <li
-                                key={index}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    onClick({
-                                        category: "branch",
-                                        value: branch,
-                                    });
-                                }}
-                            >
-                                <Image
-                                    className="filter__icon__image"
-                                    src={branchMap[branch]}
-                                    height={30}
-                                    width={30}
-                                    alt="branch"
-                                />
-                            </li>
-                            <p className="filter__icon__desc">{branch}</p>
-                        </>
-                    ))}
-            </ul> */}
-        </div>
+            </div>
+        </ul>
     );
 };
 

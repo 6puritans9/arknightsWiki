@@ -52,8 +52,9 @@ _Operators_
   [x] rarity
   [x] class
     [x] branch
-    [] Pop corresponding branches up when a class is selected
+    [x] Pop corresponding branches up when a class is selected
   [x] faction
+[x] Custom Sort for className
 [] Implement overlapping conditions
   [] Class with corresponding branches
   [] Rarity - Class(branch) - Faction
@@ -113,10 +114,10 @@ _Operators_
 ```
 \\ Filter
 [x] Adjust rarity margin
+[] Make background color change when elements are being selected
 [] Apply accordions
   [] (faction)Show the most popular 6 factions and put Extend button below
 [] Make every image background size constant in branch
-[] Make background color change when elements are being selected
 
 \\ Overview
 [] Grid(_grid.scss)

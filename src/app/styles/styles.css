@@ -352,7 +352,7 @@ p {
   font-size: 1rem;
 }
 
-.filter__rarity__container, .filter__rarity, .filter__class {
+.filter__rarity__container, .filter__rarity {
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
@@ -364,11 +364,6 @@ p {
   flex-direction: column;
   margin: 2rem 0;
   width: 100%;
-}
-.filter__title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-right: 1rem;
 }
 .filter__icon__container {
   position: relative;
@@ -407,18 +402,27 @@ p {
   transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
   z-index: 1;
 }
-.filter__icon__branch-container {
+.filter__branch__container {
   display: flex;
   position: relative;
   width: 100%;
 }
-.filter__icon__branch-container:hover > .filter__icon__desc {
+.filter__branch__container:hover > .filter__icon__desc {
   visibility: visible;
   opacity: 1;
   transform: translateX(-50%) translateY(1.5rem);
 }
+.filter__title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-right: 1rem;
+}
 .filter__rarity > li {
   margin-right: 0.8em;
+}
+.filter__class {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
 }
 .filter__branch {
   display: grid;
