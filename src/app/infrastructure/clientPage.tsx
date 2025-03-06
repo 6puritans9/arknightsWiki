@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { UnifiedFilterCondition, RelationsValue } from "@/lib/types";
-import Filter from "@/components/Filter";
+import Filter from "@/components/Filter/OpsFilter";
 import Icon from "@/components/Icon";
 import { OperatorsWithBase } from "@/lib/apiBase";
 

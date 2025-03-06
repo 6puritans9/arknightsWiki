@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Icon from "@/components/Icon";
-import { OpsFilter } from "@/components/Filter";
+import { OpsFilter } from "@/components/Filter/OpsFilter";
 import { QueryOperators, OpsFilterCondition } from "@/lib/types";
 
 type OperatorsGridClientProps = {
@@ -49,9 +49,24 @@ const OperatorsGridClient = ({ initialData }: OperatorsGridClientProps) => {
         }
     });
 
+    const classTree: { [key: string]: string[] } = {};
+    classSet.forEach((className) => {
+        classTree[className] = Array.from(
+            new Set(
+                operators
+                    .filter((operator) => operator.class === className)
+                    .map((operator) => operator.branch)
+            )
+        );
+    });
+
     return (
         <>
-            <OpsFilter filterArgs={filterArgs} onClick={filterHandler} />
+            <OpsFilter
+                filterArgs={filterArgs}
+                classTree={classTree}
+                onClick={filterHandler}
+            />
             <section className="grid grid__icon">
                 {filteredOperators.map((operator) => (
                     <Link

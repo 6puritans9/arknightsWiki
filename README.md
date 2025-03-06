@@ -54,7 +54,11 @@ _Operators_
     [x] branch
     [] Pop corresponding branches up when a class is selected
   [x] faction
-[] Apply accordion to faction
+[] Implement overlapping conditions
+  [] Class with corresponding branches
+  [] Rarity - Class(branch) - Faction
+  [] Clicking twice will unselect the selected
+
 
 \\ Overview
 [] View operators with rarity grouping
@@ -70,6 +74,9 @@ _Operators_
 _Infra_
 
 ```
+\\ Filter
+
+\\ Overview
 [x] Query operators JOIN base
   [x] When an operator is selected, filter view to its realtions
 [x] Refactor to server-side data fetching
@@ -104,7 +111,14 @@ _Footer_
 _Operators_
 
 ```
-[] Background Color(dark)
+\\ Filter
+[x] Adjust rarity margin
+[] Apply accordions
+  [] (faction)Show the most popular 6 factions and put Extend button below
+[] Make every image background size constant in branch
+[] Make background color change when elements are being selected
+
+\\ Overview
 [] Grid(_grid.scss)
   [x] 6 repeated columns
   [] when hovered, the icon shines according to its rarity

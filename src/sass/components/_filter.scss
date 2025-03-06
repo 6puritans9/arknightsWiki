@@ -3,7 +3,7 @@
 
 .filter {
     &__container {
-        @include vars.flex-evenly-wrap;
+        display: flex;
         flex-direction: column;
         margin: 2rem 0;
         width: 100%;
@@ -21,7 +21,7 @@
             width: fit-content;
             height: fit-content;
 
-            &:hover .filter__icon__desc {
+            &:hover > .filter__icon__desc {
                 visibility: visible;
                 opacity: 1;
                 transform: translateX(-50%) translateY(1.5rem);
@@ -57,10 +57,28 @@
             transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
             z-index: 1;
         }
+
+        &__branch-container {
+            display: flex;
+            position: relative;
+            width: 100%;
+
+            &:hover > .filter__icon__desc {
+                visibility: visible;
+                opacity: 1;
+                transform: translateX(-50%) translateY(1.5rem);
+            }
+        }
     }
 
     &__rarity {
+        &__container {
+            @extend %filter-flex;
+        }
         @extend %filter-flex;
+        > li {
+            margin-right: 0.8em;
+        }
     }
 
     &__class {
