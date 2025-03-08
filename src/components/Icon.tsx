@@ -1,8 +1,8 @@
 import Image from "next/image";
-import { QueryOperator } from "@/lib/types";
+import { UnifiedSingleQuery } from "@/lib/types";
 
 type IconProps = {
-    operator: QueryOperator;
+    operator: UnifiedSingleQuery;
 };
 
 const Icon = ({ operator }: IconProps) => {

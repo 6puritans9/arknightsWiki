@@ -5,43 +5,27 @@ import { baseQuery } from "./apiBase";
 
 // Query Types
 type Operator = Database["public"]["Tables"]["operators"]["Row"];
+type Base = Database["public"]["Tables"]["base"]["Row"];
+type OperatorBase = {
+    operator_id: number;
+    base_id: number;
+    base: Base;
+};
 
 type QueryOperators = QueryData<typeof operatorsQuery>;
 type QueryOperator = QueryData<typeof operatorsQuery>["0"];
+type QueryBaseSkills = {
+    id: number;
+    name: string;
+    nickname: string;
+    pathname: string;
+    code: string;
+    operator_base: OperatorBase[];
+}[];
+type QueryBaseSkill = QueryData<typeof baseQuery>["0"];
 
-type QueryBaseSkills = QueryData<typeof baseQuery>;
-
-// type OperatorWithBase = {
-//     id: number;
-//     name: string;
-//     code: number;
-//     pathname: string;
-//     races: string[];
-//     faction: string;
-//     operator_base: {
-//         operator_id: number;
-//         base_id: number;
-//         base: {
-//             id: number;
-//             name: string;
-//             description: string;
-//             effects: string[];
-//             replace_skill: string | null;
-//             can_overlap: boolean | null;
-//             related_effects: string[] | null;
-//             related_ops: string[] | null;
-//             related_faction: string | null;
-//             related_race: string | null;
-//             owners: string[];
-//             obtain_at_e2: string[] | null;
-//             pathname: string;
-//             facility: string;
-//             obtain_at_e1: string[] | null;
-//             obtain_at_30: string[] | null;
-//             related_facilities: string[] | null;
-//         };
-//     }[];
-// };
+// Unified Query Type
+type UnifiedSingleQuery = QueryOperator | QueryBaseSkill;
 
 // Filter types
 type OpsFilterState = {
@@ -91,4 +75,5 @@ export type {
     OpsFilterCondition,
     OpsFilterState,
     OpsFilterAction,
+    UnifiedSingleQuery,
 };

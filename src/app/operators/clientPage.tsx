@@ -43,6 +43,11 @@ const filterReducer = (
 const OperatorsGridClient = ({ initialData }: OperatorsGridClientProps) => {
     const [filter, dispatch] = useReducer(filterReducer, initialFilterState);
 
+    if (initialData instanceof Error) {
+        const error = initialData.message;
+        return <div>{error}</div>;
+    }
+
     const operators = initialData;
     const filterHandler = (condition: OpsFilterCondition) => {
         switch (condition.category) {
