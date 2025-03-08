@@ -1,8 +1,8 @@
-import operatorsWithBase from "@/lib/apiBase";
+import { getBaseSkills } from "@/lib/apiBase";
 import InfrastructureClient from "./clientPage";
 
-const Infrastructure = () => {
-    const data = operatorsWithBase;
+const Infrastructure = async () => {
+    const data = await getBaseSkills();
 
     return <InfrastructureClient initialData={data} />;
 };

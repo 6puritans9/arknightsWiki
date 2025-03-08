@@ -1,6 +1,7 @@
 import { Database } from "./supabase";
 import { QueryData } from "@supabase/supabase-js";
 import { operatorsQuery } from "./apiOperators";
+import { baseQuery } from "./apiBase";
 
 // Query Types
 type Operator = Database["public"]["Tables"]["operators"]["Row"];
@@ -8,37 +9,39 @@ type Operator = Database["public"]["Tables"]["operators"]["Row"];
 type QueryOperators = QueryData<typeof operatorsQuery>;
 type QueryOperator = QueryData<typeof operatorsQuery>["0"];
 
-type OperatorWithBase = {
-    id: number;
-    name: string;
-    code: number;
-    pathname: string;
-    races: string[];
-    faction: string;
-    operator_base: {
-        operator_id: number;
-        base_id: number;
-        base: {
-            id: number;
-            name: string;
-            description: string;
-            effects: string[];
-            replace_skill: string | null;
-            can_overlap: boolean | null;
-            related_effects: string[] | null;
-            related_ops: string[] | null;
-            related_faction: string | null;
-            related_race: string | null;
-            owners: string[];
-            obtain_at_e2: string[] | null;
-            pathname: string;
-            facility: string;
-            obtain_at_e1: string[] | null;
-            obtain_at_30: string[] | null;
-            related_facilities: string[] | null;
-        };
-    }[];
-};
+type QueryBaseSkills = QueryData<typeof baseQuery>;
+
+// type OperatorWithBase = {
+//     id: number;
+//     name: string;
+//     code: number;
+//     pathname: string;
+//     races: string[];
+//     faction: string;
+//     operator_base: {
+//         operator_id: number;
+//         base_id: number;
+//         base: {
+//             id: number;
+//             name: string;
+//             description: string;
+//             effects: string[];
+//             replace_skill: string | null;
+//             can_overlap: boolean | null;
+//             related_effects: string[] | null;
+//             related_ops: string[] | null;
+//             related_faction: string | null;
+//             related_race: string | null;
+//             owners: string[];
+//             obtain_at_e2: string[] | null;
+//             pathname: string;
+//             facility: string;
+//             obtain_at_e1: string[] | null;
+//             obtain_at_30: string[] | null;
+//             related_facilities: string[] | null;
+//         };
+//     }[];
+// };
 
 // Filter types
 type OpsFilterState = {
@@ -82,9 +85,9 @@ export type UnifiedFilterCondition = FilterCondition | BaseFilterCondition;
 
 export type {
     Operator,
-    OperatorWithBase,
     QueryOperators,
     QueryOperator,
+    QueryBaseSkills,
     OpsFilterCondition,
     OpsFilterState,
     OpsFilterAction,
