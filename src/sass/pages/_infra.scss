@@ -1,0 +1,24 @@
+@use "../abstracts/index" as vars;
+
+.infra {
+    &__container {
+        @include vars.grid-rep-3;
+        grid-gap: 1rem;
+    }
+
+    &__icon {
+        &__container {
+            margin-top: 2rem;
+        }
+
+        &__content {
+            &-name {
+                font-size: 1.2rem;
+            }
+
+            &-desc {
+                font-size: 1rem;
+            }
+        }
+    }
+}

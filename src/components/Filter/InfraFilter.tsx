@@ -7,7 +7,7 @@ type FilterProps = {
 
 const InfraFilter = ({ filterArgs, onClick }: FilterProps) => {
     return (
-        <div className="filter__container">
+        <div className="">
             {filterArgs.map((arg, index) => (
                 <div key={index} className={`filter__${arg.category}`}>
                     <h1>{arg.category}</h1>

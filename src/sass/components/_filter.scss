@@ -102,6 +102,8 @@
     }
 
     &__effects {
-        @include vars.grid-rep-6;
+        @include vars.grid-rep-3;
+        font-size: 0.8em;
+        text-align: center;
     }
 }

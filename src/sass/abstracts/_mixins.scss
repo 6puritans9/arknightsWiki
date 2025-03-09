@@ -16,6 +16,11 @@
     flex-wrap: wrap;
 }
 
+@mixin grid-rep-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
 @mixin grid-rep-6 {
     display: grid;
     grid-template-columns: repeat(6, 1fr);

@@ -439,7 +439,9 @@ p {
 }
 .filter__effects {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(3, 1fr);
+  font-size: 0.8em;
+  text-align: center;
 }
 
 .page__container {
@@ -634,6 +636,21 @@ p {
 }
 .op-details__vote {
   grid-area: vote;
+}
+
+.infra__container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 1rem;
+}
+.infra__icon__container {
+  margin-top: 2rem;
+}
+.infra__icon__content-name {
+  font-size: 1.2rem;
+}
+.infra__icon__content-desc {
+  font-size: 1rem;
 }
 
 /*# sourceMappingURL=styles.css.map */

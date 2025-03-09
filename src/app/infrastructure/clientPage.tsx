@@ -143,13 +143,14 @@ const InfrastructureClient = ({ initialData }: InfrastructureClientProps) => {
             <div className="flex">
                 <InfraFilter filterArgs={filterArgs} onClick={filterHandler} />
             </div>
-            <section className="grid grid__icon">
+            <section className="infra__container">
                 {filteredData.map((operator) => (
-                    <div className="infra__container" key={operator.id}>
+                    <div className="infra__icon__container" key={operator.id}>
                         <Icon operator={operator} />
                         {operator.operator_base.map((row, index) => (
                             <article
                                 key={row.base_id}
+                                className="infra__icon__content"
                                 onClick={() =>
                                     filterHandler({
                                         category: "relations",
@@ -165,8 +166,12 @@ const InfrastructureClient = ({ initialData }: InfrastructureClientProps) => {
                                     })
                                 }
                             >
-                                <p>{`${index + 1} ${row.base.name}`}</p>
-                                <p>{row.base.description}</p>
+                                <h4 className="infra__icon__content-name">{`${
+                                    index + 1
+                                } ${row.base.name}`}</h4>
+                                <p className="infra__icon__content-desc">
+                                    {row.base.description}
+                                </p>
                             </article>
                         ))}
                     </div>
