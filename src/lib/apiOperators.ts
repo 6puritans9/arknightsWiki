@@ -23,7 +23,10 @@ const getOperator = async (name: string) => {
         .select("*")
         .eq("name", decodedName)
         .single();
-    if (error) throw error;
+
+    if (error) {
+        throw new Error(error.message);
+    }
 
     return data;
 };
