@@ -74,9 +74,8 @@ _Infra_
 ```
 \\ Filter
 [] Apply facility tree structure for initialData
-[]
-[] Refactor the filtering logic can be overlapped with useReducer
-[] Polish the result to show related operators with clicked one
+[x] Refactor the filtering logic can be overlapped with useReducer
+[x] Clicked operator should be remained in the page
 
 \\ Overview
 [x] Query operators JOIN base
@@ -137,10 +136,11 @@ _Operators_Details_
 []
 ```
 
-_Base_
+_Infra_
 
 ```
-[] Add accordion for each category;
+[x] Highlight only hovered skill, not the operator itself
+[] Add accordion for each category
 ```
 
 ### DB
@@ -148,11 +148,12 @@ _Base_
 _Operators_
 [x] UPDATE COLUMN name_en TO name
 
-_base_
+_Infra_
 [x] connect operators with base
 
 ### Deploy
 
 ```
-[]
+[] Build with ISR
+[] EC2 or Vercel?
 ```

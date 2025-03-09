@@ -12,6 +12,12 @@
         }
 
         &__content {
+            &:hover {
+                transform: scale(1.1);
+                transition: transform 0.5s;
+                color: vars.$secondary-color;
+            }
+
             &-name {
                 font-size: 1.2rem;
             }

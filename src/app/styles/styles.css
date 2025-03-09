@@ -655,6 +655,11 @@ p {
 .infra__icon__container {
   margin-top: 2rem;
 }
+.infra__icon__content:hover {
+  transform: scale(1.1);
+  transition: transform 0.5s;
+  color: rgba(27, 27, 27, 0.4235294118);
+}
 .infra__icon__content-name {
   font-size: 1.2rem;
 }
