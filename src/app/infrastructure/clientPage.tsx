@@ -89,13 +89,17 @@ const InfrastructureClient = ({ initialData }: InfrastructureClientProps) => {
 
     const facilitySet = new Set(
         data.flatMap((operator) =>
-            operator.operator_base.map((row) => row.base.facility)
+            operator.operator_base.flatMap((row) =>
+                row.base.map((baseItem) => baseItem.facility)
+            )
         )
     );
 
     const effectSet = new Set(
         data.flatMap((operator) =>
-            operator.operator_base.flatMap((row) => row.base.effects)
+            operator.operator_base.flatMap((row) =>
+                row.base.flatMap((baseItem) => baseItem.effects)
+            )
         )
     );
 
@@ -105,7 +109,9 @@ const InfrastructureClient = ({ initialData }: InfrastructureClientProps) => {
     ];
 
     const filteredData = data.filter((operator) => {
-        const skill = operator.operator_base.map((row) => row.base);
+        const skill = operator.operator_base.flatMap((row) =>
+            row.base.map((baseItem) => baseItem)
+        );
         const effects = skill.flatMap((row) => row.effects);
         const facility = skill.map((row) => row.facility);
 
@@ -156,21 +162,37 @@ const InfrastructureClient = ({ initialData }: InfrastructureClientProps) => {
                                         category: "relations",
                                         selfName: operator.name,
                                         value: {
-                                            r_effects: row.base.related_effects,
-                                            r_ops: row.base.related_ops,
-                                            r_faction: row.base.related_faction,
-                                            r_race: row.base.related_race,
-                                            r_facilities:
-                                                row.base.related_facilities,
+                                            r_effects: row.base.flatMap(
+                                                (base) =>
+                                                    base.related_effects || []
+                                            ),
+                                            r_ops: row.base.flatMap(
+                                                (base) => base.related_ops || []
+                                            ),
+                                            r_faction:
+                                                row.base[0]?.related_faction ||
+                                                null,
+                                            r_race:
+                                                row.base[0]?.related_race ||
+                                                null,
+                                            r_facilities: row.base.flatMap(
+                                                (base) =>
+                                                    base.related_facilities ||
+                                                    []
+                                            ),
                                         },
                                     })
                                 }
                             >
                                 <h4 className="infra__icon__content-name">{`${
                                     index + 1
-                                } ${row.base.name}`}</h4>
+                                } ${row.base
+                                    .map((base) => base.name)
+                                    .join(", ")}`}</h4>
                                 <p className="infra__icon__content-desc">
-                                    {row.base.description}
+                                    {row.base
+                                        .map((base) => base.description)
+                                        .join(", ")}
                                 </p>
                             </article>
                         ))}

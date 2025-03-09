@@ -9,7 +9,7 @@ type Base = Database["public"]["Tables"]["base"]["Row"];
 type OperatorBase = {
     operator_id: number;
     base_id: number;
-    base: Base;
+    base: Base[];
 };
 
 type QueryOperators = QueryData<typeof operatorsQuery>;
@@ -94,6 +94,7 @@ export type {
     QueryOperators,
     QueryOperator,
     QueryBaseSkills,
+    QueryBaseSkill,
     UnifiedSingleQuery,
     OpsFilterState,
     OpsFilterAction,
