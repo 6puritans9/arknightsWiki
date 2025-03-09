@@ -444,6 +444,15 @@ p {
   text-align: center;
 }
 
+.icon__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.icon__name {
+  font-size: 1.6rem;
+}
+
 .page__container {
   display: grid;
   grid-template-rows: auto 1fr auto;

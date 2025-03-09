@@ -14,14 +14,14 @@ const Icon = ({ operator }: IconProps) => {
     const operatorPath = `char_${paddedCode}_${operator.pathname}`;
 
     return (
-        <div>
+        <div className="icon__container">
             <Image
                 src={`/operators/${operatorPath}/icons/${operatorPath}.webp`}
                 alt={operator.name}
                 width={90}
                 height={90}
             ></Image>
-            <h2>{operator.name}</h2>
+            <h2 className="icon__name">{operator.name}</h2>
         </div>
     );
 };

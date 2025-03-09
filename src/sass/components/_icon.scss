@@ -1,0 +1,13 @@
+@use "../abstracts/index" as vars;
+
+.icon {
+    &__container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    &__name {
+        font-size: 1.6rem;
+        // color: vars.$secondary-color;
+    }
+}
