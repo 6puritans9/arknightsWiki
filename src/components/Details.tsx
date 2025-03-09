@@ -70,7 +70,7 @@ const Attributes = ({ operator }: OperatorProps) => {
             <p>{`Class: ${operator.class}`}</p>
             <p>{`Branch: ${operator.branch}`}</p>
             <p>{`Faction: ${operator.faction}`}</p>
-            <p>{`Race: ${operator.race}`}</p>
+            <p>{`Race: ${operator.races?.join(", ") || ""}`}</p>
             <p>{`Gender: ${operator.gender}`}</p>
             <p>{`Position: ${operator.position}`}</p>
             <p>{`Rarity: ${operator.rarity}`}</p>

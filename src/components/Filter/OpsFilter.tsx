@@ -31,6 +31,17 @@ const OpsFilter = ({ filterArgs, classTree, onClick }: opsFilterProps) => {
         onClick({ category: "class", value });
     };
 
+    const getImageSource = (category: string, key: string): string => {
+        if (category === "class" && classMap[key]) {
+            return classMap[key];
+        }
+        if (category === "faction" && factionMap[key]) {
+            return factionMap[key];
+        }
+
+        return "/placeholder.png";
+    };
+
     return (
         <div className="filter__container">
             {filterArgs
@@ -69,18 +80,10 @@ const OpsFilter = ({ filterArgs, classTree, onClick }: opsFilterProps) => {
                                                 <>
                                                     <Image
                                                         className="filter__icon__image"
-                                                        src={
-                                                            (arg.category ===
-                                                                "class" &&
-                                                                classMap[
-                                                                    value
-                                                                ]) ||
-                                                            (arg.category ===
-                                                                "faction" &&
-                                                                factionMap[
-                                                                    value
-                                                                ])
-                                                        }
+                                                        src={getImageSource(
+                                                            arg.category,
+                                                            value.toString()
+                                                        )}
                                                         height={30}
                                                         width={30}
                                                         alt={value.toString()}

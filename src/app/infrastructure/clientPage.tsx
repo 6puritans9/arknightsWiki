@@ -89,17 +89,25 @@ const InfrastructureClient = ({ initialData }: InfrastructureClientProps) => {
 
     const facilitySet = new Set(
         data.flatMap((operator) =>
-            operator.operator_base.flatMap((row) =>
-                row.base.map((baseItem) => baseItem.facility)
-            )
+            operator.operator_base.flatMap((row) => {
+                const baseArray = Array.isArray(row.base)
+                    ? row.base
+                    : [row.base];
+
+                return baseArray.map((baseItem) => baseItem.facility);
+            })
         )
     );
 
     const effectSet = new Set(
         data.flatMap((operator) =>
-            operator.operator_base.flatMap((row) =>
-                row.base.flatMap((baseItem) => baseItem.effects)
-            )
+            operator.operator_base.flatMap((row) => {
+                const baseArray = Array.isArray(row.base)
+                    ? row.base
+                    : [row.base];
+
+                return baseArray.flatMap((baseItem) => baseItem.effects);
+            })
         )
     );
 
@@ -109,9 +117,10 @@ const InfrastructureClient = ({ initialData }: InfrastructureClientProps) => {
     ];
 
     const filteredData = data.filter((operator) => {
-        const skill = operator.operator_base.flatMap((row) =>
-            row.base.map((baseItem) => baseItem)
-        );
+        const skill = operator.operator_base.flatMap((row) => {
+            const baseArray = Array.isArray(row.base) ? row.base : [row.base];
+            return baseArray;
+        });
         const effects = skill.flatMap((row) => row.effects);
         const facility = skill.map((row) => row.facility);
 
@@ -153,49 +162,58 @@ const InfrastructureClient = ({ initialData }: InfrastructureClientProps) => {
                 {filteredData.map((operator) => (
                     <div className="infra__icon__container" key={operator.id}>
                         <Icon operator={operator} />
-                        {operator.operator_base.map((row, index) => (
-                            <article
-                                key={row.base_id}
-                                className="infra__icon__content"
-                                onClick={() =>
-                                    filterHandler({
-                                        category: "relations",
-                                        selfName: operator.name,
-                                        value: {
-                                            r_effects: row.base.flatMap(
-                                                (base) =>
-                                                    base.related_effects || []
-                                            ),
-                                            r_ops: row.base.flatMap(
-                                                (base) => base.related_ops || []
-                                            ),
-                                            r_faction:
-                                                row.base[0]?.related_faction ||
-                                                null,
-                                            r_race:
-                                                row.base[0]?.related_race ||
-                                                null,
-                                            r_facilities: row.base.flatMap(
-                                                (base) =>
-                                                    base.related_facilities ||
-                                                    []
-                                            ),
-                                        },
-                                    })
-                                }
-                            >
-                                <h4 className="infra__icon__content-name">{`${
-                                    index + 1
-                                } ${row.base
-                                    .map((base) => base.name)
-                                    .join(", ")}`}</h4>
-                                <p className="infra__icon__content-desc">
-                                    {row.base
-                                        .map((base) => base.description)
-                                        .join(", ")}
-                                </p>
-                            </article>
-                        ))}
+                        {operator.operator_base.map((row, index) => {
+                            const baseArray = Array.isArray(row.base)
+                                ? row.base
+                                : [row.base];
+
+                            return (
+                                <article
+                                    key={row.base_id}
+                                    className="infra__icon__content"
+                                    onClick={() =>
+                                        filterHandler({
+                                            category: "relations",
+                                            selfName: operator.name,
+                                            value: {
+                                                r_effects: baseArray.flatMap(
+                                                    (base) =>
+                                                        base.related_effects ||
+                                                        []
+                                                ),
+                                                r_ops: baseArray.flatMap(
+                                                    (base) =>
+                                                        base.related_ops || []
+                                                ),
+                                                r_faction:
+                                                    baseArray[0]
+                                                        ?.related_faction ||
+                                                    null,
+                                                r_race:
+                                                    baseArray[0]
+                                                        ?.related_race || null,
+                                                r_facilities: baseArray.flatMap(
+                                                    (base) =>
+                                                        base.related_facilities ||
+                                                        []
+                                                ),
+                                            },
+                                        })
+                                    }
+                                >
+                                    <h4 className="infra__icon__content-name">{`${
+                                        index + 1
+                                    } ${baseArray
+                                        .map((base) => base.name)
+                                        .join(", ")}`}</h4>
+                                    <p className="infra__icon__content-desc">
+                                        {baseArray
+                                            .map((base) => base.description)
+                                            .join(", ")}
+                                    </p>
+                                </article>
+                            );
+                        })}
                     </div>
                 ))}
             </section>
