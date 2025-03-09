@@ -20,6 +20,9 @@ type QueryBaseSkills = {
     nickname: string;
     pathname: string;
     code: string;
+    races: string[];
+    faction: string;
+    sub_factions: string[];
     operator_base: OperatorBase[];
 }[];
 type QueryBaseSkill = QueryData<typeof baseQuery>["0"];
@@ -28,6 +31,11 @@ type QueryBaseSkill = QueryData<typeof baseQuery>["0"];
 type UnifiedSingleQuery = QueryOperator | QueryBaseSkill;
 
 // Filter types
+type OpsFilterCondition = {
+    category: string | null;
+    value: number | string | null;
+};
+
 type OpsFilterState = {
     rarity: number | null;
     class: string | null;
@@ -42,12 +50,7 @@ type OpsFilterAction =
     | { type: "SET_RARITY"; value: number | null }
     | { type: "RESET" };
 
-export type FilterCondition = {
-    category: string | null;
-    value: number | string | null;
-};
-
-export type RelationsValue = {
+type BaseRelationsValue = {
     r_effects: string[] | null;
     r_ops: string[] | null;
     r_faction: string | null;
@@ -55,25 +58,48 @@ export type RelationsValue = {
     r_facilities: string[] | null;
 };
 
-export type BaseFilterCondition = {
+type BaseFilterCondition = {
     category: string | null;
-    value: string | RelationsValue | null;
+    value: string | BaseRelationsValue | null;
+    selfName?: string | null;
 };
 
-type OpsFilterCondition = {
-    category: string | null;
-    value: number | string | null;
+type BaseFilterState = {
+    selfName: string | null;
+    facility: string | null;
+    effects: string | null;
+    relations: BaseRelationsValue | null;
 };
 
-export type UnifiedFilterCondition = FilterCondition | BaseFilterCondition;
+type BaseFilterAction =
+    | {
+          type: "SET_FACILITY";
+          payload: string | null;
+          selfName: string | null;
+      }
+    | {
+          type: "SET_EFFECTS";
+          payload: string | null;
+          selfName: string | null;
+      }
+    | {
+          type: "SET_RELATIONS";
+          payload: BaseRelationsValue | null;
+          selfName: string | null;
+      }
+    | { type: "RESET" };
 
 export type {
     Operator,
     QueryOperators,
     QueryOperator,
     QueryBaseSkills,
-    OpsFilterCondition,
+    UnifiedSingleQuery,
     OpsFilterState,
     OpsFilterAction,
-    UnifiedSingleQuery,
+    OpsFilterCondition,
+    BaseFilterCondition,
+    BaseFilterState,
+    BaseFilterAction,
+    BaseRelationsValue,
 };

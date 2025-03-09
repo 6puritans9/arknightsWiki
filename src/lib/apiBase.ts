@@ -6,6 +6,9 @@ const baseQuery = supabase.from("operators").select(`
     nickname,
     pathname,
     code,
+    races,
+    faction,
+    sub_factions,
     operator_base!inner (
         operator_id,
         base_id,

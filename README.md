@@ -38,10 +38,7 @@ Currently under construction.👷‍♂️🔨🚧
 _Home_
 
 ```
-[] Sticky navigation
-  [] With opacity
-[] Event Banners
-  [] Carousel with swiper
+
 ```
 
 _Operators_
@@ -76,12 +73,15 @@ _Infra_
 
 ```
 \\ Filter
+[] Apply facility tree structure for initialData
+[]
+[] Refactor the filtering logic can be overlapped with useReducer
+[] Polish the result to show related operators with clicked one
 
 \\ Overview
 [x] Query operators JOIN base
   [x] When an operator is selected, filter view to its realtions
 [x] Refactor to server-side data fetching
-[] Fix filtering sub_factions
 [] ?Save preset
 ```
 
@@ -115,6 +115,7 @@ _Operators_
 \\ Filter
 [x] Adjust rarity margin
 [] Make background color change when elements are being selected
+[] Fix corresponding desc to show up for branches
 [] Apply accordions
   [] (faction)Show the most popular 6 factions and put Extend button below
 [] Make every image background size constant in branch
@@ -136,9 +137,11 @@ _Operators_Details_
 []
 ```
 
-_Tierlist_
-
 _Base_
+
+```
+[] Add accordion for each category;
+```
 
 ### DB
 

@@ -1,11 +1,11 @@
-import { UnifiedFilterCondition } from "@/lib/types";
+import { BaseFilterCondition } from "@/lib/types";
 
-type filterProps = {
-    filterArgs: { category: string; values: (string | number | null)[] }[];
-    onClick: (condition: UnifiedFilterCondition) => void;
+type FilterProps = {
+    filterArgs: { category: string; values: string[] }[];
+    onClick: (condition: BaseFilterCondition) => void;
 };
 
-const InfraFilter = ({ filterArgs, onClick }: filterProps) => {
+const InfraFilter = ({ filterArgs, onClick }: FilterProps) => {
     return (
         <div className="filter__container">
             {filterArgs.map((arg, index) => (
