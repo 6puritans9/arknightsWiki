@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { QueryOperator, QueryBaseSkills } from "@/lib/types";
+import getS3Url from "@/lib/apiAws";
 
 type IconProps = {
     operator: QueryOperator | QueryBaseSkills[0];
@@ -12,11 +13,12 @@ const Icon = ({ operator }: IconProps) => {
             : operator.code.toString();
 
     const operatorPath = `char_${paddedCode}_${operator.pathname}`;
+    const imagePath = `operators/${operatorPath}/icons/${operatorPath}.webp`;
 
     return (
         <div className="icon__container">
             <Image
-                src={`/operators/${operatorPath}/icons/${operatorPath}.webp`}
+                src={getS3Url(imagePath)}
                 alt={operator.name}
                 width={90}
                 height={90}

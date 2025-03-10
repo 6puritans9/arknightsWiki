@@ -5,6 +5,7 @@ import Image from "next/image";
 import { OpsFilterCondition } from "@/lib/types";
 import { classMap, factionMap } from "@/lib/constants/pathnameMap";
 import { BranchList } from "./BranchList";
+import getS3Url from "@/lib/apiAws";
 
 type opsFilterProps = {
     filterArgs: { category: string; values: (string | number)[] }[];
@@ -33,13 +34,13 @@ const OpsFilter = ({ filterArgs, classTree, onClick }: opsFilterProps) => {
 
     const getImageSource = (category: string, key: string): string => {
         if (category === "class" && classMap[key]) {
-            return classMap[key];
+            return getS3Url(classMap[key]);
         }
         if (category === "faction" && factionMap[key]) {
-            return factionMap[key];
+            return getS3Url(factionMap[key]);
         }
 
-        return "/placeholder.png";
+        return getS3Url("/placeholder.png");
     };
 
     return (

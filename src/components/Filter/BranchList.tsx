@@ -1,6 +1,7 @@
 import { OpsFilterCondition } from "@/lib/types";
 import Image from "next/image";
 import { branchMap } from "@/lib/constants/pathnameMap";
+import getS3Url from "@/lib/apiAws";
 
 type BranchListProps = {
     branches: string[];
@@ -24,7 +25,7 @@ const BranchList = ({ branches, onClick }: BranchListProps) => {
                     >
                         <Image
                             className="filter__icon__image"
-                            src={branchMap[branch]}
+                            src={getS3Url(branchMap[branch])}
                             height={30}
                             width={30}
                             alt="branch"

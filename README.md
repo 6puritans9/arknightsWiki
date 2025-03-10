@@ -154,6 +154,7 @@ _Infra_
 ### Deploy
 
 ```
-[] Build with ISR
-[] EC2 or Vercel?
+[x] S3 bucket for static assets
+[x] Fix Image src to S3
+[] Refactor using ISR
 ```
