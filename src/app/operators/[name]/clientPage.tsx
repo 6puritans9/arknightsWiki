@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Operator } from "@/lib/types";
+import getS3Url from "@/lib/apiAws";
 
 type OperatorDetailClientProps = {
     initialData: Operator;
@@ -23,6 +24,9 @@ const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
             ? operator.code.toString().padStart(3, "0")
             : operator.code.toString();
     const operatorPath = `char_${paddedCode}_${operator.pathname}`;
+    const imageSource = getS3Url(
+        `operators/${operatorPath}/${operatorPath}_1.webp`
+    );
 
     return (
         <article className="op-details">
@@ -31,7 +35,7 @@ const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
             </section>
             <div className="op-details__image-container">
                 <Image
-                    src={`/operators/${operatorPath}/${operatorPath}_1.webp`}
+                    src={`${imageSource}`}
                     alt={operator.name}
                     width={500}
                     height={500}
