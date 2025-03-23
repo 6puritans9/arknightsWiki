@@ -24,6 +24,7 @@ export default function Home() {
                     layout="responsive"
                     width={100}
                     height={100}
+                    unoptimized
                 />
                 <p className="home__banners__notice">Upcoming Events</p>
                 <Image
@@ -33,6 +34,7 @@ export default function Home() {
                     layout="responsive"
                     width={100}
                     height={100}
+                    unoptimized
                 />
             </article>
         </div>
