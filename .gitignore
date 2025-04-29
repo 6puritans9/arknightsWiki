@@ -54,3 +54,6 @@ next-env.d.ts
 /public/background
 *.gif
 *.jpg
+## Panda
+styled-system
+styled-system-studio

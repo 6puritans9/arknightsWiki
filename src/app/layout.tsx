@@ -1,6 +1,7 @@
+import "./globals.css";
 import type { Metadata } from "next";
 import { Paperlogy } from "./styles/fonts";
-import "./styles/styles.css";
+// import "./styles/styles.css";
 import Nav from "../components/Nav";
 import Title from "@/components/Title";
 import Footer from "@/components/Footer";
