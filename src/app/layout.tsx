@@ -1,9 +1,8 @@
 import "./globals.css";
-import type { Metadata } from "next";
+import { css } from "../../styled-system/css";
 import { Paperlogy } from "./styles/fonts";
-// import "./styles/styles.css";
+import type { Metadata } from "next";
 import Nav from "../components/Nav";
-import Title from "@/components/Title";
 import Footer from "@/components/Footer";
 import getS3Url from "@/lib/apiAws";
 
@@ -11,6 +10,24 @@ export const metadata: Metadata = {
     title: "Arknights Wiki",
     description: "Arknights Wiki",
 };
+
+const pageContainer = css({
+    display: "grid",
+    gridTemplateRows: "auto 1fr auto",
+    minHeight: "100%",
+    maxWidth: "100%",
+});
+
+const videoContainer = css({
+    position: "absolute",
+    top: "0",
+    left: "0",
+    width: "100vw",
+    height: "100vh",
+    objectFit: "cover",
+    zIndex: "-1",
+    opacity: "0.5",
+});
 
 export default function RootLayout({
     children,
@@ -22,15 +39,14 @@ export default function RootLayout({
     return (
         <html lang="en" className={`${Paperlogy}`}>
             <body>
-                <div className="page__container">
-                    <header className="header">
-                        <div className="header__container">
-                            <Title />
-                            <Nav />
-                        </div>
+                <div className={pageContainer}>
+                    <header
+                        style={{ position: "sticky", top: "0", zIndex: "100" }}
+                    >
+                        <Nav />
                     </header>
-                    <main className="content">
-                        <video autoPlay muted loop className="content__video">
+                    <main className={pageContainer}>
+                        <video autoPlay muted loop className={videoContainer}>
                             <source src={`${backgroundURL}`} type="video/mp4" />
                             Your browser does not support the video tag.
                         </video>
