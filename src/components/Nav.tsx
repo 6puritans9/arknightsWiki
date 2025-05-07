@@ -19,8 +19,9 @@ const navTitleContainer = flex({
 });
 
 const navLinksContainer = flex({
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
     padding: "0 3rem",
+    gap: "2rem",
     flexGrow: "1",
 });
 
