@@ -5,24 +5,51 @@ import type { Metadata } from "next";
 import Nav from "../components/Nav";
 import Footer from "@/components/Footer";
 import getS3Url from "@/lib/apiAws";
+import { container, flex } from "../../styled-system/patterns";
 
 export const metadata: Metadata = {
     title: "Arknights Wiki",
     description: "Arknights Wiki",
 };
 
-const pageContainer = css({
-    display: "grid",
-    gridTemplateRows: "auto 1fr auto",
-    minHeight: "100%",
-    maxWidth: "100%",
+const headerStyles = css({
+    position: "sticky",
+    top: "0",
+    zIndex: "100",
+    flexShrink: "0",
+});
+
+const bodyStyles = flex({
+    flexDirection: "column",
+    height: "100vh",
+    maxHeight: "100vh",
+    // minHeight: "100vh",
+    position: "relative",
+    maxWidth: "100vw",
+    overflowX: "hidden",
+});
+
+const mainStyles = container({
+    width: "100%",
+    maxWidth: "5xl",
+    margin: "2rem auto",
+    px: "4",
+    flex: "1",
+});
+
+const footerStyles = flex({
+    flexDirection: "column",
+    opacity: "0.8",
+    alignItems: "flex-end",
+    padding: "0.5rem 1rem",
+    backgroundColor: "primary",
 });
 
 const videoContainer = css({
-    position: "absolute",
+    position: "fixed",
     top: "0",
     left: "0",
-    width: "100vw",
+    width: "100%",
     height: "100vh",
     objectFit: "cover",
     zIndex: "-1",
@@ -38,22 +65,18 @@ export default function RootLayout({
 
     return (
         <html lang="en" className={`${Paperlogy}`}>
-            <body>
-                <div className={pageContainer}>
-                    <header
-                        style={{ position: "sticky", top: "0", zIndex: "100" }}
-                    >
-                        <Nav />
-                    </header>
-                    <main className={pageContainer}>
-                        <video autoPlay muted loop className={videoContainer}>
-                            <source src={`${backgroundURL}`} type="video/mp4" />
-                            Your browser does not support the video tag.
-                        </video>
-                        {children}
-                    </main>
+            <body className={bodyStyles}>
+                <header className={headerStyles}>
+                    <Nav />
+                </header>
+                <video autoPlay muted loop className={videoContainer}>
+                    <source src={`${backgroundURL}`} type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+                <main className={mainStyles}>{children}</main>
+                <footer className={footerStyles}>
                     <Footer />
-                </div>
+                </footer>
             </body>
         </html>
     );
