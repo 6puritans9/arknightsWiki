@@ -10,11 +10,32 @@ import {
 } from "@/lib/types";
 import Icon from "@/components/Icon";
 import { OpsFilter } from "@/components/Filter/OpsFilter";
+import { useOperatorStore } from "@/store/operatorStore";
+import { css } from "../../../styled-system/css";
+import { flex, grid } from "../../../styled-system/patterns";
 
+// Styles
+const contentWrapper = flex({
+    flexDirection: "column",
+});
+
+const filterContainer = grid({
+    gridTemplateColumns: "1fr 9fr",
+    gridTemplateAreas: `
+    "rarity-label rarity-content"
+    "class-label class-content"
+    "faction-label faction-content"
+  `,
+    gap: "1rem",
+    justifyItems: "flex-start",
+});
+
+// Types
 type OperatorsGridClientProps = {
     initialData: QueryOperators;
 };
 
+// Filter
 const initialFilterState: OpsFilterState = {
     rarity: null,
     class: null,
@@ -42,6 +63,18 @@ const filterReducer = (
 
 const OperatorsGridClient = ({ initialData }: OperatorsGridClientProps) => {
     const [filter, dispatch] = useReducer(filterReducer, initialFilterState);
+
+    // const {
+    //     filteredOperators,
+    //     visibleCount,
+    //     hasMore,
+    //     filters,
+    //     setAllOperators,
+    //     incrementVisibleCount,
+    //     updateFilter,
+    //     resetFilters,
+    //     applyFilters
+    // } = useOperatorStore();
 
     if (initialData instanceof Error) {
         const error = initialData.message;
@@ -84,15 +117,12 @@ const OperatorsGridClient = ({ initialData }: OperatorsGridClientProps) => {
     const branchSet = new Set(operators.map((operator) => operator.branch));
     const factionSet = new Set(operators.map((operator) => operator.faction));
 
-    const filterArgs = [
-        {
-            category: "rarity",
-            values: Array.from({ length: 6 }, (_, i) => 6 - i),
-        },
-        { category: "class", values: Array.from(classSet) },
-        { category: "branch", values: Array.from(branchSet) },
-        { category: "faction", values: Array.from(factionSet) },
-    ];
+    const filterArgs = {
+        rarity: Array.from({ length: 6 }, (_, i) => 6 - i),
+        class: Array.from(classSet),
+        branch: Array.from(branchSet),
+        faction: Array.from(factionSet),
+    };
 
     const filteredOperators = operators.filter((operator) => {
         return (
@@ -115,12 +145,15 @@ const OperatorsGridClient = ({ initialData }: OperatorsGridClientProps) => {
     });
 
     return (
-        <>
-            <OpsFilter
-                filterArgs={filterArgs}
-                classTree={classTree}
-                onClick={filterHandler}
-            />
+        <div className={contentWrapper}>
+            <section className={filterContainer}>
+                <OpsFilter
+                    filterArgs={filterArgs}
+                    classTree={classTree}
+                    onClick={filterHandler}
+                />
+            </section>
+
             <section className="grid grid__icon">
                 {filteredOperators.map((operator) => (
                     <Link
@@ -132,7 +165,7 @@ const OperatorsGridClient = ({ initialData }: OperatorsGridClientProps) => {
                     </Link>
                 ))}
             </section>
-        </>
+        </div>
     );
 };
 
