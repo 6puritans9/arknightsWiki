@@ -14,8 +14,9 @@ const popUpWrapper = flex({
     flexDirection: "column",
     gap: "0.3rem",
     backgroundColor: "rgba(0,0,0,0.7)",
-    opacity: "0.7",
+    opacity: "0.9",
     padding: "0.1rem 0.2rem 0.1rem 0.1rem",
+    cursor: "pointer",
 });
 
 const branchWrapper = flex({
