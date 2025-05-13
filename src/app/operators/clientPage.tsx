@@ -1,6 +1,6 @@
 "use client";
 
-import { useReducer } from "react";
+import { useReducer, useEffect, useRef } from "react";
 import Link from "next/link";
 import {
     QueryOperators,
@@ -64,17 +64,44 @@ const filterReducer = (
 const OperatorsGridClient = ({ initialData }: OperatorsGridClientProps) => {
     const [filter, dispatch] = useReducer(filterReducer, initialFilterState);
 
-    // const {
-    //     filteredOperators,
-    //     visibleCount,
-    //     hasMore,
-    //     filters,
-    //     setAllOperators,
-    //     incrementVisibleCount,
-    //     updateFilter,
-    //     resetFilters,
-    //     applyFilters
-    // } = useOperatorStore();
+    const {
+        filteredOperators,
+        visibleCount,
+        hasMore,
+        filters,
+        setAllOperators,
+        incrementVisibleCount,
+        updateFilter,
+        resetFilters,
+        applyFilters,
+    } = useOperatorStore();
+
+    const loaderRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        setAllOperators(initialData);
+    }, [initialData, setAllOperators]);
+
+    useEffect(() => {
+        if (!loaderRef.current || !hasMore) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && hasMore) {
+                    incrementVisibleCount();
+                }
+            },
+            { threshold: 0.1, rootMargin: "200px" }
+        );
+
+        observer.observe(loaderRef.current);
+
+        return () => {
+            if (loaderRef.current) {
+                observer.unobserve(loaderRef.current);
+            }
+        };
+    }, [hasMore, incrementVisibleCount]);
 
     if (initialData instanceof Error) {
         const error = initialData.message;
@@ -83,34 +110,13 @@ const OperatorsGridClient = ({ initialData }: OperatorsGridClientProps) => {
 
     const operators = initialData;
     const filterHandler = (condition: OpsFilterCondition) => {
-        switch (condition.category) {
-            case "class":
-                dispatch({
-                    type: "SET_CLASS",
-                    value: condition.value as string,
-                });
-                break;
-            case "branch":
-                dispatch({
-                    type: "SET_BRANCH",
-                    value: condition.value as string,
-                });
-                break;
-            case "faction":
-                dispatch({
-                    type: "SET_FACTION",
-                    value: condition.value as string,
-                });
-                break;
-            case "rarity":
-                dispatch({
-                    type: "SET_RARITY",
-                    value: condition.value as number,
-                });
-                break;
-            default:
-                dispatch({ type: "RESET" });
+        if (condition.category === "reset") {
+            resetFilters();
+        } else {
+            updateFilter(condition.category, condition.value);
         }
+
+        applyFilters();
     };
 
     const classSet = new Set(operators.map((operator) => operator.class));
@@ -123,15 +129,6 @@ const OperatorsGridClient = ({ initialData }: OperatorsGridClientProps) => {
         branch: Array.from(branchSet),
         faction: Array.from(factionSet),
     };
-
-    const filteredOperators = operators.filter((operator) => {
-        return (
-            (!filter.class || operator.class === filter.class) &&
-            (!filter.branch || operator.branch === filter.branch) &&
-            (!filter.faction || operator.faction === filter.faction) &&
-            (!filter.rarity || operator.rarity === filter.rarity)
-        );
-    });
 
     const classTree: { [key: string]: string[] } = {};
     classSet.forEach((className) => {
@@ -155,16 +152,49 @@ const OperatorsGridClient = ({ initialData }: OperatorsGridClientProps) => {
             </section>
 
             <section className="grid grid__icon">
-                {filteredOperators.map((operator) => (
-                    <Link
-                        key={operator.id}
-                        href={`/operators/${operator.name}`}
-                        passHref
-                    >
-                        <Icon operator={operator} />
-                    </Link>
-                ))}
+                {filteredOperators
+                    .slice(0, visibleCount)
+                    .map((operator, index) => (
+                        <Link
+                            key={operator.id}
+                            href={`/operators/${operator.name}`}
+                            passHref
+                        >
+                            <Icon operator={operator} priority={index < 10} />
+                        </Link>
+                    ))}
             </section>
+
+            {hasMore && (
+                <div
+                    ref={loaderRef}
+                    className={css({
+                        padding: "2rem",
+                        textAlign: "center",
+                        width: "100%",
+                    })}
+                >
+                    <div
+                        className={css({
+                            display: "inline-block",
+                            width: "2rem",
+                            height: "2rem",
+                            border: "4px solid rgba(0,0,0,0.1)",
+                            borderRadius: "50%",
+                            borderLeftColor: "#09f",
+                            animation: "spin 1s linear infinite",
+                        })}
+                    >
+                        <style jsx>{`
+                            @keyframes spin {
+                                to {
+                                    transform: rotate(360deg);
+                                }
+                            }
+                        `}</style>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

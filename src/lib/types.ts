@@ -32,7 +32,7 @@ type UnifiedSingleQuery = QueryOperator | QueryBaseSkill;
 
 // Filter types
 type OpsFilterCondition = {
-    category: string | null;
+    category: string;
     value: number | string | null;
 };
 
