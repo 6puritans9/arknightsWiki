@@ -2,6 +2,7 @@ import "./globals.css";
 import { css } from "../../styled-system/css";
 import { Paperlogy } from "./styles/fonts";
 import type { Metadata } from "next";
+import { TouchProvider } from "@/components/TouchProvider";
 import Nav from "../components/Nav";
 import Footer from "@/components/Footer";
 import getS3Url from "@/lib/apiAws";
@@ -66,17 +67,19 @@ export default function RootLayout({
     return (
         <html lang="en" className={`${Paperlogy}`}>
             <body className={bodyStyles}>
-                <header className={headerStyles}>
-                    <Nav />
-                </header>
-                <video autoPlay muted loop className={videoContainer}>
-                    <source src={`${backgroundURL}`} type="video/mp4" />
-                    Your browser does not support the video tag.
-                </video>
-                <main className={mainStyles}>{children}</main>
-                <footer className={footerStyles}>
-                    <Footer />
-                </footer>
+                <TouchProvider>
+                    <header className={headerStyles}>
+                        <Nav />
+                    </header>
+                    <video autoPlay muted loop className={videoContainer}>
+                        <source src={`${backgroundURL}`} type="video/mp4" />
+                        Your browser does not support the video tag.
+                    </video>
+                    <main className={mainStyles}>{children}</main>
+                    <footer className={footerStyles}>
+                        <Footer />
+                    </footer>
+                </TouchProvider>
             </body>
         </html>
     );
