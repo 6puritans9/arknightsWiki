@@ -9,6 +9,11 @@ import { HoverCard } from "radix-ui";
 import getS3Url from "@/lib/apiAws";
 import { flex, grid } from "../../../styled-system/patterns";
 import { css } from "../../../styled-system/css";
+import {
+    HybridTooltip,
+    HybridTooltipContent,
+    HybridTooltipTrigger,
+} from "../HybirdTooltip";
 
 // Styles
 const filterSection = flex({
@@ -127,8 +132,8 @@ const OpsFilter = ({ filterArgs, classTree, onClick }: opsFilterProps) => {
                         .sort((a, b) => customOrder[a] - customOrder[b])
                         .map((classItem) => (
                             <li key={classItem}>
-                                <HoverCard.Root>
-                                    <HoverCard.Trigger asChild>
+                                <HybridTooltip>
+                                    <HybridTooltipTrigger asChild>
                                         <Image
                                             src={getImageSource(
                                                 "class",
@@ -138,16 +143,14 @@ const OpsFilter = ({ filterArgs, classTree, onClick }: opsFilterProps) => {
                                             width={30}
                                             alt={classItem}
                                         />
-                                    </HoverCard.Trigger>
-                                    <HoverCard.Portal>
-                                        <HoverCard.Content>
-                                            <BranchList
-                                                branches={classTree[classItem]}
-                                                onClick={onClick}
-                                            />
-                                        </HoverCard.Content>
-                                    </HoverCard.Portal>
-                                </HoverCard.Root>
+                                    </HybridTooltipTrigger>
+                                    <HybridTooltipContent>
+                                        <BranchList
+                                            branches={classTree[classItem]}
+                                            onClick={onClick}
+                                        />
+                                    </HybridTooltipContent>
+                                </HybridTooltip>
                             </li>
                         ))}
                 </ul>
@@ -160,8 +163,8 @@ const OpsFilter = ({ filterArgs, classTree, onClick }: opsFilterProps) => {
                 <ul className={factionWrapper}>
                     {factions.map((faction) => (
                         <li key={faction}>
-                            <HoverCard.Root>
-                                <HoverCard.Trigger asChild>
+                            <HybridTooltip>
+                                <HybridTooltipTrigger asChild>
                                     <Image
                                         src={getImageSource("faction", faction)}
                                         className={factionImage}
@@ -169,17 +172,13 @@ const OpsFilter = ({ filterArgs, classTree, onClick }: opsFilterProps) => {
                                         width={30}
                                         alt={faction}
                                     />
-                                </HoverCard.Trigger>
-                                <HoverCard.Portal>
-                                    <HoverCard.Content>
-                                        <div className={popUpWrapper}>
-                                            <p className={popUpText}>
-                                                {faction}
-                                            </p>
-                                        </div>
-                                    </HoverCard.Content>
-                                </HoverCard.Portal>
-                            </HoverCard.Root>
+                                </HybridTooltipTrigger>
+                                <HybridTooltipContent>
+                                    <div className={popUpWrapper}>
+                                        <p className={popUpText}>{faction}</p>
+                                    </div>
+                                </HybridTooltipContent>
+                            </HybridTooltip>
                         </li>
                     ))}
                 </ul>
