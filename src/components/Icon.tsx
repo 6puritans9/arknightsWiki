@@ -1,4 +1,6 @@
 import Image from "next/image";
+import Link from "next/link";
+import { css } from "../../styled-system/css";
 import { QueryOperator, QueryBaseSkills } from "@/lib/types";
 import getS3Url from "@/lib/apiAws";
 
@@ -6,6 +8,15 @@ type IconProps = {
     operator: QueryOperator | QueryBaseSkills[0];
     priority: boolean;
 };
+
+const wrapper = css({
+    width: {
+        base: "70px",
+        sm: "80px",
+        md: "90px",
+    },
+    height: "auto",
+});
 
 const Icon = ({ operator, priority = false }: IconProps) => {
     const paddedCode =
@@ -17,15 +28,21 @@ const Icon = ({ operator, priority = false }: IconProps) => {
     const imagePath = `operators/${operatorPath}/icons/${operatorPath}.webp`;
 
     return (
-        <div className="icon__container">
-            <Image
-                src={getS3Url(imagePath)}
-                alt={operator.name}
-                width={90}
-                height={90}
-                priority={priority}
-            ></Image>
-            <h2 className="icon__name">{operator.name}</h2>
+        <div className={wrapper}>
+            <Link
+                key={operator.id}
+                href={`/operators/${operator.name}`}
+                passHref
+            >
+                <Image
+                    src={getS3Url(imagePath)}
+                    alt={operator.name}
+                    width={90}
+                    height={90}
+                    priority={priority}
+                ></Image>
+            </Link>
+            <span className="icon__name">{operator.name}</span>
         </div>
     );
 };
