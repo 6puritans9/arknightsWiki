@@ -1,1 +1,11 @@
 @layer reset, base, tokens, recipes, utilities;
+
+/* Remove background color from tooltip and popover components */
+[data-radix-popper-content-wrapper],
+[data-radix-popper-content-wrapper]>div,
+[role="tooltip"],
+[role="tooltip"]>div {
+    background-color: transparent;
+    box-shadow: none;
+    border: none;
+}
