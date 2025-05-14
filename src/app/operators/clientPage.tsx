@@ -1,6 +1,6 @@
 "use client";
 
-import { useReducer, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import {
     QueryOperators,
@@ -17,6 +17,7 @@ import { flex, grid } from "../../../styled-system/patterns";
 // Styles
 const contentWrapper = flex({
     flexDirection: "column",
+    alignItems: "center",
 });
 
 const filterContainer = grid({
@@ -28,6 +29,15 @@ const filterContainer = grid({
   `,
     gap: "1rem",
     justifyItems: "flex-start",
+});
+
+const gridContainer = grid({
+    gridTemplateColumns: {
+        base: "repeat(3, 1fr)",
+        md: "repeat(5, 1fr)",
+    },
+    gap: "1rem",
+    justifyItems: "center",
 });
 
 // Types
@@ -43,27 +53,7 @@ const initialFilterState: OpsFilterState = {
     faction: null,
 };
 
-const filterReducer = (
-    state: OpsFilterState,
-    action: OpsFilterAction
-): OpsFilterState => {
-    switch (action.type) {
-        case "SET_CLASS":
-            return { ...state, class: action.value, branch: null };
-        case "SET_BRANCH":
-            return { ...state, branch: action.value };
-        case "SET_FACTION":
-            return { ...state, faction: action.value };
-        case "SET_RARITY":
-            return { ...state, rarity: action.value };
-        case "RESET":
-            return initialFilterState;
-    }
-};
-
 const OperatorsGridClient = ({ initialData }: OperatorsGridClientProps) => {
-    const [filter, dispatch] = useReducer(filterReducer, initialFilterState);
-
     const {
         filteredOperators,
         visibleCount,
@@ -151,17 +141,15 @@ const OperatorsGridClient = ({ initialData }: OperatorsGridClientProps) => {
                 />
             </section>
 
-            <section className="grid grid__icon">
+            <section className={gridContainer}>
                 {filteredOperators
                     .slice(0, visibleCount)
                     .map((operator, index) => (
-                        <Link
+                        <Icon
                             key={operator.id}
-                            href={`/operators/${operator.name}`}
-                            passHref
-                        >
-                            <Icon operator={operator} priority={index < 10} />
-                        </Link>
+                            operator={operator}
+                            priority={index < 10}
+                        />
                     ))}
             </section>
 
