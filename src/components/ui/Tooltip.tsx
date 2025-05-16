@@ -4,8 +4,18 @@ import * as React from "react";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import { css } from "../../../styled-system/css";
 
-const TooltipProvider = TooltipPrimitive.Provider;
-const Tooltip = TooltipPrimitive.Root;
+const TooltipProvider = ({
+    delayDuration = 700,
+    ...props
+}: TooltipPrimitive.TooltipProviderProps) => (
+    <TooltipPrimitive.Provider delayDuration={delayDuration} {...props} />
+);
+const Tooltip = ({
+    delayDuration = 700,
+    ...props
+}: TooltipPrimitive.TooltipProps) => (
+    <TooltipPrimitive.Root delayDuration={delayDuration} {...props} />
+);
 const TooltipTrigger = TooltipPrimitive.Trigger;
 
 const TooltipContent = React.forwardRef<

@@ -15,15 +15,20 @@ import {
     PopoverTriggerProps,
 } from "@radix-ui/react-popover";
 
-export const HybridTooltip = (props: TooltipProps & PopoverProps) => {
+interface HybridTooltipProps extends TooltipProps, PopoverProps {}
+
+export const HybridTooltip = ({
+    delayDuration,
+    ...props
+}: HybridTooltipProps) => {
     const isTouch = useTouch();
     if (isTouch) {
         return <Popover {...props} />;
     }
 
     return (
-        <TooltipProvider>
-            <Tooltip {...props} />
+        <TooltipProvider delayDuration={delayDuration}>
+            <Tooltip delayDuration={delayDuration} {...props} />
         </TooltipProvider>
     );
 };
