@@ -2,13 +2,12 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { OpsFilterCondition } from "@/lib/types";
-import { classMap, factionMap } from "@/lib/constants/pathnameMap";
-import BranchList from "./BranchList";
-import { HoverCard } from "radix-ui";
-import getS3Url from "@/lib/apiAws";
-import { flex, grid } from "../../../styled-system/patterns";
+import { useOperatorStore } from "@/store/operatorStore";
 import { css } from "../../../styled-system/css";
+import { flex, grid } from "../../../styled-system/patterns";
+import { classMap, factionMap } from "@/lib/constants/pathnameMap";
+import getS3Url from "@/lib/apiAws";
+import BranchList from "./BranchList";
 import {
     HybridTooltip,
     HybridTooltipContent,
@@ -63,20 +62,26 @@ const popUpText = css({
     color: "white",
 });
 
-// Types
-type opsFilterProps = {
-    filterArgs: {
-        rarity: number[];
-        class: string[];
-        branch: string[];
-        faction: string[];
-    };
-    classTree: { [key: string]: string[] };
-    onClick: (condition: OpsFilterCondition) => void;
-};
+const selectedItem = css({
+    borderBottom: "2px solid",
+    borderColor: "blue.500",
+    paddingBottom: "2px",
+});
+
+const resetButton = css({
+    color: "red.500",
+    textAlign: "center",
+    cursor: "pointer",
+    marginTop: "1rem",
+    fontWeight: "bold",
+    padding: "0.5rem",
+    borderRadius: "md",
+    _hover: {
+        backgroundColor: "red.50",
+    },
+});
 
 // Custom order for class sorting
-
 const customOrder: { [key: string]: number } = {
     Vanguard: 0,
     Guard: 1,
@@ -88,15 +93,52 @@ const customOrder: { [key: string]: number } = {
     Specialist: 7,
 };
 
-const OpsFilter = ({ filterArgs, classTree, onClick }: opsFilterProps) => {
-    const [branchParent, setBranchParent] = useState<string | null>(null);
+// Types
+type Filters = {
+    rarity: number[];
+    class: string[];
+    branch: string[];
+    faction: string[];
+};
+
+type FilterCondition = {
+    category: keyof Filters | "reset";
+    value: number | string | null;
+};
+
+type FilterProps = {
+    filterArgs: {
+        rarity: number[];
+        class: string[];
+        branch: string[];
+        faction: string[];
+    };
+    classTree: { [key: string]: string[] };
+};
+
+const OpsFilter = ({ filterArgs, classTree }: FilterProps) => {
+    // const [branchParent, setBranchParent] = useState<string | null>(null);
     const rarities = filterArgs.rarity;
     const classes = filterArgs.class;
     const factions = filterArgs.faction;
 
+    const filters: Filters = useOperatorStore((state) => state.filters);
+    const updateFilter = useOperatorStore((state) => state.updateFilter);
+    const applyFilters = useOperatorStore((state) => state.applyFilters);
+    const resetFilters = useOperatorStore((state) => state.resetFilters);
+
+    const handleFilterChange = (condition: FilterCondition) => {
+        if (condition.category === "reset") {
+            resetFilters();
+        } else {
+            updateFilter(condition.category, condition.value);
+        }
+        applyFilters();
+    };
+
     const handleClassClick = (value: string) => {
-        setBranchParent(branchParent === value ? null : value);
-        onClick({ category: "class", value });
+        // setBranchParent(branchParent === value ? null : value);
+        handleFilterChange({ category: "class", value: value });
     };
 
     const getImageSource = (category: string, key: string): string => {
@@ -110,6 +152,13 @@ const OpsFilter = ({ filterArgs, classTree, onClick }: opsFilterProps) => {
         return getS3Url("/placeholder.png");
     };
 
+    const isSelected = (
+        category: keyof typeof filters,
+        value: string | number
+    ): boolean => {
+        return (filters[category] as (string | number)[]).includes(value);
+    };
+
     return (
         <>
             <div className={filterSection}>
@@ -118,7 +167,20 @@ const OpsFilter = ({ filterArgs, classTree, onClick }: opsFilterProps) => {
             <div>
                 <ul className={rarityWrapper}>
                     {rarities.map((rarity) => (
-                        <li key={rarity}>★{rarity}</li>
+                        <li
+                            key={rarity}
+                            className={
+                                isSelected("rarity", rarity) ? selectedItem : ""
+                            }
+                            onClick={() =>
+                                handleFilterChange({
+                                    category: "rarity",
+                                    value: rarity,
+                                })
+                            }
+                        >
+                            ★{rarity}
+                        </li>
                     ))}
                 </ul>
             </div>
@@ -142,12 +204,15 @@ const OpsFilter = ({ filterArgs, classTree, onClick }: opsFilterProps) => {
                                             height={30}
                                             width={30}
                                             alt={classItem}
+                                            onClick={() =>
+                                                handleClassClick(classItem)
+                                            }
                                         />
                                     </HybridTooltipTrigger>
                                     <HybridTooltipContent>
                                         <BranchList
                                             branches={classTree[classItem]}
-                                            onClick={onClick}
+                                            onClick={handleFilterChange}
                                         />
                                     </HybridTooltipContent>
                                 </HybridTooltip>
@@ -171,6 +236,12 @@ const OpsFilter = ({ filterArgs, classTree, onClick }: opsFilterProps) => {
                                         height={30}
                                         width={30}
                                         alt={faction}
+                                        onClick={() =>
+                                            handleFilterChange({
+                                                category: "faction",
+                                                value: faction,
+                                            })
+                                        }
                                     />
                                 </HybridTooltipTrigger>
                                 <HybridTooltipContent>
@@ -184,12 +255,20 @@ const OpsFilter = ({ filterArgs, classTree, onClick }: opsFilterProps) => {
                 </ul>
             </div>
 
-            <h1
+            <div
+                className={resetButton}
+                onClick={() =>
+                    handleFilterChange({ category: "reset", value: null })
+                }
+            >
+                RESET
+            </div>
+            {/* <h1
                 style={{ color: "red", textAlign: "center" }}
                 onClick={() => onClick({ category: null, value: null })}
             >
                 RESET
-            </h1>
+            </h1> */}
         </>
     );
 };

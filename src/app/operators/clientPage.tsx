@@ -134,11 +134,7 @@ const OperatorsGridClient = ({ initialData }: OperatorsGridClientProps) => {
     return (
         <div className={contentWrapper}>
             <section className={filterContainer}>
-                <OpsFilter
-                    filterArgs={filterArgs}
-                    classTree={classTree}
-                    onClick={filterHandler}
-                />
+                <OpsFilter filterArgs={filterArgs} classTree={classTree} />
             </section>
 
             <section className={gridContainer}>
