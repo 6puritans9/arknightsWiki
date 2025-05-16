@@ -1,11 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { css } from "../../styled-system/css";
-import { QueryOperator, QueryBaseSkills } from "@/lib/types";
+import { QueryOperator } from "@/lib/types";
 import getS3Url from "@/lib/apiAws";
 
-type IconProps = {
-    operator: QueryOperator | QueryBaseSkills[0];
+type ThumbnailProps = {
+    operator: QueryOperator;
     priority: boolean;
 };
 
@@ -18,7 +18,7 @@ const wrapper = css({
     height: "auto",
 });
 
-const Icon = ({ operator, priority = false }: IconProps) => {
+const OpsThumbnail = ({ operator, priority = false }: ThumbnailProps) => {
     const paddedCode =
         operator.code.toString().length < 3
             ? operator.code.toString().padStart(3, "0")
@@ -42,9 +42,9 @@ const Icon = ({ operator, priority = false }: IconProps) => {
                     priority={priority}
                 ></Image>
             </Link>
-            <span className="icon__name">{operator.name}</span>
+            <span>{operator.name}</span>
         </div>
     );
 };
 
-export default Icon;
+export default OpsThumbnail;

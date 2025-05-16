@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef } from "react";
 import { QueryOperators } from "@/lib/types";
-import Icon from "@/components/Icon";
+import OpsThumbnail from "@/components/OpsThumbnail";
 import { OpsFilter } from "@/components/Filter/OpsFilter";
 import { useOperatorStore } from "@/store/operatorStore";
 import { css } from "../../../styled-system/css";
@@ -124,7 +124,7 @@ const OperatorsGridClient = ({ initialData }: OperatorsGridClientProps) => {
                 {filteredOperators
                     .slice(0, visibleCount)
                     .map((operator, index) => (
-                        <Icon
+                        <OpsThumbnail
                             key={operator.id}
                             operator={operator}
                             priority={index < 10}
