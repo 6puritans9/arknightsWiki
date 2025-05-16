@@ -201,7 +201,7 @@ const OpsFilter = ({ filterArgs, classTree }: FilterProps) => {
                         .sort((a, b) => customOrder[a] - customOrder[b])
                         .map((classItem) => (
                             <li key={classItem}>
-                                <HybridTooltip>
+                                <HybridTooltip delayDuration={100}>
                                     <HybridTooltipTrigger asChild>
                                         <Image
                                             src={getImageSource(
@@ -241,7 +241,7 @@ const OpsFilter = ({ filterArgs, classTree }: FilterProps) => {
                 <ul className={factionWrapper}>
                     {factions.map((faction) => (
                         <li key={faction}>
-                            <HybridTooltip>
+                            <HybridTooltip delayDuration={100}>
                                 <HybridTooltipTrigger asChild>
                                     <Image
                                         src={getImageSource("faction", faction)}
