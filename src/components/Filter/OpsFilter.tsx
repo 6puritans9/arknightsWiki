@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 import { useOperatorStore } from "@/store/operatorStore";
 import { css } from "../../../styled-system/css";
 import { flex, grid } from "../../../styled-system/patterns";
+import { selected, nonSelected } from "@/app/styles/filterStyles";
 import { classMap, factionMap } from "@/lib/constants/pathnameMap";
 import getS3Url from "@/lib/apiAws";
 import BranchList from "./BranchList";
@@ -37,6 +37,12 @@ const classWrapper = flex({
     cursor: "pointer",
 });
 
+const classImage = css({
+    height: "30px",
+    width: "auto",
+    backgroundColor: "black",
+});
+
 const factionWrapper = grid({
     gridTemplateColumns: "repeat(10, 1fr)",
     gridTemplateRows: "auto",
@@ -62,22 +68,23 @@ const popUpText = css({
     color: "white",
 });
 
-const selectedItem = css({
-    borderBottom: "2px solid",
-    borderColor: "blue.500",
-    paddingBottom: "2px",
-});
-
-const resetButton = css({
+const resetButton = flex({
+    justify: "center",
     color: "red.500",
     textAlign: "center",
     cursor: "pointer",
-    marginTop: "1rem",
     fontWeight: "bold",
     padding: "0.5rem",
     borderRadius: "md",
+    transition: "0.2s ease-in-out",
     _hover: {
         backgroundColor: "red.50",
+        opacity: "0.5",
+    },
+    _active: {
+        backgroundColor: "red.50",
+        opacity: "0.7",
+        transition: "background-color 0.1s ease-in-out",
     },
 });
 
@@ -117,7 +124,6 @@ type FilterProps = {
 };
 
 const OpsFilter = ({ filterArgs, classTree }: FilterProps) => {
-    // const [branchParent, setBranchParent] = useState<string | null>(null);
     const rarities = filterArgs.rarity;
     const classes = filterArgs.class;
     const factions = filterArgs.faction;
@@ -137,7 +143,6 @@ const OpsFilter = ({ filterArgs, classTree }: FilterProps) => {
     };
 
     const handleClassClick = (value: string) => {
-        // setBranchParent(branchParent === value ? null : value);
         handleFilterChange({ category: "class", value: value });
     };
 
@@ -170,7 +175,9 @@ const OpsFilter = ({ filterArgs, classTree }: FilterProps) => {
                         <li
                             key={rarity}
                             className={
-                                isSelected("rarity", rarity) ? selectedItem : ""
+                                isSelected("rarity", rarity)
+                                    ? selected
+                                    : nonSelected
                             }
                             onClick={() =>
                                 handleFilterChange({
@@ -201,6 +208,11 @@ const OpsFilter = ({ filterArgs, classTree }: FilterProps) => {
                                                 "class",
                                                 classItem
                                             )}
+                                            className={
+                                                isSelected("class", classItem)
+                                                    ? `${nonSelected} ${classImage}`
+                                                    : `${selected} ${classImage}`
+                                            }
                                             height={30}
                                             width={30}
                                             alt={classItem}
@@ -213,6 +225,7 @@ const OpsFilter = ({ filterArgs, classTree }: FilterProps) => {
                                         <BranchList
                                             branches={classTree[classItem]}
                                             onClick={handleFilterChange}
+                                            activeBranches={filters.branch}
                                         />
                                     </HybridTooltipContent>
                                 </HybridTooltip>
@@ -232,7 +245,11 @@ const OpsFilter = ({ filterArgs, classTree }: FilterProps) => {
                                 <HybridTooltipTrigger asChild>
                                     <Image
                                         src={getImageSource("faction", faction)}
-                                        className={factionImage}
+                                        className={
+                                            isSelected("faction", faction)
+                                                ? `${selected} ${factionImage}`
+                                                : `${nonSelected} ${factionImage}`
+                                        }
                                         height={30}
                                         width={30}
                                         alt={faction}
@@ -253,22 +270,15 @@ const OpsFilter = ({ filterArgs, classTree }: FilterProps) => {
                         </li>
                     ))}
                 </ul>
+                <div
+                    className={resetButton}
+                    onClick={() =>
+                        handleFilterChange({ category: "reset", value: null })
+                    }
+                >
+                    <span>RESET</span>
+                </div>
             </div>
-
-            <div
-                className={resetButton}
-                onClick={() =>
-                    handleFilterChange({ category: "reset", value: null })
-                }
-            >
-                RESET
-            </div>
-            {/* <h1
-                style={{ color: "red", textAlign: "center" }}
-                onClick={() => onClick({ category: null, value: null })}
-            >
-                RESET
-            </h1> */}
         </>
     );
 };

@@ -4,12 +4,9 @@ import { branchMap } from "@/lib/constants/pathnameMap";
 import getS3Url from "@/lib/apiAws";
 import { flex } from "../../../styled-system/patterns";
 import { css } from "../../../styled-system/css";
+import { nonSelected, selected } from "@/app/styles/filterStyles";
 
-type BranchListProps = {
-    branches: string[];
-    onClick: (condition: OpsFilterCondition) => void;
-};
-
+// Styles
 const popUpWrapper = flex({
     flexDirection: "column",
     gap: "0.3rem",
@@ -33,7 +30,21 @@ const branchText = css({
     color: "gray.200",
 });
 
-const BranchList = ({ branches, onClick }: BranchListProps) => {
+// Types
+type BranchListProps = {
+    branches: string[];
+    onClick: (condition: OpsFilterCondition) => void;
+    activeBranches?: string[];
+};
+
+const BranchList = ({ branches, activeBranches, onClick }: BranchListProps) => {
+    const isBranchActive = (branch: string): boolean => {
+        if (activeBranches) {
+            return activeBranches.includes(branch);
+        }
+        return false;
+    };
+
     return (
         <ul className={popUpWrapper}>
             {branches.map((branch, index) => (
@@ -49,7 +60,11 @@ const BranchList = ({ branches, onClick }: BranchListProps) => {
                     }}
                 >
                     <Image
-                        className={branchImage}
+                        className={
+                            isBranchActive(branch)
+                                ? `${selected} ${branchImage}`
+                                : `${nonSelected} ${branchImage}`
+                        }
                         src={getS3Url(branchMap[branch])}
                         height={30}
                         width={30}
