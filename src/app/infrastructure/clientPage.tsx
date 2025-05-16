@@ -9,7 +9,7 @@ import {
 } from "@/lib/types";
 import { QueryBaseSkills } from "@/lib/types";
 import { InfraFilter } from "@/components/Filter/InfraFilter";
-import Icon from "@/components/Icon";
+import InfraThumbnail from "@/components/InfraThumbnail";
 
 type InfrastructureClientProps = {
     initialData: QueryBaseSkills;
@@ -161,7 +161,7 @@ const InfrastructureClient = ({ initialData }: InfrastructureClientProps) => {
             <section className="infra__container">
                 {filteredData.map((operator) => (
                     <div className="infra__icon__container" key={operator.id}>
-                        <Icon operator={operator} />
+                        <InfraThumbnail operator={operator} />
                         {operator.operator_base.map((row, index) => {
                             const baseArray = Array.isArray(row.base)
                                 ? row.base
