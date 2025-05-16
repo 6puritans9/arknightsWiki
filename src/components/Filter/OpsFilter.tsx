@@ -210,8 +210,8 @@ const OpsFilter = ({ filterArgs, classTree }: FilterProps) => {
                                             )}
                                             className={
                                                 isSelected("class", classItem)
-                                                    ? `${nonSelected} ${classImage}`
-                                                    : `${selected} ${classImage}`
+                                                    ? `${selected} ${classImage}`
+                                                    : `${nonSelected} ${classImage}`
                                             }
                                             height={30}
                                             width={30}
