@@ -1,10 +1,10 @@
-import { OpsFilterCondition } from "@/lib/types";
 import Image from "next/image";
 import { branchMap } from "@/lib/constants/pathnameMap";
 import getS3Url from "@/lib/apiAws";
 import { flex } from "../../../styled-system/patterns";
 import { css } from "../../../styled-system/css";
 import { nonSelected, selected } from "@/app/styles/filterStyles";
+import { FilterCondition } from "./OpsFilter";
 
 // Styles
 const popUpWrapper = flex({
@@ -30,10 +30,9 @@ const branchText = css({
     color: "gray.200",
 });
 
-// Types
 type BranchListProps = {
     branches: string[];
-    onClick: (condition: OpsFilterCondition) => void;
+    onClick: (condition: FilterCondition) => void;
     activeBranches?: string[];
 };
 

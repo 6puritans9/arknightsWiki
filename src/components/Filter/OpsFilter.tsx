@@ -108,7 +108,7 @@ type Filters = {
     faction: string[];
 };
 
-type FilterCondition = {
+export type FilterCondition = {
     category: keyof Filters | "reset";
     value: number | string | null;
 };
