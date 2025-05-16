@@ -1,13 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import Link from "next/link";
-import {
-    QueryOperators,
-    OpsFilterCondition,
-    OpsFilterState,
-    OpsFilterAction,
-} from "@/lib/types";
+import { useEffect, useMemo, useRef } from "react";
+import { QueryOperators } from "@/lib/types";
 import Icon from "@/components/Icon";
 import { OpsFilter } from "@/components/Filter/OpsFilter";
 import { useOperatorStore } from "@/store/operatorStore";
@@ -29,6 +23,7 @@ const filterContainer = grid({
   `,
     gap: "1rem",
     justifyItems: "flex-start",
+    marginBottom: "1rem",
 });
 
 const gridContainer = grid({
@@ -46,35 +41,27 @@ type OperatorsGridClientProps = {
 };
 
 // Filter
-const initialFilterState: OpsFilterState = {
-    rarity: null,
-    class: null,
-    branch: null,
-    faction: null,
-};
-
 const OperatorsGridClient = ({ initialData }: OperatorsGridClientProps) => {
     const {
         filteredOperators,
         visibleCount,
         hasMore,
-        filters,
         setAllOperators,
         incrementVisibleCount,
-        updateFilter,
-        resetFilters,
-        applyFilters,
     } = useOperatorStore();
 
     const loaderRef = useRef<HTMLDivElement>(null);
 
+    // Set initial data
     useEffect(() => {
         setAllOperators(initialData);
     }, [initialData, setAllOperators]);
 
+    // Infinite scroll
     useEffect(() => {
         if (!loaderRef.current || !hasMore) return;
 
+        const currentLoaderRef = loaderRef.current;
         const observer = new IntersectionObserver(
             (entries) => {
                 if (entries[0].isIntersecting && hasMore) {
@@ -84,52 +71,48 @@ const OperatorsGridClient = ({ initialData }: OperatorsGridClientProps) => {
             { threshold: 0.1, rootMargin: "200px" }
         );
 
-        observer.observe(loaderRef.current);
+        observer.observe(currentLoaderRef);
 
         return () => {
-            if (loaderRef.current) {
-                observer.unobserve(loaderRef.current);
-            }
+            observer.unobserve(currentLoaderRef);
         };
     }, [hasMore, incrementVisibleCount]);
 
+    // Filter arguments
+    const { filterArgs, classTree } = useMemo(() => {
+        const operators = initialData;
+        const classSet = new Set(operators.map((operator) => operator.class));
+        const branchSet = new Set(operators.map((operator) => operator.branch));
+        const factionSet = new Set(
+            operators.map((operator) => operator.faction)
+        );
+
+        const filterArgs = {
+            rarity: Array.from({ length: 6 }, (_, i) => 6 - i),
+            class: Array.from(classSet),
+            branch: Array.from(branchSet),
+            faction: Array.from(factionSet),
+        };
+
+        const classTree: { [key: string]: string[] } = {};
+        classSet.forEach((className) => {
+            classTree[className] = Array.from(
+                new Set(
+                    operators
+                        .filter((operator) => operator.class === className)
+                        .map((operator) => operator.branch)
+                )
+            );
+        });
+
+        return { filterArgs, classTree };
+    }, [initialData]);
+
+    // Handle error
     if (initialData instanceof Error) {
         const error = initialData.message;
         return <div>{error}</div>;
     }
-
-    const operators = initialData;
-    const filterHandler = (condition: OpsFilterCondition) => {
-        if (condition.category === "reset") {
-            resetFilters();
-        } else {
-            updateFilter(condition.category, condition.value);
-        }
-
-        applyFilters();
-    };
-
-    const classSet = new Set(operators.map((operator) => operator.class));
-    const branchSet = new Set(operators.map((operator) => operator.branch));
-    const factionSet = new Set(operators.map((operator) => operator.faction));
-
-    const filterArgs = {
-        rarity: Array.from({ length: 6 }, (_, i) => 6 - i),
-        class: Array.from(classSet),
-        branch: Array.from(branchSet),
-        faction: Array.from(factionSet),
-    };
-
-    const classTree: { [key: string]: string[] } = {};
-    classSet.forEach((className) => {
-        classTree[className] = Array.from(
-            new Set(
-                operators
-                    .filter((operator) => operator.class === className)
-                    .map((operator) => operator.branch)
-            )
-        );
-    });
 
     return (
         <div className={contentWrapper}>
