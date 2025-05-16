@@ -31,24 +31,12 @@ type QueryBaseSkill = QueryData<typeof baseQuery>["0"];
 type UnifiedSingleQuery = QueryOperator | QueryBaseSkill;
 
 // Filter types
-type OpsFilterCondition = {
-    category: string;
-    value: number | string | null;
-};
-
 type OpsFilterState = {
     rarity: number | null;
     class: string | null;
     branch: string | null;
     faction: string | null;
 };
-
-type OpsFilterAction =
-    | { type: "SET_CLASS"; value: string | null }
-    | { type: "SET_BRANCH"; value: string | null }
-    | { type: "SET_FACTION"; value: string | null }
-    | { type: "SET_RARITY"; value: number | null }
-    | { type: "RESET" };
 
 type BaseRelationsValue = {
     r_effects: string[] | null;
