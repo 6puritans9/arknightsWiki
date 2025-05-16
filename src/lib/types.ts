@@ -85,8 +85,6 @@ export type {
     QueryBaseSkill,
     UnifiedSingleQuery,
     OpsFilterState,
-    OpsFilterAction,
-    OpsFilterCondition,
     BaseFilterCondition,
     BaseFilterState,
     BaseFilterAction,
