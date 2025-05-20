@@ -24,6 +24,7 @@ type State = {
 
 type Action = {
     setAllOperators: (operators: QueryOperators) => void;
+    setVisibleCount: (count: number) => void;
     incrementVisibleCount: () => void;
     resetVisibleCount: () => void;
     updateFilter: (
@@ -57,6 +58,10 @@ const useOperatorStore = create<State & Action>((set) => ({
             filteredOperators: operators,
             hasMore: operators.length > state.visibleCount,
         })),
+
+    setVisibleCount: (count: number) => {
+        set({ visibleCount: count });
+    },
 
     incrementVisibleCount: () =>
         set((state) => {
