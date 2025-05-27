@@ -7,6 +7,7 @@ import Nav from "../components/Nav";
 import Footer from "@/components/Footer";
 import getS3Url from "@/lib/apiAws";
 import { container, flex } from "../../styled-system/patterns";
+import StoreInitializer from "@/components/StoreInitializer";
 
 export const metadata: Metadata = {
     title: "Arknights Wiki",
@@ -67,6 +68,7 @@ export default function RootLayout({
     return (
         <html lang="en" className={`${Paperlogy}`}>
             <body className={bodyStyles}>
+                <StoreInitializer />
                 <TouchProvider>
                     <header className={headerStyles}>
                         <Nav />
