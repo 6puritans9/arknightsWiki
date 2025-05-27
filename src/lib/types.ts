@@ -77,6 +77,16 @@ type BaseFilterAction =
       }
     | { type: "RESET" };
 
+type GoogleUser = {
+    sub: string; // user ID
+    name: string;
+    given_name: string;
+    family_name: string;
+    email: string;
+    email_verified?: boolean;
+    picture?: string;
+};
+
 export type {
     Operator,
     QueryOperators,
@@ -89,4 +99,5 @@ export type {
     BaseFilterState,
     BaseFilterAction,
     BaseRelationsValue,
+    GoogleUser,
 };
