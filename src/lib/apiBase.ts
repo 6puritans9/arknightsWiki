@@ -1,4 +1,4 @@
-import supabase from "./supabaseClient";
+import supabase from "../utils/supabase/client";
 
 const baseQuery = supabase.from("operators").select(`
     id,
