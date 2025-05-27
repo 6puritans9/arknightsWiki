@@ -1,7 +1,7 @@
 "use client";
 
 import { OpsFilter } from "@/components/Filter/OpsFilter";
-import { useOperatorStore } from "@/store/operatorStore";
+import { useOperatorStore } from "@/stores/operatorStore";
 import { useEffect } from "react";
 import { QueryOperator } from "@/lib/types";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useOperatorStore } from "@/store/operatorStore";
+import { useOperatorStore } from "@/stores/operatorStore";
 import { css } from "../../../styled-system/css";
 import { flex, grid } from "../../../styled-system/patterns";
 import { selected, nonSelected } from "@/app/styles/filterStyles";

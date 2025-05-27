@@ -1,6 +1,6 @@
 "use client";
 
-import { useOperatorStore } from "@/store/operatorStore";
+import { useOperatorStore } from "@/stores/operatorStore";
 import { useRef, useEffect, useMemo } from "react";
 import OpsThumbnail from "@/components/OpsThumbnail";
 import { grid } from "../../../styled-system/patterns";
