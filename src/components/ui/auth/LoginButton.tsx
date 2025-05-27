@@ -1,3 +1,5 @@
+"use client";
+
 import { css } from "../../../../styled-system/css";
 
 // Style for the icon wrapper div
@@ -103,9 +105,13 @@ const gsiMaterialButtonStyles = css({
     },
 });
 
-const LoginButton = () => {
+type LoginButtonProps = {
+    onClick: () => Promise<void>;
+};
+
+const LoginButton = ({ onClick }: LoginButtonProps) => {
     return (
-        <button className={gsiMaterialButtonStyles}>
+        <button className={gsiMaterialButtonStyles} onClick={onClick}>
             <div className={gsiStateStyles}></div>
             <div className={gsiContentWrapperStyles}>
                 <div className={gsiIconStyles}>
