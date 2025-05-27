@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { flex } from "../../styled-system/patterns";
 import { css } from "../../styled-system/css";
+import AuthButton from "./ui/auth/AuthButton";
 
 const navContainer = css({
     backgroundColor: "primary",
@@ -23,6 +24,12 @@ const navLinksContainer = flex({
     padding: "0 3rem",
     gap: "2rem",
     flexGrow: "1",
+});
+
+const navButtonContainer = flex({
+    justifyContent: "flex-end",
+    padding: "0 1rem",
+    alignItems: "center",
 });
 
 const navItem = css({
@@ -57,6 +64,9 @@ const Nav = () => {
                         </Link>
                     </li>
                 </ul>
+                <div className={navButtonContainer}>
+                    <AuthButton />
+                </div>
             </div>
         </nav>
     );
