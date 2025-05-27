@@ -19,7 +19,7 @@ export default defineConfig({
                         value: "#29c8cc",
                         description: "Primary color for arknights theme",
                     },
-                    secondary: { value: "#1b1b1b6c" },
+                    secondary: { value: "#1b1b1b" },
                     headerText: { value: "#333333" },
                 },
             },
