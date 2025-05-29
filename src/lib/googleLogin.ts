@@ -2,10 +2,13 @@ import supabase from "../utils/supabase/client";
 
 const googleLogin = async () => {
     try {
+        const currentPath = window.location.pathname;
+        const nextPath = currentPath && currentPath !== "/" ? currentPath : "/";
+
         const { data, error } = await supabase.auth.signInWithOAuth({
             provider: "google",
             options: {
-                redirectTo: `http://localhost:3000/auth/callback`,
+                redirectTo: `http://localhost:3000/auth/callback?next=${encodeURIComponent(nextPath)}`,
             },
         });
 
