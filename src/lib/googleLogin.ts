@@ -8,7 +8,7 @@ const googleLogin = async () => {
         const { data, error } = await supabase.auth.signInWithOAuth({
             provider: "google",
             options: {
-                redirectTo: `http://localhost:3000/auth/callback?next=${encodeURIComponent(nextPath)}`,
+                redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextPath)}`,
             },
         });
 
