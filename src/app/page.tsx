@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { getHomeBanners } from "@/lib/apiAws";
 import { css } from "../../styled-system/css";
+import { cardBackground } from "./styles/shared/cardBackground";
 
 const contentWrapper = css({
     display: "flex",
@@ -23,13 +24,6 @@ const bannerContainer = css({
     justifyContent: "center",
     alignItems: "center",
     gap: "2rem",
-});
-
-const bannerSection = css({
-    backgroundColor: "rgba(0,0,0,0.4)",
-    borderRadius: "lg",
-    padding: "1rem 1.5rem 1.5rem 1.5rem",
-    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.5)",
 });
 
 const bannerTitle = css({
@@ -59,7 +53,7 @@ export default function Home() {
             <h1 className={welcomeText}>Welcome to ArknightsWiki</h1>
 
             <article className={bannerContainer}>
-                <section className={bannerSection}>
+                <section className={cardBackground}>
                     <h2 className={bannerTitle}>Ongoing Events</h2>
                     <Image
                         className={bannerImageWrapper}
@@ -71,7 +65,7 @@ export default function Home() {
                         unoptimized
                     />
                 </section>
-                <section className={bannerSection}>
+                <section className={cardBackground}>
                     <h2 className={bannerTitle}>Upcoming Events</h2>
                     <Image
                         className={bannerImageWrapper}

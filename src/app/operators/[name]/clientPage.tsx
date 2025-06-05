@@ -4,6 +4,9 @@ import { useState } from "react";
 import Image from "next/image";
 import { Operator } from "@/lib/types";
 import getS3Url from "@/lib/apiAws";
+import { css } from "../../../../styled-system/css";
+import { flex, grid } from "../../../../styled-system/patterns";
+import { cardBackground } from "@/app/styles/shared/cardBackground";
 
 type OperatorDetailClientProps = {
     initialData: Operator;
@@ -14,6 +17,75 @@ type TabProps = {
 type onClickProps = {
     onClick: (index: number) => () => void;
 };
+
+// Styles
+const pageContainer = grid({
+    gridTemplateColumns: "2fr 1fr",
+    gridTemplateRows: "1fr 1fr 3fr 2fr",
+});
+
+const headerWrapper = flex({
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: "0 0.5rem 0 0.5rem",
+});
+
+const headerTitle = css({
+    fontSize: {
+        base: "1.5rem",
+    },
+});
+
+const headerClass = flex({
+    flexDirection: "column",
+});
+
+const tabsContainer = flex({
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    padding: "0.5rem 1rem",
+    borderBottom: "1px solid #ccc",
+});
+
+const tabElement = css({
+    cursor: "pointer",
+});
+
+const contentWrapper = flex({
+    flexDirection: "column",
+    overflowY: "hidden",
+    height: "100%",
+    fontSize: {
+        base: "0.8rem",
+    },
+});
+
+const imageWrapper = css({
+    gridRow: "1/-1",
+    gridColumn: "2",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+});
+
+const imageElement = css({
+    height: "100%",
+    width: "auto",
+});
+
+const feedbackContainer = flex({
+    flexDirection: "column",
+    gap: "1rem",
+});
+
+const tagsWrapper = flex({
+    justifyContent: "center",
+});
+
+const voteWrapper = flex({
+    justifyContent: "center",
+});
 
 const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
     const [tab, setTab] = useState<number>(0);
@@ -29,34 +101,41 @@ const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
     );
 
     return (
-        <article className="op-details">
-            <section className="op-details__header">
-                <h2>{operator.name}</h2>
+        <article className={`${pageContainer} ${cardBackground}`}>
+            <section className={headerWrapper}>
+                <h2 className={headerTitle}>{operator.name}</h2>
+                <div className={headerClass}>
+                    <p>{`Class: ${operator.class}`}</p>
+                    <p>{`Branch: ${operator.branch}`}</p>
+                </div>
             </section>
-            <div className="op-details__image-container">
+            <div className={imageWrapper}>
                 <Image
                     src={`${imageSource}`}
                     alt={operator.name}
-                    width={500}
-                    height={500}
+                    className={imageElement}
+                    width={100}
+                    height={100}
                 ></Image>
             </div>
-            <section className="op-details__tabs">
+            <section className={tabsContainer}>
                 <Tabs onClick={(index) => () => setTab(index)} />
             </section>
-            <section className="op-details__contents">
+            <section className={contentWrapper}>
                 {tab === 0 && <Attributes operator={operator} />}
                 {tab === 1 && <Skills operator={operator} />}
                 {tab === 2 && <Review operator={operator} />}
                 {tab === 3 && <Synergy operator={operator} />}
                 {tab === 4 && <Lore operator={operator} />}
             </section>
-            <section className="op-details__tags">
-                <h1>TAGS</h1>
-            </section>
-            <section className="op-details__vote">
-                <h1>VOTE</h1>
-            </section>
+            <div className={feedbackContainer}>
+                <section className={tagsWrapper}>
+                    <h1>TAGS</h1>
+                </section>
+                <section className={voteWrapper}>
+                    <h1>Should I pull?</h1>
+                </section>
+            </div>
         </article>
     );
 };
@@ -66,7 +145,7 @@ const Tabs = ({ onClick }: onClickProps) => {
     const items = ["Attributes", "Skills", "Review", "Synergy", "Lore"];
 
     return items.map((item, index) => (
-        <div key={index} onClick={onClick(index)}>
+        <div className={tabElement} key={index} onClick={onClick(index)}>
             <h3>{item}</h3>
         </div>
     ));
