@@ -7,21 +7,31 @@ import getS3Url from "@/lib/apiAws";
 import { css } from "../../../../styled-system/css";
 import { flex, grid } from "../../../../styled-system/patterns";
 import { cardBackground } from "@/app/styles/shared/cardBackground";
+import OperatorTabs from "@/components/operator/OperatorTabs";
+import Attributes from "@/components/operator/Attributes";
+import Skills from "@/components/operator/Skills";
+import Review from "@/components/operator/Review";
+import Synergy from "@/components/operator/Synergy";
+import Lore from "@/components/operator/Lore";
 
 type OperatorDetailClientProps = {
     initialData: Operator;
 };
-type TabProps = {
-    operator: Operator;
-};
-type onClickProps = {
-    onClick: (index: number) => () => void;
-};
 
 // Styles
-const pageContainer = grid({
+const pageWrapper = flex({
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100%",
+    padding: "1rem",
+});
+
+const cardContainer = grid({
     gridTemplateColumns: "2fr 1fr",
     gridTemplateRows: "1fr 1fr 3fr 2fr",
+    alignSelf: "center",
+    justifySelf: "center",
+    width: "100%",
 });
 
 const headerWrapper = flex({
@@ -44,12 +54,10 @@ const tabsContainer = flex({
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
-    padding: "0.5rem 1rem",
-    borderBottom: "1px solid #ccc",
-});
-
-const tabElement = css({
-    cursor: "pointer",
+    borderTop: "1px solid",
+    borderTopColor: "gray.800/70",
+    borderBottom: "1px solid",
+    borderBottomColor: "gray.800/70",
 });
 
 const contentWrapper = flex({
@@ -84,7 +92,15 @@ const tagsWrapper = flex({
 });
 
 const voteWrapper = flex({
+    flexDirection: "column",
     justifyContent: "center",
+    alignItems: "center",
+});
+
+const buttonWrapper = flex({
+    gap: "0.5rem",
+    justifyContent: "space-between",
+    alignItems: "center",
 });
 
 const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
@@ -101,98 +117,50 @@ const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
     );
 
     return (
-        <article className={`${pageContainer} ${cardBackground}`}>
-            <section className={headerWrapper}>
-                <h2 className={headerTitle}>{operator.name}</h2>
-                <div className={headerClass}>
-                    <p>{`Class: ${operator.class}`}</p>
-                    <p>{`Branch: ${operator.branch}`}</p>
+        <div className={pageWrapper}>
+            <article className={`${cardContainer} ${cardBackground}`}>
+                <section className={headerWrapper}>
+                    <h2 className={headerTitle}>{operator.name}</h2>
+                    <div className={headerClass}>
+                        <p>{`Class: ${operator.class}`}</p>
+                        <p>{`Branch: ${operator.branch}`}</p>
+                    </div>
+                </section>
+                <div className={imageWrapper}>
+                    <Image
+                        src={`${imageSource}`}
+                        alt={operator.name}
+                        className={imageElement}
+                        width={100}
+                        height={100}
+                    ></Image>
                 </div>
-            </section>
-            <div className={imageWrapper}>
-                <Image
-                    src={`${imageSource}`}
-                    alt={operator.name}
-                    className={imageElement}
-                    width={100}
-                    height={100}
-                ></Image>
-            </div>
-            <section className={tabsContainer}>
-                <Tabs onClick={(index) => () => setTab(index)} />
-            </section>
-            <section className={contentWrapper}>
-                {tab === 0 && <Attributes operator={operator} />}
-                {tab === 1 && <Skills operator={operator} />}
-                {tab === 2 && <Review operator={operator} />}
-                {tab === 3 && <Synergy operator={operator} />}
-                {tab === 4 && <Lore operator={operator} />}
-            </section>
-            <div className={feedbackContainer}>
-                <section className={tagsWrapper}>
-                    <h1>TAGS</h1>
+                <section className={tabsContainer}>
+                    <OperatorTabs
+                        onClick={(index) => () => setTab(index)}
+                        activeTab={tab}
+                    />
                 </section>
-                <section className={voteWrapper}>
-                    <h1>Should I pull?</h1>
+                <section className={contentWrapper}>
+                    {tab === 0 && <Attributes operator={operator} />}
+                    {tab === 1 && <Skills operator={operator} />}
+                    {tab === 2 && <Review operator={operator} />}
+                    {tab === 3 && <Synergy operator={operator} />}
+                    {tab === 4 && <Lore operator={operator} />}
                 </section>
-            </div>
-        </article>
-    );
-};
-
-// Inner Components
-const Tabs = ({ onClick }: onClickProps) => {
-    const items = ["Attributes", "Skills", "Review", "Synergy", "Lore"];
-
-    return items.map((item, index) => (
-        <div className={tabElement} key={index} onClick={onClick(index)}>
-            <h3>{item}</h3>
-        </div>
-    ));
-};
-
-const Attributes = ({ operator }: TabProps) => {
-    return (
-        <>
-            <p>{`Class: ${operator.class}`}</p>
-            <p>{`Branch: ${operator.branch}`}</p>
-            <p>{`Faction: ${operator.faction}`}</p>
-            <p>{`Race: ${operator.races}`}</p>
-            <p>{`Gender: ${operator.gender}`}</p>
-            <p>{`Position: ${operator.position}`}</p>
-            <p>{`Rarity: ${operator.rarity}`}</p>
-        </>
-    );
-};
-
-const Skills = ({ operator }: TabProps) => {
-    return (
-        <>
-            <h1 style={{ color: "red" }}>SKILLS</h1>
-        </>
-    );
-};
-
-const Review = ({ operator }: TabProps) => {
-    return (
-        <div>
-            <h1 style={{ color: "red" }}>REVIEW</h1>
-        </div>
-    );
-};
-
-const Synergy = ({ operator }: TabProps) => {
-    return (
-        <div>
-            <h1 style={{ color: "red" }}>SYNERGY</h1>
-        </div>
-    );
-};
-
-const Lore = ({ operator }: TabProps) => {
-    return (
-        <div>
-            <h1 style={{ color: "red" }}>{operator.faction}</h1>
+                <div className={feedbackContainer}>
+                    <section className={tagsWrapper}>
+                        <h1>TAGS</h1>
+                    </section>
+                    <section className={voteWrapper}>
+                        <h1>Should I pull?</h1>
+                        <div className={buttonWrapper}>
+                            <button>Upvote</button>
+                            <button>Downvote</button>
+                        </div>
+                    </section>
+                </div>
+            </article>
         </div>
     );
 };
