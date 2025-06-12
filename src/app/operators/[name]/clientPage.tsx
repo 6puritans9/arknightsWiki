@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { Operator } from "@/lib/types";
 import getS3Url from "@/lib/apiAws";
+import Image from "next/image";
 import { css } from "../../../../styled-system/css";
 import { flex, grid } from "../../../../styled-system/patterns";
 import { cardBackground } from "@/app/styles/shared/cardBackground";
@@ -13,6 +13,8 @@ import Skills from "@/components/operator/Skills";
 import Review from "@/components/operator/Review";
 import Synergy from "@/components/operator/Synergy";
 import Lore from "@/components/operator/Lore";
+import VoteBar from "@/components/operator/VoteBar";
+import useVote from "@/hooks/useVote";
 
 type OperatorDetailClientProps = {
     initialData: Operator;
@@ -75,10 +77,12 @@ const imageWrapper = css({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    height: "100%",
+    width: "100%",
 });
 
 const imageElement = css({
-    height: "100%",
+    height: "max-content",
     width: "auto",
 });
 
@@ -98,13 +102,14 @@ const voteWrapper = flex({
 });
 
 const buttonWrapper = flex({
-    gap: "0.5rem",
     justifyContent: "space-between",
     alignItems: "center",
+    gap: "1.5rem",
 });
 
 const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
     const [tab, setTab] = useState<number>(0);
+    const { votes } = useVote({ operatorId: initialData.id });
 
     const operator = initialData;
     const paddedCode =
@@ -155,9 +160,10 @@ const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
                     <section className={voteWrapper}>
                         <h1>Should I pull?</h1>
                         <div className={buttonWrapper}>
-                            <button>Upvote</button>
-                            <button>Downvote</button>
+                            <button>👍</button>
+                            <button>👎</button>
                         </div>
+                        <VoteBar votes={votes} />
                     </section>
                 </div>
             </article>
