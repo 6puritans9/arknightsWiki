@@ -14,6 +14,7 @@ import Review from "@/components/operator/Review";
 import Synergy from "@/components/operator/Synergy";
 import Lore from "@/components/operator/Lore";
 import VoteBar from "@/components/operator/VoteBar";
+import Button from "@/components/Button";
 import useVote from "@/hooks/useVote";
 
 type OperatorDetailClientProps = {
@@ -109,7 +110,9 @@ const buttonWrapper = flex({
 
 const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
     const [tab, setTab] = useState<number>(0);
-    const { votes } = useVote({ operatorId: initialData.id });
+    const { votes, handleVote } = useVote({
+        operatorId: initialData.id,
+    });
 
     const operator = initialData;
     const paddedCode =
@@ -160,8 +163,14 @@ const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
                     <section className={voteWrapper}>
                         <h1>Should I pull?</h1>
                         <div className={buttonWrapper}>
-                            <button>👍</button>
-                            <button>👎</button>
+                            <Button
+                                content="👍"
+                                onClick={() => handleVote("upvote")}
+                            />
+                            <Button
+                                content="👎"
+                                onClick={() => handleVote("downvote")}
+                            />
                         </div>
                         <VoteBar votes={votes} />
                     </section>
