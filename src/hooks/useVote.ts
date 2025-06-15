@@ -17,11 +17,11 @@ const useVote = ({ operatorId }: UseVoteProps) => {
         downvotes: 0,
         userVote: null,
     });
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-    const pendingVote = useRef<VoteType>(null);
-    const doebounceTimer = useRef<NodeJS.Timeout>(null);
+    const pendingVote = useRef<VoteType | null>(null);
+    const debounceTimer = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
         const fetchInitialVotes = async () => {
@@ -42,7 +42,7 @@ const useVote = ({ operatorId }: UseVoteProps) => {
                 setVotes(voteData);
             } catch (e) {
                 setError(e instanceof Error ? e.message : "Unknown error");
-                console.error("Error fetching user:", error);
+                console.error("Error fetching user:", e);
             } finally {
                 setIsLoading(false);
             }
@@ -52,11 +52,21 @@ const useVote = ({ operatorId }: UseVoteProps) => {
         fetchInitialVotes();
     }, [operatorId]);
 
+    const getVoteDeltas = (
+        oldVote: VoteType | null,
+        newVote: VoteType | null
+    ) => ({
+        upvoteDelta:
+            (newVote === "upvote" ? 1 : 0) - (oldVote === "upvote" ? 1 : 0),
+        downvoteDelta:
+            (newVote === "downvote" ? 1 : 0) - (oldVote === "downvote" ? 1 : 0),
+    });
+
     // OnClick handler for vote buttons
     const handleVote = useCallback(
         async (clickedVoteType: VoteType) => {
             try {
-                const { user, error } = await checkAuth();
+                const { user, error } = await checkAuth(); // user must be authenticated
                 if (error) {
                     console.error("Error fetching user:", error);
                     return;
@@ -68,48 +78,37 @@ const useVote = ({ operatorId }: UseVoteProps) => {
                     return;
                 }
 
+                const newVoteType =
+                    votes.userVote === clickedVoteType ? null : clickedVoteType;
+                const { upvoteDelta, downvoteDelta } = getVoteDeltas(
+                    /* oldVote */ votes.userVote,
+                    /* newVote */ newVoteType
+                );
+
+                pendingVote.current = newVoteType; // set pending vote before state update
+
                 setVotes((prevVotes) => {
-                    let finalVoteType: VoteType | null;
-                    if (prevVotes.userVote === clickedVoteType) {
-                        finalVoteType = null; // toggle off
-                    } else {
-                        finalVoteType = clickedVoteType;
-                    }
-                    pendingVote.current = finalVoteType;
-
-                    const newVotes = { ...prevVotes };
-
-                    // remove previous vote if exists
-                    if (prevVotes.userVote === "upvote") {
-                        prevVotes.upvotes -= 1;
-                    } else if (prevVotes.userVote === "downvote") {
-                        prevVotes.downvotes -= 1;
-                    }
-
-                    // apply new vote
-                    if (finalVoteType === "upvote") {
-                        newVotes.upvotes += 1;
-                    } else if (finalVoteType === "downvote") {
-                        newVotes.downvotes += 1;
-                    }
-                    newVotes.userVote = finalVoteType;
-                    return newVotes;
+                    return {
+                        upvotes: prevVotes.upvotes + upvoteDelta,
+                        downvotes: prevVotes.downvotes + downvoteDelta,
+                        userVote: newVoteType,
+                    };
                 });
 
                 // debouncing
-                if (doebounceTimer.current) {
-                    clearTimeout(doebounceTimer.current);
+                if (debounceTimer.current) {
+                    clearTimeout(debounceTimer.current);
                 }
 
-                doebounceTimer.current = setTimeout(async () => {
+                debounceTimer.current = setTimeout(async () => {
                     try {
-                        const requestVoteType =
-                            pendingVote.current === null
-                                ? "delete"
-                                : pendingVote.current;
+                        // pendingVote.current === null
+                        //     ? "delete"                                : pendingVote.current;
                         const res = await submitVote({
                             operatorId,
-                            requestVoteType,
+                            userVote: pendingVote.current,
+                            upvoteDelta,
+                            downvoteDelta,
                         });
 
                         setVotes(res);
@@ -121,7 +120,7 @@ const useVote = ({ operatorId }: UseVoteProps) => {
                         try {
                             const freshData = await fetchVote({
                                 operatorId,
-                                userId: user?.id,
+                                userId: user.id,
                             });
                             setVotes(freshData);
                         } catch (fetchError) {
@@ -139,17 +138,17 @@ const useVote = ({ operatorId }: UseVoteProps) => {
                 );
             }
         },
-        [operatorId]
+        [operatorId, votes.userVote]
     );
 
     useEffect(() => {
         return () => {
-            if (doebounceTimer.current) {
-                clearTimeout(doebounceTimer.current);
+            if (debounceTimer.current) {
+                clearTimeout(debounceTimer.current);
             }
             pendingVote.current = null; // reset on unmount
         };
-    });
+    }, []);
 
     return { votes, isLoading, error, handleVote };
 };
