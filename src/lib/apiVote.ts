@@ -1,24 +1,26 @@
 import supabase from "@/utils/supabase/client";
 import { AuthUser, isAuthError } from "@supabase/supabase-js";
 
-type VoteType = "upvote" | "downvote";
+type VoteType = "upvote" | "downvote" | null;
 type VoteFetchRequest = {
     operatorId: number;
     userId: string | null;
 };
 type VoteSubmitRequest = {
     operatorId: number;
-    requestVoteType: VoteType | "delete";
+    userVote: VoteType;
+    upvoteDelta: number;
+    downvoteDelta: number;
 };
 type VoteSubmitResponse = {
     upvotes: number;
     downvotes: number;
-    userVote: VoteType | null;
+    userVote: VoteType;
 };
 type VoteData = {
     upvotes: number;
     downvotes: number;
-    userVote: VoteType | null;
+    userVote: VoteType;
 };
 
 const checkAuth = async (): Promise<{
@@ -83,7 +85,7 @@ const fetchVote = async ({
             if (userVoteError && userVoteError.code !== "PGRST116") {
                 throw userVoteError;
             }
-            userVote = userVoteData?.vote_type as VoteType | null;
+            userVote = userVoteData?.vote_type as VoteType;
         }
 
         return {
@@ -103,7 +105,9 @@ const fetchVote = async ({
 
 const submitVote = async ({
     operatorId,
-    voteType,
+    userVote,
+    upvoteDelta,
+    downvoteDelta,
 }: VoteSubmitRequest): Promise<VoteSubmitResponse> => {
     try {
         const { user, error: authError } = await checkAuth();
@@ -117,7 +121,9 @@ const submitVote = async ({
 
         const { data, error: voteError } = await supabase.rpc("handle_vote", {
             p_operator_id: operatorId,
-            p_vote_type: voteType,
+            p_vote_type: userVote,
+            p_upvote_delta: upvoteDelta,
+            p_downvote_delta: downvoteDelta,
         });
         if (voteError) {
             console.error("Error submitting vote:", voteError);
