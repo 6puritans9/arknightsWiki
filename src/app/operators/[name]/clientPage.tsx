@@ -16,6 +16,7 @@ import Lore from "@/components/operator/Lore";
 import VoteBar from "@/components/operator/VoteBar";
 import Button from "@/components/Button";
 import useVote from "@/hooks/useVote";
+import Notification from "@/components/ui/Notification";
 
 type OperatorDetailClientProps = {
     initialData: Operator;
@@ -110,8 +111,10 @@ const buttonWrapper = flex({
 
 const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
     const [tab, setTab] = useState<number>(0);
+    const [showNotification, setShowNotification] = useState<boolean>(false);
     const { votes, handleVote } = useVote({
         operatorId: initialData.id,
+        onUnAuthVote: () => setShowNotification(true),
     });
 
     const operator = initialData;
@@ -125,58 +128,67 @@ const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
     );
 
     return (
-        <div className={pageWrapper}>
-            <article className={`${cardContainer} ${cardBackground}`}>
-                <section className={headerWrapper}>
-                    <h2 className={headerTitle}>{operator.name}</h2>
-                    <div className={headerClass}>
-                        <p>{`Class: ${operator.class}`}</p>
-                        <p>{`Branch: ${operator.branch}`}</p>
-                    </div>
-                </section>
-                <div className={imageWrapper}>
-                    <Image
-                        src={`${imageSource}`}
-                        alt={operator.name}
-                        className={imageElement}
-                        width={100}
-                        height={100}
-                    ></Image>
-                </div>
-                <section className={tabsContainer}>
-                    <OperatorTabs
-                        onClick={(index) => () => setTab(index)}
-                        activeTab={tab}
-                    />
-                </section>
-                <section className={contentWrapper}>
-                    {tab === 0 && <Attributes operator={operator} />}
-                    {tab === 1 && <Skills operator={operator} />}
-                    {tab === 2 && <Review operator={operator} />}
-                    {tab === 3 && <Synergy operator={operator} />}
-                    {tab === 4 && <Lore operator={operator} />}
-                </section>
-                <div className={feedbackContainer}>
-                    <section className={tagsWrapper}>
-                        <h1>TAGS</h1>
-                    </section>
-                    <section className={voteWrapper}>
-                        <h1>Should I pull?</h1>
-                        <div className={buttonWrapper}>
-                            <Button
-                                content="👍"
-                                onClick={() => handleVote("upvote")}
-                            />
-                            <Button
-                                content="👎"
-                                onClick={() => handleVote("downvote")}
-                            />
+        <>
+            <Notification
+                title="Login required"
+                description="You need to be logged in to vote."
+                variant="Close"
+                open={showNotification}
+                onOpenChange={setShowNotification}
+            />
+            <div className={pageWrapper}>
+                <article className={`${cardContainer} ${cardBackground}`}>
+                    <section className={headerWrapper}>
+                        <h2 className={headerTitle}>{operator.name}</h2>
+                        <div className={headerClass}>
+                            <p>{`Class: ${operator.class}`}</p>
+                            <p>{`Branch: ${operator.branch}`}</p>
                         </div>
-                        <VoteBar votes={votes} />
                     </section>
-                </div>
-            </article>
-        </div>
+                    <div className={imageWrapper}>
+                        <Image
+                            src={`${imageSource}`}
+                            alt={operator.name}
+                            className={imageElement}
+                            width={100}
+                            height={100}
+                        ></Image>
+                    </div>
+                    <section className={tabsContainer}>
+                        <OperatorTabs
+                            onClick={(index) => () => setTab(index)}
+                            activeTab={tab}
+                        />
+                    </section>
+                    <section className={contentWrapper}>
+                        {tab === 0 && <Attributes operator={operator} />}
+                        {tab === 1 && <Skills operator={operator} />}
+                        {tab === 2 && <Review operator={operator} />}
+                        {tab === 3 && <Synergy operator={operator} />}
+                        {tab === 4 && <Lore operator={operator} />}
+                    </section>
+                    <div className={feedbackContainer}>
+                        <section className={tagsWrapper}>
+                            <h1>TAGS</h1>
+                        </section>
+                        <section className={voteWrapper}>
+                            <h1>Should I pull?</h1>
+                            <div className={buttonWrapper}>
+                                <Button
+                                    content="👍"
+                                    onClick={() => handleVote("upvote")}
+                                />
+                                <Button
+                                    content="👎"
+                                    onClick={() => handleVote("downvote")}
+                                />
+                            </div>
+                            <VoteBar votes={votes} />
+                        </section>
+                    </div>
+                </article>
+            </div>
+        </>
     );
 };
 

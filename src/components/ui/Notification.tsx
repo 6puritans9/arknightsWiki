@@ -14,11 +14,6 @@ type NotificationProps = {
 };
 
 // Styles
-// Base button reset
-const buttonReset = css({
-    all: "unset",
-});
-
 // Toast Viewport
 const toastViewport = css({
     "--viewport-padding": "25px",
@@ -162,7 +157,6 @@ const Notification = ({
     useEffect(() => {
         if (autoShow) {
             setOpen(true);
-            eventDateRef.current = oneWeekAway();
         }
 
         return () => clearTimeout(timerRef.current);
@@ -182,7 +176,6 @@ const Notification = ({
                         dateTime={eventDateRef.current.toISOString()}
                     >
                         {description}
-                        {prettyDate(eventDateRef.current)}
                     </time>
                 </Toast.Description>
                 <Toast.Action
@@ -206,18 +199,5 @@ const Notification = ({
         </Toast.Provider>
     );
 };
-
-function oneWeekAway() {
-    const now = new Date();
-    const inOneWeek = now.setDate(now.getDate() + 7);
-    return new Date(inOneWeek);
-}
-
-function prettyDate(date: Date) {
-    return new Intl.DateTimeFormat("en-US", {
-        dateStyle: "full",
-        timeStyle: "short",
-    }).format(date);
-}
 
 export default Notification;
