@@ -23,6 +23,28 @@ export default defineConfig({
                     headerText: { value: "#333333" },
                 },
             },
+            keyframes: {
+                hide: {
+                    from: { opacity: "1" },
+                    to: { opacity: "0" },
+                },
+                slideIn: {
+                    from: {
+                        transform:
+                            "translateX(calc(100% + var(--viewport-padding)))",
+                    },
+                    to: { transform: "translateX(0)" },
+                },
+                swipeOut: {
+                    from: {
+                        transform: "translateX(var(--radix-toast-swipe-end-x))",
+                    },
+                    to: {
+                        transform:
+                            "translateX(calc(100% + var(--viewport-padding)))",
+                    },
+                },
+            },
         },
     },
 
