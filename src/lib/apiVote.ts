@@ -33,21 +33,15 @@ const checkAuth = async (): Promise<{
             error,
         } = await supabase.auth.getUser();
         if (error) {
-            throw error;
+            if (!isAuthError(error)) {
+                throw error;
+            }
         }
 
         return { user };
     } catch (error) {
         let errorMsg = "";
-        if (isAuthError(error)) {
-            errorMsg = `Name: ${error.name} Message: ${error.message}`;
-            if (error.code) {
-                errorMsg += ` (Code: ${error.code})`;
-            }
-            if (error.status) {
-                errorMsg += ` (Status: ${error.status})`;
-            }
-        } else if (error instanceof Error) {
+        if (error instanceof Error) {
             errorMsg = `Error: ${error.message}`;
         } else {
             errorMsg = `Unknown error: ${String(error)}`;
