@@ -3,6 +3,7 @@ import { css } from "../../styled-system/css";
 type buttonProps = {
     content?: string;
     onClick: () => void;
+    isSelected: boolean;
 };
 
 const buttonStyles = css({
@@ -21,10 +22,19 @@ const buttonStyles = css({
         cursor: "not-allowed",
     },
 });
+const selected = css({
+    backgroundColor: "gray.800",
+    color: "white",
+    borderColor: "gray.800",
+    borderWidth: "1px",
+});
 
-const Button = ({ content, onClick }: buttonProps) => {
+const Button = ({ content, onClick, isSelected }: buttonProps) => {
     return (
-        <button className={buttonStyles} onClick={onClick}>
+        <button
+            className={`${buttonStyles} ${isSelected && selected}`}
+            onClick={onClick}
+        >
             {content}
         </button>
     );

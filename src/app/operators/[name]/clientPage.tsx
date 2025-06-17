@@ -177,10 +177,12 @@ const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
                                 <Button
                                     content="👍"
                                     onClick={() => handleVote("upvote")}
+                                    isSelected={votes.userVote === "upvote"}
                                 />
                                 <Button
                                     content="👎"
                                     onClick={() => handleVote("downvote")}
+                                    isSelected={votes.userVote === "downvote"}
                                 />
                             </div>
                             <VoteBar votes={votes} />
