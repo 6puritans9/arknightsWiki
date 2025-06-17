@@ -9,148 +9,171 @@ import {
 
 type UseVoteProps = {
     operatorId: number;
+    onUnAuthVote: () => void;
 };
 
-const useVote = ({ operatorId }: UseVoteProps) => {
-    const [votes, setVotes] = useState<VoteData>({
+const useVote = ({ operatorId, onUnAuthVote }: UseVoteProps) => {
+    // 1. Server State - Single Source of Truth
+    const serverStateRef = useRef<VoteData>({
         upvotes: 0,
         downvotes: 0,
         userVote: null,
     });
+
+    // 2. Client State - UI State (initialized from server)
+    const [clientState, setClientState] = useState<VoteData>({
+        upvotes: 0,
+        downvotes: 0,
+        userVote: null,
+    });
+
+    // 4. Client state reference to avoid race conditions
+    const clientVoteRef = useRef<VoteType>(null);
+
+    // Loading and error states
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-    const pendingVote = useRef<VoteType | null>(null);
+    // Debouncing
+    const pendingVote = useRef<VoteType>(null);
     const debounceTimer = useRef<NodeJS.Timeout | null>(null);
 
+    // 1. Initialize both states from server
     useEffect(() => {
         const fetchInitialVotes = async () => {
             try {
                 setIsLoading(true);
                 setError(null);
 
-                const { user, error: authError } = await checkAuth();
-                if (authError) {
-                    console.warn(
-                        "Authentication error(user might be anonymous1):",
-                        authError
-                    );
-                }
-
+                const { user } = await checkAuth();
                 const userId = user?.id || null;
-                const voteData = await fetchVote({ operatorId, userId });
-                setVotes(voteData);
+                const serverData = await fetchVote({ operatorId, userId });
+
+                // 1. Server state = source of truth
+                serverStateRef.current = serverData;
+
+                // 2. Client state = initialized from server
+                setClientState(serverData);
+
+                // 4. Client ref = initialized from server
+                clientVoteRef.current = serverData.userVote;
             } catch (e) {
                 setError(e instanceof Error ? e.message : "Unknown error");
-                console.error("Error fetching user:", e);
             } finally {
                 setIsLoading(false);
             }
         };
 
-        // Fetch initial votes when the component mounts
         fetchInitialVotes();
     }, [operatorId]);
 
-    const getVoteDeltas = (
-        oldVote: VoteType | null,
-        newVote: VoteType | null
-    ) => ({
-        upvoteDelta:
-            (newVote === "upvote" ? 1 : 0) - (oldVote === "upvote" ? 1 : 0),
-        downvoteDelta:
-            (newVote === "downvote" ? 1 : 0) - (oldVote === "downvote" ? 1 : 0),
-    });
+    // 5. Calculate deltas based on client state
+    const calculateDeltas = (oldVote: VoteType, newVote: VoteType) => {
+        const oldUp = oldVote === "upvote" ? 1 : 0;
+        const oldDown = oldVote === "downvote" ? 1 : 0;
+        const newUp = newVote === "upvote" ? 1 : 0;
+        const newDown = newVote === "downvote" ? 1 : 0;
 
-    // OnClick handler for vote buttons
+        return {
+            upvoteDelta: newUp - oldUp,
+            downvoteDelta: newDown - oldDown,
+        };
+    };
+
     const handleVote = useCallback(
         async (clickedVoteType: VoteType) => {
             try {
-                const { user, error } = await checkAuth(); // user must be authenticated
-                if (error) {
-                    console.error("Error fetching user:", error);
-                    return;
-                }
+                const { user } = await checkAuth();
                 if (!user) {
-                    console.error(
-                        "User not authenticated. Toast or modal to notify state."
-                    );
+                    onUnAuthVote();
                     return;
                 }
 
-                const newVoteType =
-                    votes.userVote === clickedVoteType ? null : clickedVoteType;
-                const { upvoteDelta, downvoteDelta } = getVoteDeltas(
-                    /* oldVote */ votes.userVote,
-                    /* newVote */ newVoteType
-                );
+                // 4. Use client ref to avoid race conditions
+                const currentClientVote = clientVoteRef.current;
+                const newVote =
+                    currentClientVote === clickedVoteType
+                        ? null
+                        : clickedVoteType;
 
-                pendingVote.current = newVoteType; // set pending vote before state update
+                // 4. Update client ref immediately (atomic)
+                clientVoteRef.current = newVote;
 
-                setVotes((prevVotes) => {
-                    return {
-                        upvotes: prevVotes.upvotes + upvoteDelta,
-                        downvotes: prevVotes.downvotes + downvoteDelta,
-                        userVote: newVoteType,
-                    };
-                });
+                // 5. Calculate deltas from client state
+                const deltas = calculateDeltas(currentClientVote, newVote);
 
-                // debouncing
+                // Store what we'll send to server
+                pendingVote.current = newVote;
+
+                // 6. Update client UI immediately
+                setClientState((prev) => ({
+                    upvotes: prev.upvotes + deltas.upvoteDelta,
+                    downvotes: prev.downvotes + deltas.downvoteDelta,
+                    userVote: newVote,
+                }));
+
+                // 7. Debounce for 500ms
                 if (debounceTimer.current) {
                     clearTimeout(debounceTimer.current);
                 }
 
                 debounceTimer.current = setTimeout(async () => {
                     try {
-                        // pendingVote.current === null
-                        //     ? "delete"                                : pendingVote.current;
-                        const res = await submitVote({
+                        // Calculate final deltas from server state to pending vote
+                        const serverToClientDeltas = calculateDeltas(
+                            serverStateRef.current.userVote,
+                            pendingVote.current
+                        );
+
+                        // 8. Send to server
+                        const serverResponse = await submitVote({
                             operatorId,
                             userVote: pendingVote.current,
-                            upvoteDelta,
-                            downvoteDelta,
+                            upvoteDelta: serverToClientDeltas.upvoteDelta,
+                            downvoteDelta: serverToClientDeltas.downvoteDelta,
                         });
 
-                        setVotes(res);
-                        pendingVote.current = null; // reset after submission
-                    } catch (error) {
-                        console.error("Error submitting vote:", error);
+                        // 9. Server response becomes new source of truth
+                        serverStateRef.current = serverResponse;
+
+                        // 10. Sync client state with server
+                        setClientState(serverResponse);
+                        clientVoteRef.current = serverResponse.userVote;
+
+                        pendingVote.current = null;
+                    } catch (e) {
+                        console.error("Error submitting vote:", e);
                         setError("Failed to submit vote");
 
-                        try {
-                            const freshData = await fetchVote({
-                                operatorId,
-                                userId: user.id,
-                            });
-                            setVotes(freshData);
-                        } catch (fetchError) {
-                            console.error(
-                                "Error fetching fresh vote data:",
-                                fetchError
-                            );
-                        }
+                        // Revert client state to server state on error
+                        setClientState(serverStateRef.current);
+                        clientVoteRef.current = serverStateRef.current.userVote;
                     }
                 }, 500);
-            } catch (error) {
-                console.error("Error handling vote:", error);
-                setError(
-                    error instanceof Error ? error.message : "Unknown error"
-                );
+            } catch (e) {
+                console.error("Error handling vote:", e);
+                setError(e instanceof Error ? e.message : "Unknown error");
             }
         },
-        [operatorId, votes.userVote]
+        [operatorId, onUnAuthVote]
     );
 
+    // Cleanup dangling timer on unmount
     useEffect(() => {
         return () => {
             if (debounceTimer.current) {
                 clearTimeout(debounceTimer.current);
             }
-            pendingVote.current = null; // reset on unmount
         };
     }, []);
 
-    return { votes, isLoading, error, handleVote };
+    // Return client state for UI
+    return {
+        votes: clientState, // UI displays client state
+        isLoading,
+        error,
+        handleVote,
+    };
 };
 
 export default useVote;
