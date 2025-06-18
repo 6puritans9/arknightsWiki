@@ -17,6 +17,7 @@ import VoteBar from "@/components/operator/VoteBar";
 import Button from "@/components/Button";
 import useVote from "@/hooks/useVote";
 import Notification from "@/components/ui/Notification";
+import { classMap, branchMap } from "@/lib/constants/pathnameMap";
 
 type OperatorDetailClientProps = {
     initialData: Operator;
@@ -44,14 +45,32 @@ const headerWrapper = flex({
     padding: "0 0.5rem 0 0.5rem",
 });
 
-const headerTitle = css({
+const headerTitle = flex({
     fontSize: {
         base: "1.5rem",
     },
+    alignItems: "center",
+    gap: "0.1rem",
+});
+
+const starsStyle = css({
+    color: "#FFD700",
+    opacity: 0.8,
+    fontSize: "0.8rem",
+    alignSelf: "flex-start",
 });
 
 const headerClass = flex({
-    flexDirection: "column",
+    gap: "1rem",
+});
+
+const figureWithCaption = flex({
+    alignItems: "center",
+    gap: "0.2rem",
+});
+
+const captionStyle = css({
+    fontSize: "0.8rem",
 });
 
 const tabsContainer = flex({
@@ -139,10 +158,36 @@ const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
             <div className={pageWrapper}>
                 <article className={`${cardContainer} ${cardBackground}`}>
                     <section className={headerWrapper}>
-                        <h2 className={headerTitle}>{operator.name}</h2>
+                        <h2 className={headerTitle}>
+                            {operator.name}
+                            <span className={starsStyle}>
+                                {"★".repeat(operator.rarity)}
+                            </span>
+                        </h2>
+
                         <div className={headerClass}>
-                            <p>{`Class: ${operator.class}`}</p>
-                            <p>{`Branch: ${operator.branch}`}</p>
+                            <figure className={figureWithCaption}>
+                                <Image
+                                    src={getS3Url(classMap[operator.class])}
+                                    alt="classImg"
+                                    height="30"
+                                    width="30"
+                                />
+                                <figcaption
+                                    className={captionStyle}
+                                >{`${operator.class}`}</figcaption>
+                            </figure>
+                            <figure className={figureWithCaption}>
+                                <Image
+                                    src={getS3Url(branchMap[operator.branch])}
+                                    alt="branchImg"
+                                    height="30"
+                                    width="30"
+                                />
+                                <figcaption
+                                    className={captionStyle}
+                                >{`${operator.branch}`}</figcaption>
+                            </figure>
                         </div>
                     </section>
                     <div className={imageWrapper}>
