@@ -17,7 +17,7 @@ import VoteBar from "@/components/operator/VoteBar";
 import Button from "@/components/Button";
 import useVote from "@/hooks/useVote";
 import Notification from "@/components/ui/Notification";
-import { classMap, branchMap } from "@/lib/constants/pathnameMap";
+import { classMap, branchMap, factionMap } from "@/lib/constants/pathnameMap";
 
 type OperatorDetailClientProps = {
     initialData: Operator;
@@ -175,6 +175,9 @@ const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
         `operators/${operatorPath}/${operatorPath}_1.webp`
     );
 
+    const faction = factionMap[initialData.faction as string];
+    const factionImage = getS3Url(faction);
+
     const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
         const img = e.currentTarget as HTMLImageElement;
         const ratio = img.naturalWidth / img.naturalHeight;
@@ -227,7 +230,15 @@ const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
                             </figure>
                         </div>
                     </section>
-                    <div className={imageWrapper}>
+                    <div
+                        className={imageWrapper}
+                        style={{
+                            backgroundImage: `url(${factionImage})`,
+                            backgroundSize: "40%",
+                            backgroundRepeat: "no-repeat",
+                            backgroundPosition: "top left",
+                        }}
+                    >
                         <Image
                             src={`${imageSource}`}
                             alt={operator.name}
