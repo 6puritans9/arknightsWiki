@@ -100,11 +100,39 @@ const imageWrapper = css({
     justifyContent: "center",
     height: "100%",
     width: "100%",
+    overflow: "visible",
+    position: "relative",
 });
 
 const imageElement = css({
-    height: "max-content",
+    height: "100%",
+    maxWidth: "100%",
     width: "auto",
+    objectFit: "cover",
+    transformOrigin: "center",
+    transition:
+        "object-fit 0.35s linear, transform 0.4s cubic-bezier(0.4,0,0.2,1), z-index 0s",
+
+    _hover: {
+        position: "absolute",
+        width: "140%",
+        height: "auto",
+        maxWidth: "none",
+        minWidth: "120%",
+        objectFit: "contain",
+        zIndex: 15,
+        // transition: "transform 0.2s ease-in",
+    },
+
+    "&.square:hover": {
+        transform: "scale(1.5)",
+    },
+    "&.tall:hover": {
+        transform: "scale(1.05)",
+    },
+    "&.wide:hover": {
+        transform: "scale(1.1)",
+    },
 });
 
 const feedbackContainer = flex({
@@ -131,6 +159,7 @@ const buttonWrapper = flex({
 const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
     const [tab, setTab] = useState<number>(0);
     const [showNotification, setShowNotification] = useState<boolean>(false);
+    const [aspect, setAspect] = useState<"square" | "tall" | "wide">("tall");
     const { votes, handleVote } = useVote({
         operatorId: initialData.id,
         onUnAuthVote: () => setShowNotification(true),
@@ -145,6 +174,14 @@ const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
     const imageSource = getS3Url(
         `operators/${operatorPath}/${operatorPath}_1.webp`
     );
+
+    const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
+        const img = e.currentTarget as HTMLImageElement;
+        const ratio = img.naturalWidth / img.naturalHeight;
+        if (ratio > 1.2) setAspect("wide");
+        else if (ratio < 0.8) setAspect("tall");
+        else setAspect("square");
+    };
 
     return (
         <>
@@ -194,11 +231,14 @@ const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
                         <Image
                             src={`${imageSource}`}
                             alt={operator.name}
-                            className={imageElement}
+                            className={`${imageElement} ${aspect}`}
                             width={100}
                             height={100}
+                            unoptimized={true}
+                            onLoad={handleImageLoad}
                         ></Image>
                     </div>
+
                     <section className={tabsContainer}>
                         <OperatorTabs
                             onClick={(index) => () => setTab(index)}
