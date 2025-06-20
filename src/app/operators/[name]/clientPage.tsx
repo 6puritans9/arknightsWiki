@@ -92,9 +92,31 @@ const contentWrapper = flex({
     },
 });
 
-const imageWrapper = css({
+const imageContainer = flex({
     gridRow: "1/-1",
     gridColumn: "2",
+    flexDirection: "column",
+});
+
+const selectorWrapper = flex({
+    justifyContent: "flex-end",
+    gap: "0.8rem",
+});
+
+const selector = css({
+    cursor: "pointer",
+    _hover: {
+        color: "#f0f0f0/60",
+    },
+});
+
+const selected = css({
+    color: "#f0f0f0/60",
+});
+
+const imageWrapper = css({
+    // gridRow: "1/-1",
+    // gridColumn: "2",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -102,6 +124,7 @@ const imageWrapper = css({
     width: "100%",
     overflow: "visible",
     position: "relative",
+    paddingTop: "3rem",
 });
 
 const imageElement = css({
@@ -157,9 +180,10 @@ const buttonWrapper = flex({
 });
 
 const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
-    const [tab, setTab] = useState<number>(0);
+    const [tab, setTab] = useState<number>(1);
     const [showNotification, setShowNotification] = useState<boolean>(false);
     const [aspect, setAspect] = useState<"square" | "tall" | "wide">("tall");
+    const [selectedSkin, setSelectedSkin] = useState<1 | 2>(1);
     const { votes, handleVote } = useVote({
         operatorId: initialData.id,
         onUnAuthVote: () => setShowNotification(true),
@@ -171,9 +195,20 @@ const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
             ? operator.code.toString().padStart(3, "0")
             : operator.code.toString();
     const operatorPath = `char_${paddedCode}_${operator.pathname}`;
-    const imageSource = getS3Url(
-        `operators/${operatorPath}/${operatorPath}_1.webp`
-    );
+    const getImageSource = (skinType: 1 | 2) => {
+        const baseImagePath = getS3Url(
+            `operators/${operatorPath}/${operatorPath}`
+        );
+
+        switch (skinType) {
+            case 1:
+                return `${baseImagePath}_1.webp`;
+            case 2:
+                return `${baseImagePath}_2.webp`;
+            default:
+                return `${baseImagePath}_1.webp`;
+        }
+    };
 
     const faction = factionMap[initialData.faction as string];
     const factionImage = getS3Url(faction);
@@ -231,7 +266,7 @@ const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
                         </div>
                     </section>
                     <div
-                        className={imageWrapper}
+                        className={imageContainer}
                         style={{
                             backgroundImage: `url(${factionImage})`,
                             backgroundSize: "40%",
@@ -239,15 +274,31 @@ const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
                             backgroundPosition: "top left",
                         }}
                     >
-                        <Image
-                            src={`${imageSource}`}
-                            alt={operator.name}
-                            className={`${imageElement} ${aspect}`}
-                            width={100}
-                            height={100}
-                            unoptimized={true}
-                            onLoad={handleImageLoad}
-                        ></Image>
+                        <div className={selectorWrapper}>
+                            <button
+                                className={`${selector} ${selectedSkin === 1 ? selected : ""}`}
+                                onClick={() => setSelectedSkin(1)}
+                            >
+                                1
+                            </button>
+                            <button
+                                className={`${selector} ${selectedSkin === 2 ? selected : ""}`}
+                                onClick={() => setSelectedSkin(2)}
+                            >
+                                2
+                            </button>
+                        </div>
+                        <div className={imageWrapper}>
+                            <Image
+                                src={getImageSource(selectedSkin)}
+                                alt={operator.name}
+                                className={`${imageElement} ${aspect}`}
+                                width={100}
+                                height={100}
+                                unoptimized={true}
+                                onLoad={handleImageLoad}
+                            />
+                        </div>
                     </div>
 
                     <section className={tabsContainer}>
