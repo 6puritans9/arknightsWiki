@@ -33,10 +33,13 @@ const pageWrapper = flex({
 
 const cardContainer = grid({
     gridTemplateColumns: "2fr 1fr",
-    gridTemplateRows: "1fr 1fr 3fr 2fr",
+    // gridTemplateRows: "1fr 1fr 3fr 2fr",
+    gridTemplateRows: "1fr auto 2fr auto",
     alignSelf: "center",
     justifySelf: "center",
     width: "100%",
+    height: "70vh",
+    gap: "1rem",
 });
 
 const headerWrapper = flex({
@@ -96,6 +99,8 @@ const imageContainer = flex({
     gridRow: "1/-1",
     gridColumn: "2",
     flexDirection: "column",
+    height: "100%",
+    width: "100%",
 });
 
 const selectorWrapper = flex({
@@ -115,20 +120,22 @@ const selected = css({
 });
 
 const imageWrapper = css({
-    // gridRow: "1/-1",
-    // gridColumn: "2",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     height: "100%",
+    maxHeight: "100%",
     width: "100%",
     overflow: "visible",
     position: "relative",
     paddingTop: "3rem",
+    aspectRatio: "1 / 1",
 });
 
 const imageElement = css({
-    height: "100%",
+    // height: "80%",
+    maxHeight: "100%",
+    height: "auto",
     maxWidth: "100%",
     width: "auto",
     objectFit: "cover",
@@ -138,17 +145,12 @@ const imageElement = css({
 
     _hover: {
         position: "absolute",
-        width: "140%",
-        height: "auto",
-        maxWidth: "none",
-        minWidth: "120%",
         objectFit: "contain",
         zIndex: 15,
-        // transition: "transform 0.2s ease-in",
     },
 
     "&.square:hover": {
-        transform: "scale(1.5)",
+        transform: "scale(1.2) translateY(5%)",
     },
     "&.tall:hover": {
         transform: "scale(1.05)",
