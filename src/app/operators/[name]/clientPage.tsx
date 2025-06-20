@@ -182,7 +182,7 @@ const buttonWrapper = flex({
 });
 
 const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
-    const [tab, setTab] = useState<number>(1);
+    const [tab, setTab] = useState<number>(0);
     const [showNotification, setShowNotification] = useState<boolean>(false);
     const [aspect, setAspect] = useState<"square" | "tall" | "wide">("tall");
     const [selectedSkin, setSelectedSkin] = useState<1 | 2>(1);
