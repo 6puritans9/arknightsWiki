@@ -1,6 +1,6 @@
 import { Database } from "./supabase";
 import { QueryData } from "@supabase/supabase-js";
-import { operatorsQuery } from "./apiOperators";
+import { operatorsQuery } from "./apiSupabase";
 import { baseQuery } from "./apiBase";
 
 // Query Types

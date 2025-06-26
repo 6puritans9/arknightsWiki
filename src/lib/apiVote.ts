@@ -3,11 +3,11 @@ import { AuthUser, isAuthError } from "@supabase/supabase-js";
 
 type VoteType = "upvote" | "downvote" | null;
 type VoteFetchRequest = {
-    operatorId: number;
+    operatorId: string;
     userId: string | null;
 };
 type VoteSubmitRequest = {
-    operatorId: number;
+    operatorId: string;
     userVote: VoteType;
     upvoteDelta: number;
     downvoteDelta: number;
