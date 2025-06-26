@@ -1,5 +1,5 @@
 import OperatorDetailClient from "./clientPage";
-import { getOperator } from "@/lib/apiOperators";
+import { fetchSingleEntity } from "@/lib/apiMongo";
 
 type OperatorDetailProps = {
     params: Promise<{
@@ -9,7 +9,12 @@ type OperatorDetailProps = {
 
 const OperatorDetail = async ({ params }: OperatorDetailProps) => {
     const { name } = await params;
-    const data = await getOperator(name);
+    const data = await fetchSingleEntity(name, "character_table", "en");
+    console.log("Operator Detail Data:", data);
+
+    if (!data) {
+        return <div>Operator not found</div>;
+    }
 
     return <OperatorDetailClient initialData={data} />;
 };

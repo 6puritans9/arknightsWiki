@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Operator } from "@/lib/types";
 import getS3Url from "@/lib/apiAws";
 import Image from "next/image";
 import { css } from "../../../../styled-system/css";
@@ -18,9 +17,11 @@ import Button from "@/components/Button";
 import useVote from "@/hooks/useVote";
 import Notification from "@/components/ui/Notification";
 import { classMap, branchMap, factionMap } from "@/lib/constants/pathnameMap";
+import { WithId } from "mongodb";
+import { OperatorType } from "@/lib/apiMongo";
 
 type OperatorDetailClientProps = {
-    initialData: Operator;
+    initialData: WithId<OperatorType>;
 };
 
 // Styles
@@ -187,16 +188,12 @@ const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
     const [aspect, setAspect] = useState<"square" | "tall" | "wide">("tall");
     const [selectedSkin, setSelectedSkin] = useState<1 | 2>(1);
     const { votes, handleVote } = useVote({
-        operatorId: initialData.id,
+        operatorId: initialData._id,
         onUnAuthVote: () => setShowNotification(true),
     });
 
     const operator = initialData;
-    const paddedCode =
-        operator.code.toString().length < 3
-            ? operator.code.toString().padStart(3, "0")
-            : operator.code.toString();
-    const operatorPath = `char_${paddedCode}_${operator.pathname}`;
+    const operatorPath = `${operator._id}`;
     const getImageSource = (skinType: 1 | 2) => {
         const baseImagePath = getS3Url(
             `operators/${operatorPath}/${operatorPath}`
@@ -252,18 +249,20 @@ const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
                                 />
                                 <figcaption
                                     className={captionStyle}
-                                >{`${operator.class}`}</figcaption>
+                                >{`${operator.profession}`}</figcaption>
                             </figure>
                             <figure className={figureWithCaption}>
                                 <Image
-                                    src={getS3Url(branchMap[operator.branch])}
+                                    src={getS3Url(
+                                        branchMap[operator.subProfessionId]
+                                    )}
                                     alt="branchImg"
                                     height="30"
                                     width="30"
                                 />
                                 <figcaption
                                     className={captionStyle}
-                                >{`${operator.branch}`}</figcaption>
+                                >{`${operator.subProfessionId}`}</figcaption>
                             </figure>
                         </div>
                     </section>
