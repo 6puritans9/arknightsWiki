@@ -65,6 +65,7 @@ const fetchVote = async ({
         if (opVotesError && opVotesError.code !== "PGRST116") {
             throw opVotesError;
         }
+        console.log(opVotes);
 
         // fetch specific user vote data
         let userVote = null;
