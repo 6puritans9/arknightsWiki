@@ -8,7 +8,7 @@ import {
 } from "@/lib/apiVote";
 
 type UseVoteProps = {
-    operatorId: number;
+    operatorId: string;
     onUnAuthVote: () => void;
 };
 
