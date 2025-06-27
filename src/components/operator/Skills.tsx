@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { TabProps } from "./OperatorTabs";
 import { flex } from "../../../styled-system/patterns";
-import { replaceTags, replacePlaceholder } from "@/utils/TextConverter";
+import { convertSkillText } from "@/utils/TextConverter";
 
 const selectorWrapper = flex({
     gap: "0.5rem",
@@ -93,13 +93,11 @@ const Skills = ({ operator }: TabProps) => {
                                     </div>
                                     <section>
                                         <p>
-                                            {replaceTags(
-                                                replacePlaceholder(
-                                                    skill.levels[activeLevel]
-                                                        ?.description,
-                                                    skill.levels[activeLevel]
-                                                        ?.blackboard
-                                                )
+                                            {convertSkillText(
+                                                skill.levels[activeLevel]
+                                                    ?.description,
+                                                skill.levels[activeLevel]
+                                                    ?.blackboard
                                             )}
                                         </p>
                                     </section>
