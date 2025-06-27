@@ -16,28 +16,22 @@ const getOperators = async () => {
     return data;
 };
 
-const getAllOperatorData = async () => {
-    const { data, error } = await supabase
-        .from("operators")
-        .select(
-            "name, nickname, pathname, code, rarity, class, branch, faction, is_cn, has_promotion`"
-        )
-        .order("is_cn", { ascending: false })
-        .order("rarity", { ascending: false })
-        .order("code", { ascending: false });
+// const getAllOperatorData = async () => {
+//     const { data, error } = await supabase
+//         .from("operators")
+//         .select(
+//             "name, nickname, pathname, code, rarity, class, branch, faction, is_cn, has_promotion`"
+//         )
+//         .order("is_cn", { ascending: false })
+//         .order("rarity", { ascending: false })
+//         .order("code", { ascending: false });
 
-    if (error) {
-        throw error;
-    }
+//     if (error) {
+//         throw error;
+//     }
 
-    return data;
-};
-
-// const getPaginatedOperatorImages = async(page =0, limit = 20) => {
-//     const offset = page * limit;
-
-//     const {data, error} = await
-// }
+//     return data;
+// };
 
 const getOperator = async (name: string) => {
     const decodedName = decodeURIComponent(name);
