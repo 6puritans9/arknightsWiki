@@ -1,4 +1,4 @@
-const classMap: { [key: string]: string } = {
+const professionMap: { [key: string]: string } = {
     Vanguard: "op_misc/profession_large_hub/icon_profession_pioneer_large.png",
     Defender: "op_misc/profession_large_hub/icon_profession_tank_large.png",
     Specialist:
@@ -6,11 +6,11 @@ const classMap: { [key: string]: string } = {
     Caster: "op_misc/profession_large_hub/icon_profession_caster_large.png",
     Medic: "op_misc/profession_large_hub/icon_profession_medic_large.png",
     Supporter: "op_misc/profession_large_hub/icon_profession_support_large.png",
-    Guard: "op_misc/profession_large_hub/icon_profession_warrior_large.png",
+    WARRIOR: "op_misc/profession_large_hub/icon_profession_warrior_large.png",
     Sniper: "op_misc/profession_large_hub/icon_profession_sniper_large.png",
 };
 
-const branchMap: { [key: string]: string } = {
+const subProfessionIdMap: { [key: string]: string } = {
     Abjurer: "op_misc/subprofessionicon/sub_blessing_icon.png",
     Agent: "op_misc/subprofessionicon/sub_agent_icon.png",
     Alchemist: "op_misc/subprofessionicon/sub_alchemist_icon.png",
@@ -80,7 +80,7 @@ const branchMap: { [key: string]: string } = {
     "Wandering Medic": "op_misc/subprofessionicon/sub_wandermedic_icon.png",
 };
 
-const factionMap: { [key: string]: string } = {
+const nationIdMap: { [key: string]: string } = {
     "Abyssal Hunters": "op_misc/camplogo/logo_abyssal.png",
     Ægir: "op_misc/camplogo/logo_egir.png",
     Babel: "op_misc/camplogo/logo_babel.png",
@@ -125,4 +125,4 @@ const factionMap: { [key: string]: string } = {
     Yan: "op_misc/camplogo/logo_yan.png",
 };
 
-export { classMap, branchMap, factionMap };
+export { professionMap, subProfessionIdMap, nationIdMap };
