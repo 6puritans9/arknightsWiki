@@ -1,7 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import getS3Url from "@/lib/apiAws";
+import getS3Url, {
+    getProfessionImage,
+    getsubProfessionIdImage,
+} from "@/lib/apiAws";
 import Image from "next/image";
 import { css } from "../../../../styled-system/css";
 import { flex, grid } from "../../../../styled-system/patterns";
@@ -16,7 +19,11 @@ import VoteBar from "@/components/operator/VoteBar";
 import Button from "@/components/Button";
 import useVote from "@/hooks/useVote";
 import Notification from "@/components/ui/Notification";
-import { classMap, branchMap, factionMap } from "@/lib/constants/pathnameMap";
+import {
+    professionMap,
+    subProfessionIdMap,
+    nationIdMap,
+} from "@/lib/constants/pathnameMap";
 import { WithId } from "mongodb";
 import { OperatorType } from "@/lib/apiMongo";
 
@@ -34,7 +41,6 @@ const pageWrapper = flex({
 
 const cardContainer = grid({
     gridTemplateColumns: "2fr 1fr",
-    // gridTemplateRows: "1fr 1fr 3fr 2fr",
     gridTemplateRows: "1fr auto 2fr auto",
     alignSelf: "center",
     justifySelf: "center",
@@ -209,7 +215,7 @@ const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
         }
     };
 
-    const faction = factionMap[initialData.faction as string];
+    const faction = nationIdMap[initialData.nationId as string];
     const factionImage = getS3Url(faction);
 
     const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
@@ -242,7 +248,9 @@ const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
                         <div className={headerClass}>
                             <figure className={figureWithCaption}>
                                 <Image
-                                    src={getS3Url(classMap[operator.class])}
+                                    src={getProfessionImage(
+                                        operator.profession
+                                    )}
                                     alt="classImg"
                                     height="30"
                                     width="30"
@@ -253,8 +261,8 @@ const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
                             </figure>
                             <figure className={figureWithCaption}>
                                 <Image
-                                    src={getS3Url(
-                                        branchMap[operator.subProfessionId]
+                                    src={getsubProfessionIdImage(
+                                        operator.subProfessionId
                                     )}
                                     alt="branchImg"
                                     height="30"
@@ -323,12 +331,12 @@ const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
                             <h1>Should I pull?</h1>
                             <div className={buttonWrapper}>
                                 <Button
-                                    content="👍"
+                                    content="upvote"
                                     onClick={() => handleVote("upvote")}
                                     isSelected={votes.userVote === "upvote"}
                                 />
                                 <Button
-                                    content="👎"
+                                    content="downvote"
                                     onClick={() => handleVote("downvote")}
                                     isSelected={votes.userVote === "downvote"}
                                 />

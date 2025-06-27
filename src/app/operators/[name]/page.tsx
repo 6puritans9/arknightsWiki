@@ -10,7 +10,6 @@ type OperatorDetailProps = {
 const OperatorDetail = async ({ params }: OperatorDetailProps) => {
     const { name } = await params;
     const data = await fetchSingleEntity(name, "character_table", "en");
-    console.log("Operator Detail Data:", data);
 
     if (!data) {
         return <div>Operator not found</div>;
