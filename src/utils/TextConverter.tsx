@@ -1,6 +1,6 @@
 import React from "react";
 
-export const replacePlaceholder = (
+const replaceSkillPlaceholder = (
     description: string,
     blackboard: Record<string, number>
 ) => {
@@ -19,7 +19,7 @@ export const replacePlaceholder = (
     });
 };
 
-export const replaceTags = (text: string) => {
+const replaceSkillTags = (text: string) => {
     // Match any <@ba.xxx> or <$ba.xxx> or </> tag
     const tagRegex = /<(@|\$)ba\.(\w+)>|<\/>/g;
     const stack: Array<{
@@ -93,72 +93,75 @@ export const replaceTags = (text: string) => {
     return result;
 };
 
-// export const replaceTags = (text: string) => {
-//     const tagRegex = /<(@|\$)ba\.(\w+)>|<\/>/g;
-//     const stack: Array<{
-//         tag: string;
-//         tagType: string;
-//         children: React.ReactNode[];
-//     }> = [];
-//     let lastIndex = 0;
-//     let match;
-//     let idx = 0;
-//     const result: React.ReactNode[] = [];
+const convertSkillText = (
+    text: string,
+    blackboard: { [key: string]: number }
+) => replaceSkillTags(replaceSkillPlaceholder(text, blackboard));
 
-//     while ((match = tagRegex.exec(text)) !== null) {
-//         if (match.index > lastIndex) {
-//             const content = text.slice(lastIndex, match.index);
-//             if (stack.length) {
-//                 stack[stack.length - 1].children.push(content);
-//             } else {
-//                 result.push(content);
-//             }
-//         }
-//         const [full, atOrDollar, tagName] = match;
-//         if (full.startsWith("</")) {
-//             const node = stack.pop();
-//             if (node) {
-//                 let element: React.ReactNode;
-//                 if (node.tag === "vup") {
-//                     element = (
-//                         <span key={idx++} style={{ color: "dodgerblue" }}>
-//                             {node.children}
-//                         </span>
-//                     );
-//                 } else if (node.tag === "rem") {
-//                     element = (
-//                         <span key={idx++} style={{ color: "orange" }}>
-//                             {node.children}
-//                         </span>
-//                     );
-//                 } else if (node.tag === "root") {
-//                     element = <b key={idx++}>{node.children}</b>;
-//                 } else {
-//                     // All other tags: gray
-//                     element = (
-//                         <span key={idx++} style={{ color: "gray" }}>
-//                             {node.children}
-//                         </span>
-//                     );
-//                 }
-//                 if (stack.length) {
-//                     stack[stack.length - 1].children.push(element);
-//                 } else {
-//                     result.push(element);
-//                 }
-//             }
-//         } else {
-//             stack.push({ tag: tagName, tagType: atOrDollar, children: [] });
-//         }
-//         lastIndex = tagRegex.lastIndex;
-//     }
-//     if (lastIndex < text.length) {
-//         const content = text.slice(lastIndex);
-//         if (stack.length) {
-//             stack[stack.length - 1].children.push(content);
-//         } else {
-//             result.push(content);
-//         }
-//     }
-//     return result;
-// };
+const convertAttrText = (str: string): React.ReactNode => {
+    // Regex to match any <@ba.xxx> or <$ba.xxx> ... </>
+    const tagRegex = /<(@|\$)ba\.(\w+)>|<\/>/g;
+    let lastIndex = 0;
+    let match;
+    let idx = 0;
+    const stack: Array<{
+        tag: string;
+        tagType: string;
+        children: React.ReactNode[];
+    }> = [];
+    const result: React.ReactNode[] = [];
+
+    while ((match = tagRegex.exec(str)) !== null) {
+        if (match.index > lastIndex) {
+            const content = str.slice(lastIndex, match.index);
+            if (stack.length) {
+                stack[stack.length - 1].children.push(content);
+            } else {
+                result.push(content);
+            }
+        }
+        const [full, atOrDollar, tagName] = match;
+        if (full.startsWith("</")) {
+            const node = stack.pop();
+            if (node) {
+                let element: React.ReactNode;
+                if (node.tag === "kw") {
+                    element = (
+                        <span key={idx++} style={{ color: "dodgerblue" }}>
+                            {node.children}
+                        </span>
+                    );
+                } else {
+                    // All other tags: bold gray
+                    element = (
+                        <span
+                            key={idx++}
+                            style={{ color: "gray", fontWeight: "bold" }}
+                        >
+                            {node.children}
+                        </span>
+                    );
+                }
+                if (stack.length) {
+                    stack[stack.length - 1].children.push(element);
+                } else {
+                    result.push(element);
+                }
+            }
+        } else {
+            stack.push({ tag: tagName, tagType: atOrDollar, children: [] });
+        }
+        lastIndex = tagRegex.lastIndex;
+    }
+    if (lastIndex < str.length) {
+        const content = str.slice(lastIndex);
+        if (stack.length) {
+            stack[stack.length - 1].children.push(content);
+        } else {
+            result.push(content);
+        }
+    }
+    return <>{result}</>;
+};
+
+export { convertSkillText, convertAttrText };
