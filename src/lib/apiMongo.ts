@@ -61,6 +61,30 @@ type skillType = {
     levelUpCostCond: levelUpCostCondType[];
 };
 
+type skillDetailType = {
+    _id: string;
+    skillId: string;
+    hidden: boolean;
+    levels: {
+        name: string;
+        description: string;
+        skillType: string;
+        durationType: string;
+        spData: {
+            spType: string;
+            maxChargeTime: number;
+            spCost: number;
+            initSp: number;
+            increment: number;
+        };
+        prefabId: string;
+        duration: number;
+        blackboard: {
+            [key: string]: number;
+        };
+    }[];
+};
+
 export type ThumbnailOperatorType = {
     _id: string;
     name: string;
@@ -93,6 +117,7 @@ export type OperatorType = {
     teamId?: string;
     phases: PhaseType[];
     skills: skillType[];
+    skillDetails: skillDetailType[];
     // talents: 1;
     // potentialRanks: 1;
     // favorKeyFrames: 1;
@@ -194,7 +219,7 @@ const fetchAllOperators = async (
     }
 };
 
-const fetchSingleEntity = async (
+const fetchOperatorWithSkills = async (
     name: string,
     collectionName: string,
     lang: string = "en"
@@ -207,10 +232,24 @@ const fetchSingleEntity = async (
         const db = mongoClient.db(dbName);
         const collection = db.collection(collectionName);
 
-        const entity = await collection.findOne(
-            { name: decodedName, isNotObtainable: false }, // filters npc characters
+        const pipeline = [
             {
-                projection: {
+                $match: {
+                    name: decodedName,
+                    isNotObtainable: false, // filter npc characters
+                },
+            },
+            // Lookup to join skills
+            {
+                $lookup: {
+                    from: "skill_table",
+                    localField: "skills.skillId",
+                    foreignField: "_id",
+                    as: "skillDetails",
+                },
+            },
+            {
+                $project: {
                     _id: 1,
                     name: 1,
                     description: 1,
@@ -228,20 +267,60 @@ const fetchSingleEntity = async (
                     teamId: 1,
                     phases: 1,
                     skills: 1,
+                    skillDetails: 1,
                     // talents: 1,
                     // potentialRanks: 1,
                     // favorKeyFrames: 1,
                     // allSkillLvlup: 1,
                 },
-            }
-        );
+            },
+        ];
 
-        if (!entity) {
+        const result = await collection.aggregate(pipeline).toArray();
+        if (!result || result.length === 0) {
             console.warn(
                 `Entity with name "${decodedName}" not found in collection "${collectionName}"`
             );
             return null;
         }
+
+        const entity = result[0];
+
+        // const entity = await collection.findOne(
+        //     { name: decodedName, isNotObtainable: false }, // filters npc characters
+        //     {
+        //         projection: {
+        //             _id: 1,
+        //             name: 1,
+        //             description: 1,
+        //             itemUsage: 1,
+        //             itemDesc: 1,
+        //             appellation: 1,
+        //             position: 1,
+        //             isSpChar: 1,
+        //             rarity: 1,
+        //             profession: 1,
+        //             subProfessionId: 1,
+        //             itemObtainApproach: 1,
+        //             nationId: 1,
+        //             groupId: 1,
+        //             teamId: 1,
+        //             phases: 1,
+        //             skills: 1,
+        //             // talents: 1,
+        //             // potentialRanks: 1,
+        //             // favorKeyFrames: 1,
+        //             // allSkillLvlup: 1,
+        //         },
+        //     }
+        // );
+
+        // if (!entity) {
+        //     console.warn(
+        //         `Entity with name "${decodedName}" not found in collection "${collectionName}"`
+        //     );
+        //     return null;
+        // }
 
         return {
             _id: entity._id.toString(),
@@ -261,6 +340,7 @@ const fetchSingleEntity = async (
             teamId: cleanStringField(entity.teamId),
             phases: entity.phases,
             skills: entity.skills,
+            skillDetails: entity.skillDetails,
             // talents: 1,
             // potentialRanks: 1,
             // favorKeyFrames: 1,
@@ -272,4 +352,4 @@ const fetchSingleEntity = async (
     }
 };
 
-export { fetchSingleEntity, fetchAllOperators };
+export { fetchOperatorWithSkills, fetchAllOperators };
