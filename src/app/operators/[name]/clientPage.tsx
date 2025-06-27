@@ -19,11 +19,7 @@ import VoteBar from "@/components/operator/VoteBar";
 import Button from "@/components/Button";
 import useVote from "@/hooks/useVote";
 import Notification from "@/components/ui/Notification";
-import {
-    professionMap,
-    subProfessionIdMap,
-    nationIdMap,
-} from "@/lib/constants/pathnameMap";
+import { nationIdMap } from "@/lib/constants/pathnameMap";
 import { WithId } from "mongodb";
 import { OperatorType } from "@/lib/apiMongo";
 
@@ -31,7 +27,7 @@ type OperatorDetailClientProps = {
     initialData: WithId<OperatorType>;
 };
 
-// Styles
+//#region Styles
 const pageWrapper = flex({
     justifyContent: "center",
     alignItems: "center",
@@ -187,8 +183,10 @@ const buttonWrapper = flex({
     alignItems: "center",
     gap: "1.5rem",
 });
+//#endregion Styles
 
 const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
+    //#region State management
     const [tab, setTab] = useState<number>(0);
     const [showNotification, setShowNotification] = useState<boolean>(false);
     const [aspect, setAspect] = useState<"square" | "tall" | "wide">("tall");
@@ -197,6 +195,7 @@ const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
         operatorId: initialData._id,
         onUnAuthVote: () => setShowNotification(true),
     });
+    //#endregion State management
 
     const operator = initialData;
     const operatorPath = `${operator._id}`;
