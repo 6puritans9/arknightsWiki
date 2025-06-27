@@ -1,6 +1,6 @@
+import { OperatorType } from "@/lib/apiMongo";
 import { css, cx } from "../../../styled-system/css";
 import { flex } from "../../../styled-system/patterns";
-import { Operator } from "@/lib/types";
 
 const tabElement = flex({
     cursor: "pointer",
@@ -24,7 +24,7 @@ type TabsProps = {
 };
 
 export type TabProps = {
-    operator: Operator;
+    operator: OperatorType;
 };
 
 const OperatorTabs = ({ onClick, activeTab }: TabsProps) => {
