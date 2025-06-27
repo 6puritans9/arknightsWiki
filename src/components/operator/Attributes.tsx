@@ -1,43 +1,15 @@
-import { ReactElement, useState } from "react";
+import { useState } from "react";
 import { css } from "../../../styled-system/css";
 import { TabProps } from "./OperatorTabs";
 import Image from "next/image";
 import { flex } from "../../../styled-system/patterns";
-
-const keywordStyle = css({
-    color: "blue.500",
-    fontWeight: "bold",
-});
+import { convertAttrText } from "@/utils/TextConverter";
 
 const phaseWrapper = flex({
     gap: "0.5rem",
     cursor: "pointer",
     alignItems: "center",
 });
-
-const translateStyle = (str: string): ReactElement => {
-    if (str.includes("<@ba.kw>")) {
-        const startIdx = str.indexOf("<@ba.kw>");
-        const endIdx = str.indexOf("</>", startIdx);
-        if (endIdx === -1) {
-            return <span>{str}</span>;
-        }
-
-        const before = str.substring(0, startIdx);
-        const keyword = str.substring(startIdx + "<@ba.kw>".length, endIdx);
-        const remaining = str.substring(endIdx + "</>".length);
-
-        return (
-            <>
-                {before}
-                <span className={keywordStyle}>{keyword}</span>
-                {remaining && translateStyle(remaining)}
-            </>
-        );
-    }
-
-    return <span>{str}</span>;
-};
 
 const filterRelated = (data: {
     [key: string]: number | boolean;
@@ -73,7 +45,7 @@ const Attributes = ({ operator }: TabProps) => {
 
     return (
         <>
-            <p>Description: {translateStyle(operator.description)}</p>
+            <p>Description: {convertAttrText(operator.description)}</p>
             <p>{`Position: ${operator.position}`}</p>
             <div className={phaseWrapper}>
                 <Image
