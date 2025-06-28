@@ -1,7 +1,7 @@
 "use client";
 
-import { useOperatorStore } from "@/stores/operatorStore";
 import { useRef, useEffect, useMemo } from "react";
+import { useOperatorStore } from "@/stores/operatorStore";
 import OpsThumbnail from "@/components/OpsThumbnail";
 import { grid } from "../../../styled-system/patterns";
 import { css } from "../../../styled-system/css";
@@ -22,11 +22,11 @@ type ClientPaginationProps = {
 
 export default function ClientPage({ initialCount }: ClientPaginationProps) {
     const {
-        filteredOperators,
-        visibleCount,
         hasMore,
-        incrementVisibleCount,
+        visibleCount,
         setVisibleCount,
+        incrementVisibleCount,
+        filteredOperators,
         filters,
     } = useOperatorStore();
 
@@ -83,7 +83,7 @@ export default function ClientPage({ initialCount }: ClientPaginationProps) {
                 .slice(0, visibleCount)
                 .map((operator) => (
                     <OpsThumbnail
-                        key={operator.id}
+                        key={operator._id}
                         operator={operator}
                         priority={false}
                     />
@@ -93,7 +93,7 @@ export default function ClientPage({ initialCount }: ClientPaginationProps) {
                 .slice(initialCount, visibleCount)
                 .map((operator) => (
                     <OpsThumbnail
-                        key={operator.id}
+                        key={operator._id}
                         operator={operator}
                         priority={false}
                     />
