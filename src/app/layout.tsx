@@ -1,76 +1,46 @@
 import "./globals.css";
-import { css } from "../../styled-system/css";
 import Paperlogy from "./styles/fonts";
 import type { Metadata } from "next";
 import { TouchProvider } from "@/components/TouchProvider";
-import Nav from "../components/Nav";
-import Footer from "@/components/Footer";
-import getS3Url from "@/lib/apiAws";
-import { container, flex } from "../../styled-system/patterns";
 import StoreInitializer from "@/components/StoreInitializer";
+import Header from "../components/Header";
+import Footer from "@/components/Footer";
+import { flex } from "../../styled-system/patterns";
 
 export const metadata: Metadata = {
-    title: "Arknights Wiki",
+    title: "Rhodes Island",
     description: "Arknights Wiki",
 };
 
-const headerStyles = css({
-    position: "sticky",
-    top: "0",
-    zIndex: "100",
-    flexShrink: "0",
-});
-
-const bodyStyles = flex({
+const wrapper = flex({
+    minHeight: "100vh",
+    padding: "0 4.5rem 0 4.5rem",
+    margin: 0,
     flexDirection: "column",
-    height: "100vh",
-    maxHeight: "100vh",
-    // minHeight: "100vh",
-    position: "relative",
-    maxWidth: "100vw",
+    flex: "1 1 0%",
     overflowX: "hidden",
-    backgroundColor: "#FFFFFC",
+    justifyContent: "space-between",
+    gap: 0,
 });
 
-const mainStyles = container({
-    width: "100%",
-    maxWidth: "5xl",
-    margin: "2rem auto",
-    px: "4",
-    flex: "1",
+const container = flex({
+    flexDirection: "column",
+    position: "relative",
+    backgroundColor: "whiteBackground",
 });
-
-// const videoContainer = css({
-//     position: "fixed",
-//     top: "0",
-//     left: "0",
-//     width: "100%",
-//     height: "100vh",
-//     objectFit: "cover",
-//     zIndex: "-1",
-//     opacity: "0.5",
-// });
 
 export default function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    // const backgroundURL = getS3Url("background/sarkaz-arknights.1920x1080.mp4");
-
     return (
         <html lang="en" className={`${Paperlogy.className}`}>
-            <body className={bodyStyles}>
+            <body className={wrapper}>
                 <StoreInitializer />
                 <TouchProvider>
-                    <header className={headerStyles}>
-                        <Nav />
-                    </header>
-                    {/* <video autoPlay muted loop className={videoContainer}>
-                        <source src={`${backgroundURL}`} type="video/mp4" />
-                        Your browser does not support the video tag.
-                    </video> */}
-                    <main className={mainStyles}>{children}</main>
+                    <Header />
+                    <main className={container}>{children}</main>
                     <Footer />
                 </TouchProvider>
             </body>

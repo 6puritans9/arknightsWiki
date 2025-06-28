@@ -1,83 +1,199 @@
 import Image from "next/image";
 import { getHomeBanners } from "@/lib/apiAws";
 import { css } from "../../styled-system/css";
-import { cardBackground } from "./styles/shared/cardBackground";
+import { grid } from "../../styled-system/patterns";
+import { appPageText } from "@/lib/dictionary";
 
-const contentWrapper = css({
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    height: "100%",
+//#region Styles
+const container = grid({
+    gridTemplateColumns: {
+        base: "1fr",
+        md: "repeat(22, 1fr)",
+    },
+    width: {
+        base: "480px",
+        md: "550px",
+        lgToXl: "800px",
+        xl: "100%",
+    },
     maxWidth: "100vw",
+    height: "100%",
+    marginTop: "2rem",
     gap: "2rem",
 });
 
-const welcomeText = css({
-    fontSize: { base: "xl", md: "2xl" },
-    fontWeight: "bold",
-    textAlign: "center",
+const textWrapper = css({
+    gridColumn: {
+        base: "1",
+        md: "1 / 11",
+    },
+    height: "fit-content",
+    position: "sticky",
+    top: "4rem",
+    width: {
+        base: "50%",
+        xl: "100%",
+    },
 });
 
-const bannerContainer = css({
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: "2rem",
-});
-
+// Text styles
 const bannerTitle = css({
-    fontSize: "xl",
+    fontSize: {
+        base: "1rem",
+        xl: "4rem",
+    },
     fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: "1rem",
 });
 
-const bannerImageWrapper = css({
-    position: "relative",
-    width: "100%",
-    overflow: "hidden",
-    borderRadius: "lg",
+const bannerText = css({
+    fontSize: {
+        base: "0.5rem",
+        xl: "2rem",
+    },
 });
+
+const imageWrapper = css({
+    gridColumn: {
+        base: "1",
+        md: "12 / -1",
+    },
+    aspectRatio: "1 / 1",
+    width: "100%",
+    height: {
+        base: "160px",
+        xl: "530px",
+    },
+    maxHeight: "100%",
+    overflow: "hidden",
+    position: "relative",
+});
+
+const imageStyles = css({
+    height: "100%",
+    width: "100%",
+    objectFit: "cover",
+});
+//#endregion
 
 const banners = [
     "banners/EN_Come_Catastrophes_or_Wakes_of_Vultures_Rerun_banner.webp",
     "banners/CN_Delicious_on_Terra_banner.webp",
 ];
 
-export default function Home() {
+export default function App() {
     const { ongoing, upcoming } = getHomeBanners(banners);
 
     return (
-        <div className={contentWrapper}>
-            <h1 className={welcomeText}>Welcome to ArknightsWiki</h1>
-
-            <article className={bannerContainer}>
-                <section className={cardBackground}>
-                    <h2 className={bannerTitle}>Ongoing Events</h2>
+        <>
+            <article className={container}>
+                <div className={textWrapper}>
+                    <h2 className={bannerTitle}>
+                        {appPageText.event.ongoing.en.toUpperCase()}
+                    </h2>
+                    <p className={bannerText}>
+                        The Rides to Lake Silberneherze Rerun
+                    </p>
+                </div>
+                <div className={imageWrapper}>
                     <Image
-                        className={bannerImageWrapper}
+                        className={imageStyles}
                         src={`${ongoing}`}
-                        alt="ongoing"
-                        layout="responsive"
-                        width={900}
-                        height={300}
+                        alt="Ongoing Events"
+                        fill={true}
                         unoptimized
                     />
-                </section>
-                <section className={cardBackground}>
-                    <h2 className={bannerTitle}>Upcoming Events</h2>
-                    <Image
-                        className={bannerImageWrapper}
-                        src={`${upcoming}`}
-                        alt="upcoming"
-                        layout="responsive"
-                        width={900}
-                        height={300}
-                        unoptimized
-                    />
-                </section>
+                </div>
             </article>
-        </div>
+
+            <article className={container}>
+                <section className={textWrapper}>
+                    <h2 className={bannerTitle}>
+                        {appPageText.event.upcoming.en.toUpperCase()}
+                    </h2>
+                    <p className={bannerText}>Delicious On Terra</p>
+                </section>
+                <div className={imageWrapper}>
+                    <Image
+                        className={imageStyles}
+                        src={`${upcoming}`}
+                        alt="Upcoming Events"
+                        fill={true}
+                        unoptimized
+                    />
+                </div>
+            </article>
+
+            <article className={container}>
+                <section className={textWrapper}>
+                    <h2 className={bannerTitle}>
+                        {appPageText.event.upcoming.ko.toUpperCase()}
+                    </h2>
+                    <p className={bannerText}>테라밥</p>
+                </section>
+                <div className={imageWrapper}>
+                    <Image
+                        className={imageStyles}
+                        src={`${upcoming}`}
+                        alt="Upcoming Events"
+                        fill={true}
+                        unoptimized
+                    />
+                </div>
+            </article>
+
+            <article className={container}>
+                <section className={textWrapper}>
+                    <h2 className={bannerTitle}>
+                        {appPageText.event.upcoming.ja.toUpperCase()}
+                    </h2>
+                    <p className={bannerText}>テラ飯</p>
+                </section>
+                <div className={imageWrapper}>
+                    <Image
+                        className={imageStyles}
+                        src={`${upcoming}`}
+                        alt="Upcoming Events"
+                        fill={true}
+                        unoptimized
+                    />
+                </div>
+            </article>
+
+            <article className={container}>
+                <section className={textWrapper}>
+                    <h2 className={bannerTitle}>
+                        {appPageText.event.upcoming.cn.toUpperCase()}
+                    </h2>
+                    <p className={bannerText}>泰拉饭</p>
+                </section>
+                <div className={imageWrapper}>
+                    <Image
+                        className={imageStyles}
+                        src={`${upcoming}`}
+                        alt="Upcoming Events"
+                        fill={true}
+                        unoptimized
+                    />
+                </div>
+            </article>
+
+            <article className={container}>
+                <section className={textWrapper}>
+                    <h2 className={bannerTitle}>
+                        {appPageText.event.upcoming.tw.toUpperCase()}
+                    </h2>
+                    <p className={bannerText}>泰拉飯</p>
+                </section>
+                <div className={imageWrapper}>
+                    <Image
+                        className={imageStyles}
+                        src={`${upcoming}`}
+                        alt="Upcoming Events"
+                        fill={true}
+                        unoptimized
+                    />
+                </div>
+            </article>
+        </>
     );
 }
