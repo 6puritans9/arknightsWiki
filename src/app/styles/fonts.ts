@@ -50,4 +50,4 @@ const Paperlogy = localFont({
     ],
 });
 
-export { Paperlogy };
+export default Paperlogy;

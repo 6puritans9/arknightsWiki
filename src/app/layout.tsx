@@ -1,6 +1,6 @@
 import "./globals.css";
 import { css } from "../../styled-system/css";
-import { Paperlogy } from "./styles/fonts";
+import Paperlogy from "./styles/fonts";
 import type { Metadata } from "next";
 import { TouchProvider } from "@/components/TouchProvider";
 import Nav from "../components/Nav";
@@ -66,7 +66,7 @@ export default function RootLayout({
     const backgroundURL = getS3Url("background/sarkaz-arknights.1920x1080.mp4");
 
     return (
-        <html lang="en" className={`${Paperlogy}`}>
+        <html lang="en" className={`${Paperlogy.className}`}>
             <body className={bodyStyles}>
                 <StoreInitializer />
                 <TouchProvider>
