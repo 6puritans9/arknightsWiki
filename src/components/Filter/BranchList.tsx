@@ -1,10 +1,10 @@
 import Image from "next/image";
-import { branchMap } from "@/lib/constants/pathnameMap";
-import getS3Url from "@/lib/apiAws";
+import { getsubProfessionIdImage } from "@/lib/apiAws";
 import { flex } from "../../../styled-system/patterns";
 import { css } from "../../../styled-system/css";
 import { nonSelected, selected } from "@/app/styles/filterStyles";
 import { FilterCondition } from "./OpsFilter";
+import { subProfessionIdMap } from "@/lib/constants/NameMap";
 
 // Styles
 const popUpWrapper = flex({
@@ -46,7 +46,7 @@ const BranchList = ({ branches, activeBranches, onClick }: BranchListProps) => {
 
     return (
         <ul className={popUpWrapper}>
-            {branches.map((branch, index) => (
+            {branches.map((branchItem, index) => (
                 <li
                     key={index}
                     className={branchWrapper}
@@ -54,22 +54,24 @@ const BranchList = ({ branches, activeBranches, onClick }: BranchListProps) => {
                         e.stopPropagation();
                         onClick({
                             category: "branch",
-                            value: branch,
+                            value: branchItem,
                         });
                     }}
                 >
                     <Image
                         className={
-                            isBranchActive(branch)
+                            isBranchActive(branchItem)
                                 ? `${selected} ${branchImage}`
                                 : `${nonSelected} ${branchImage}`
                         }
-                        src={getS3Url(branchMap[branch])}
+                        src={getsubProfessionIdImage(branchItem)}
                         height={30}
                         width={30}
                         alt="branch"
                     />
-                    <span className={branchText}>{branch}</span>
+                    <span className={branchText}>
+                        {subProfessionIdMap[branchItem] || branchItem}
+                    </span>
                 </li>
             ))}
         </ul>
