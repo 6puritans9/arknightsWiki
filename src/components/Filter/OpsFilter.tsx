@@ -5,16 +5,21 @@ import { useOperatorStore } from "@/stores/operatorStore";
 import { css } from "../../../styled-system/css";
 import { flex, grid } from "../../../styled-system/patterns";
 import { selected, nonSelected } from "@/app/styles/filterStyles";
-import { classMap, factionMap } from "@/lib/constants/pathnameMap";
-import getS3Url from "@/lib/apiAws";
-import BranchList from "./BranchList";
+import {
+    getFactionImage,
+    getProfessionImage,
+    getsubProfessionIdImage,
+} from "@/lib/apiAws";
 import {
     HybridTooltip,
     HybridTooltipContent,
     HybridTooltipTrigger,
 } from "../HybirdTooltip";
+import BranchList from "./BranchList";
+import { FilterType } from "@/stores/operatorStore";
+import { professionMap } from "@/lib/constants/NameMap";
 
-// Styles
+//#region Styles
 const filterSection = flex({
     gap: "1.5",
 });
@@ -87,8 +92,9 @@ const resetButton = flex({
         transition: "background-color 0.1s ease-in-out",
     },
 });
+//#endregion
 
-// Custom order for class sorting
+// Custom order for profession sorting
 const customOrder: { [key: string]: number } = {
     Vanguard: 0,
     Guard: 1,
@@ -100,39 +106,32 @@ const customOrder: { [key: string]: number } = {
     Specialist: 7,
 };
 
-// Types
-type Filters = {
-    rarity: number[];
-    class: string[];
-    branch: string[];
-    faction: string[];
+//#region Types
+type OpsFilterProps = {
+    filterArgs: {
+        rarities: number[];
+        classes: string[];
+        nations: string[];
+    };
+    classTree: { [key: string]: string[] };
+    factionTree: { [key: string]: string[] };
 };
 
 export type FilterCondition = {
-    category: keyof Filters | "reset";
+    category: keyof FilterType | "reset";
     value: number | string | null;
 };
+//#endregion
 
-type FilterProps = {
-    filterArgs: {
-        rarity: number[];
-        class: string[];
-        branch: string[];
-        faction: string[];
-    };
-    classTree: { [key: string]: string[] };
-};
+const OpsFilter = ({ filterArgs, classTree, factionTree }: OpsFilterProps) => {
+    const { rarities, classes, nations } = filterArgs;
 
-const OpsFilter = ({ filterArgs, classTree }: FilterProps) => {
-    const rarities = filterArgs.rarity;
-    const classes = filterArgs.class;
-    const factions = filterArgs.faction;
-
-    const filters: Filters = useOperatorStore((state) => state.filters);
+    const filters: FilterType = useOperatorStore((state) => state.filters);
     const updateFilter = useOperatorStore((state) => state.updateFilter);
     const applyFilters = useOperatorStore((state) => state.applyFilters);
     const resetFilters = useOperatorStore((state) => state.resetFilters);
 
+    // Helper functions
     const handleFilterChange = (condition: FilterCondition) => {
         if (condition.category === "reset") {
             resetFilters();
@@ -146,17 +145,7 @@ const OpsFilter = ({ filterArgs, classTree }: FilterProps) => {
         handleFilterChange({ category: "class", value: value });
     };
 
-    const getImageSource = (category: string, key: string): string => {
-        if (category === "class" && classMap[key]) {
-            return getS3Url(classMap[key]);
-        }
-        if (category === "faction" && factionMap[key]) {
-            return getS3Url(factionMap[key]);
-        }
-
-        return getS3Url("/placeholder.png");
-    };
-
+    // Style Helper
     const isSelected = (
         category: keyof typeof filters,
         value: string | number
@@ -191,7 +180,6 @@ const OpsFilter = ({ filterArgs, classTree }: FilterProps) => {
                     ))}
                 </ul>
             </div>
-
             <div className={filterSection}>
                 <h3 className={filterTitle}>Class</h3>
             </div>
@@ -204,10 +192,7 @@ const OpsFilter = ({ filterArgs, classTree }: FilterProps) => {
                                 <HybridTooltip delayDuration={100}>
                                     <HybridTooltipTrigger asChild>
                                         <Image
-                                            src={getImageSource(
-                                                "class",
-                                                classItem
-                                            )}
+                                            src={getProfessionImage(classItem)}
                                             className={
                                                 isSelected("class", classItem)
                                                     ? `${selected} ${classImage}`
@@ -215,7 +200,7 @@ const OpsFilter = ({ filterArgs, classTree }: FilterProps) => {
                                             }
                                             height={30}
                                             width={30}
-                                            alt={classItem}
+                                            alt={professionMap[classItem]}
                                             onClick={() =>
                                                 handleClassClick(classItem)
                                             }
@@ -232,38 +217,38 @@ const OpsFilter = ({ filterArgs, classTree }: FilterProps) => {
                             </li>
                         ))}
                 </ul>
-            </div>
-
+            </div>{" "}
+            *
             <div className={filterSection}>
                 <h3 className={filterTitle}>Faction</h3>
             </div>
             <div>
                 <ul className={factionWrapper}>
-                    {factions.map((faction) => (
-                        <li key={faction}>
+                    {nations.map((nationId) => (
+                        <li key={nationId}>
                             <HybridTooltip delayDuration={100}>
                                 <HybridTooltipTrigger asChild>
                                     <Image
-                                        src={getImageSource("faction", faction)}
+                                        src={getFactionImage(nationId)}
                                         className={
-                                            isSelected("faction", faction)
+                                            isSelected("nation", nationId)
                                                 ? `${selected} ${factionImage}`
                                                 : `${nonSelected} ${factionImage}`
                                         }
                                         height={30}
                                         width={30}
-                                        alt={faction}
+                                        alt={nationId}
                                         onClick={() =>
                                             handleFilterChange({
-                                                category: "faction",
-                                                value: faction,
+                                                category: "nation",
+                                                value: nationId,
                                             })
                                         }
                                     />
                                 </HybridTooltipTrigger>
                                 <HybridTooltipContent>
                                     <div className={popUpWrapper}>
-                                        <p className={popUpText}>{faction}</p>
+                                        <p className={popUpText}>{nationId}</p>
                                     </div>
                                 </HybridTooltipContent>
                             </HybridTooltip>
