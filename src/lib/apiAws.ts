@@ -18,8 +18,16 @@ const getProfessionImage = (
     return `https://arknights-wiki-assets.s3.ap-northeast-2.amazonaws.com/dynamicassets/arts/profession_large_hub/icon_profession_${profession.toLowerCase()}_large${isBlack ? "" : "_white"}.png`;
 };
 
-const getsubProfessionIdImage = (subProfessionId: string): string =>
-    `https://arknights-wiki-assets.s3.ap-northeast-2.amazonaws.com/dynamicassets/arts/ui/subprofessionicon/sub_${subProfessionId}_icon.png`;
+const getsubProfessionIdImage = (id: string): string =>
+    `https://arknights-wiki-assets.s3.ap-northeast-2.amazonaws.com/public/op_misc/subprofessionicon/sub_${id.toLocaleLowerCase()}_icon.png`;
+
+const getFactionImage = (id: string): string =>
+    `https://arknights-wiki-assets.s3.ap-northeast-2.amazonaws.com/public/op_misc/camplogo/logo_${id.toLocaleLowerCase()}.png`;
 
 export default getS3Url;
-export { getHomeBanners, getProfessionImage, getsubProfessionIdImage };
+export {
+    getHomeBanners,
+    getProfessionImage,
+    getsubProfessionIdImage,
+    getFactionImage,
+};

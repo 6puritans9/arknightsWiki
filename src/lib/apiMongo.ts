@@ -93,8 +93,8 @@ export type ThumbnailOperatorType = {
     profession: string;
     subProfessionId: string;
     nationId: string;
-    teamId?: string;
-    groupId?: string;
+    teamId: string | null;
+    groupId: string | null;
     displayNumber: string;
 };
 
@@ -175,6 +175,7 @@ const fetchAllOperators = async (
         const db = mongoClient.db(dbName);
         const collection = db.collection("character_table");
 
+        // TODO: add query for position, isLimited
         let query = collection.find(
             {
                 $and: [
@@ -198,6 +199,7 @@ const fetchAllOperators = async (
             }
         );
 
+        // TODO: sort by rarity, releaseOrder,
         query = query.sort({ rarity: -1, displayNumber: -1 });
         const operators = await query.toArray();
 
@@ -285,42 +287,6 @@ const fetchOperatorWithSkills = async (
         }
 
         const entity = result[0];
-
-        // const entity = await collection.findOne(
-        //     { name: decodedName, isNotObtainable: false }, // filters npc characters
-        //     {
-        //         projection: {
-        //             _id: 1,
-        //             name: 1,
-        //             description: 1,
-        //             itemUsage: 1,
-        //             itemDesc: 1,
-        //             appellation: 1,
-        //             position: 1,
-        //             isSpChar: 1,
-        //             rarity: 1,
-        //             profession: 1,
-        //             subProfessionId: 1,
-        //             itemObtainApproach: 1,
-        //             nationId: 1,
-        //             groupId: 1,
-        //             teamId: 1,
-        //             phases: 1,
-        //             skills: 1,
-        //             // talents: 1,
-        //             // potentialRanks: 1,
-        //             // favorKeyFrames: 1,
-        //             // allSkillLvlup: 1,
-        //         },
-        //     }
-        // );
-
-        // if (!entity) {
-        //     console.warn(
-        //         `Entity with name "${decodedName}" not found in collection "${collectionName}"`
-        //     );
-        //     return null;
-        // }
 
         return {
             _id: entity._id.toString(),
