@@ -1,17 +1,24 @@
 import { create } from "zustand";
-import { QueryOperators } from "@/lib/types";
+import { ThumbnailOperatorType } from "@/lib/apiMongo";
+// import { QueryOperators } from "@/lib/types";
 
-type FilterType = {
+export type FilterType = {
     rarity: number[];
+    position: string[];
+    // isLimited: boolean; TODO: Implement limited filter
+
     class: string[];
     branch: string[];
-    faction: string[];
+
+    nation: string[];
+    team: string[];
+    group: string[];
 };
 
 type State = {
     // Data
-    allOperators: QueryOperators;
-    filteredOperators: QueryOperators;
+    allOperators: ThumbnailOperatorType[];
+    filteredOperators: ThumbnailOperatorType[];
 
     // Pagination
     visibleCount: number;
@@ -23,7 +30,7 @@ type State = {
 };
 
 type Action = {
-    setAllOperators: (operators: QueryOperators) => void;
+    setAllOperators: (operators: ThumbnailOperatorType[]) => void;
     setVisibleCount: (count: number) => void;
     incrementVisibleCount: () => void;
     resetVisibleCount: () => void;
@@ -43,9 +50,12 @@ const initialState: State = {
     hasMore: true,
     filters: {
         rarity: [],
+        position: [],
         class: [],
         branch: [],
-        faction: [],
+        nation: [],
+        team: [],
+        group: [],
     },
 };
 
@@ -114,13 +124,13 @@ const useOperatorStore = create<State & Action>((set) => ({
                             newFilters.class = newFilters.class.filter(
                                 (c) => c !== value
                             );
-                            // Reset branch when class changes
+                            // Reset subProfessionId when class changes
                             newFilters.branch = newFilters.branch.filter(
                                 (b) =>
                                     !state.allOperators.some(
                                         (op) =>
-                                            op.class === value &&
-                                            op.branch === b
+                                            op.profession === value &&
+                                            op.subProfessionId === b
                                     )
                             );
                         }
@@ -139,14 +149,14 @@ const useOperatorStore = create<State & Action>((set) => ({
                         }
                     }
                     break;
-                case "faction":
+                case "nation":
                     if (typeof value === "string") {
-                        const index = newFilters.faction.indexOf(value);
+                        const index = newFilters.nation.indexOf(value);
 
                         if (index == -1) {
-                            newFilters.faction = [...newFilters.faction, value];
+                            newFilters.nation = [...newFilters.nation, value];
                         } else {
-                            newFilters.faction = newFilters.faction.filter(
+                            newFilters.nation = newFilters.nation.filter(
                                 (f) => f !== value
                             );
                         }
@@ -173,13 +183,13 @@ const useOperatorStore = create<State & Action>((set) => ({
                     filters.rarity.includes(operator.rarity);
                 const classMatch =
                     filters.class.length === 0 ||
-                    filters.class.includes(operator.class);
+                    filters.class.includes(operator.profession);
                 const branchMatch =
                     filters.branch.length === 0 ||
-                    filters.branch.includes(operator.branch);
+                    filters.branch.includes(operator.subProfessionId);
                 const factionMatch =
-                    filters.faction.length === 0 ||
-                    filters.faction.includes(operator.faction);
+                    filters.nation.length === 0 ||
+                    filters.nation.includes(operator.nationId);
 
                 return rarityMatch && classMatch && branchMatch && factionMatch;
             });
