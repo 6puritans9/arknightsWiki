@@ -1,32 +1,38 @@
 "use client";
 
-import { OpsFilter } from "@/components/Filter/OpsFilter";
-import { useOperatorStore } from "@/stores/operatorStore";
 import { useEffect } from "react";
-import { QueryOperator } from "@/lib/types";
+import { ThumbnailOperatorType } from "@/lib/apiMongo";
+import { useOperatorStore } from "@/stores/operatorStore";
+import { OpsFilter } from "@/components/Filter/OpsFilter";
 
 type ClientSideFilterWrapperProps = {
     filterArgs: {
-        rarity: number[];
-        class: string[];
-        branch: string[];
-        faction: string[];
+        rarities: number[];
+        classes: string[];
+        nations: string[];
     };
     classTree: { [key: string]: string[] };
-    initialData: QueryOperator[];
+    factionTree: { [key: string]: string[] };
+    initialData: ThumbnailOperatorType[];
 };
 
 export default function ClientSideFilterWrapper({
     filterArgs,
     classTree,
+    factionTree,
     initialData,
 }: ClientSideFilterWrapperProps) {
     const { setAllOperators } = useOperatorStore();
 
-    // Initialize store with data
     useEffect(() => {
         setAllOperators(initialData);
     }, [initialData, setAllOperators]);
 
-    return <OpsFilter filterArgs={filterArgs} classTree={classTree} />;
+    return (
+        <OpsFilter
+            filterArgs={filterArgs}
+            classTree={classTree}
+            factionTree={factionTree}
+        />
+    );
 }
