@@ -1,11 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { css } from "../../styled-system/css";
-import { QueryOperator } from "@/lib/types";
+// import { QueryOperator } from "@/lib/types";
+import { ThumbnailOperatorType } from "@/lib/apiMongo";
 import getS3Url from "@/lib/apiAws";
 
 type ThumbnailProps = {
-    operator: QueryOperator;
+    operator: ThumbnailOperatorType;
     priority: boolean;
 };
 
@@ -19,18 +20,13 @@ const wrapper = css({
 });
 
 const OpsThumbnail = ({ operator, priority = false }: ThumbnailProps) => {
-    const paddedCode =
-        operator.code.toString().length < 3
-            ? operator.code.toString().padStart(3, "0")
-            : operator.code.toString();
-
-    const operatorPath = `char_${paddedCode}_${operator.pathname}`;
+    const operatorPath = `${operator._id}`;
     const imagePath = `operators/${operatorPath}/icons/${operatorPath}.webp`;
 
     return (
         <div className={wrapper}>
             <Link
-                key={operator.id}
+                key={operator._id}
                 href={`/operators/${operator.name}`}
                 passHref
             >
