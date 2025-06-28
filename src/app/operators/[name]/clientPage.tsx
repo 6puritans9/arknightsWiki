@@ -19,7 +19,7 @@ import VoteBar from "@/components/operator/VoteBar";
 import Button from "@/components/Button";
 import useVote from "@/hooks/useVote";
 import Notification from "@/components/ui/Notification";
-import { nationIdMap } from "@/lib/constants/pathnameMap";
+import { nationIdMap } from "@/lib/constants/NameMap";
 import { WithId } from "mongodb";
 import { OperatorType } from "@/lib/apiMongo";
 
