@@ -4,8 +4,13 @@ import { css } from "../../../../styled-system/css";
 
 // Style for the icon wrapper div
 const gsiIconStyles = css({
+    marginRight: {
+        base: "0", // Remove margin on small screens
+        md: "12px", // Margin on larger screens
+    },
+
     height: "20px",
-    marginRight: "12px",
+    // marginRight: "12px",
     minWidth: "20px",
     width: "20px",
     // Consume opacity variable set by parent button's _disabled state
@@ -26,6 +31,11 @@ const gsiContentWrapperStyles = css({
 
 // Style for the text content span
 const gsiContentsStyles = css({
+    display: {
+        base: "none", // Hide on small screens
+        md: "inline-block", // Show on larger screens
+    },
+
     flexGrow: 1,
     fontFamily: "'Roboto', arial, sans-serif",
     fontWeight: 500,
