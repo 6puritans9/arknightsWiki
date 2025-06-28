@@ -21,6 +21,21 @@ export default defineConfig({
                     },
                     secondary: { value: "#1b1b1b" },
                     headerText: { value: "#333333" },
+                    whiteBackground: { value: "#FFFFFC" },
+                },
+                zIndex: {
+                    header: {
+                        value: "10",
+                        description: "Z-index for header",
+                    },
+                    toast: {
+                        value: "20",
+                        description: "Z-index for toast notifications",
+                    },
+                    overlay: {
+                        value: "30",
+                        description: "Z-index for nav overlay",
+                    },
                 },
             },
             keyframes: {
