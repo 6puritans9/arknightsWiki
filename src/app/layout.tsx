@@ -29,6 +29,7 @@ const bodyStyles = flex({
     position: "relative",
     maxWidth: "100vw",
     overflowX: "hidden",
+    backgroundColor: "#FFFFFC",
 });
 
 const mainStyles = container({
@@ -39,31 +40,23 @@ const mainStyles = container({
     flex: "1",
 });
 
-const footerStyles = flex({
-    flexDirection: "column",
-    opacity: "0.8",
-    alignItems: "flex-end",
-    padding: "0.5rem 1rem",
-    backgroundColor: "primary",
-});
-
-const videoContainer = css({
-    position: "fixed",
-    top: "0",
-    left: "0",
-    width: "100%",
-    height: "100vh",
-    objectFit: "cover",
-    zIndex: "-1",
-    opacity: "0.5",
-});
+// const videoContainer = css({
+//     position: "fixed",
+//     top: "0",
+//     left: "0",
+//     width: "100%",
+//     height: "100vh",
+//     objectFit: "cover",
+//     zIndex: "-1",
+//     opacity: "0.5",
+// });
 
 export default function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const backgroundURL = getS3Url("background/sarkaz-arknights.1920x1080.mp4");
+    // const backgroundURL = getS3Url("background/sarkaz-arknights.1920x1080.mp4");
 
     return (
         <html lang="en" className={`${Paperlogy.className}`}>
@@ -73,14 +66,12 @@ export default function RootLayout({
                     <header className={headerStyles}>
                         <Nav />
                     </header>
-                    <video autoPlay muted loop className={videoContainer}>
+                    {/* <video autoPlay muted loop className={videoContainer}>
                         <source src={`${backgroundURL}`} type="video/mp4" />
                         Your browser does not support the video tag.
-                    </video>
+                    </video> */}
                     <main className={mainStyles}>{children}</main>
-                    <footer className={footerStyles}>
-                        <Footer />
-                    </footer>
+                    <Footer />
                 </TouchProvider>
             </body>
         </html>
