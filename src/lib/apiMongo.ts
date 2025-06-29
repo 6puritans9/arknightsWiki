@@ -1,6 +1,6 @@
 import { MongoClient } from "mongodb";
 
-//#region Type Definitions
+//#region character_table Type Definitions
 type attributesKeyFrameType = {
     level: number;
     data: {
@@ -124,6 +124,43 @@ export type OperatorType = {
     // allSkillLvlup: 1;
 };
 //#endregion Type Definitions
+
+//#region building_data Type Definitions
+export type BuildingCharType = {
+    charId: string;
+    buffChar: {
+        buffData: {
+            buffId: string;
+            cond: {
+                phase: string;
+                level: number;
+            };
+        }[];
+    }[];
+};
+
+export type BuildingBuffType = {
+    buffId: string;
+    buffName: string;
+    buffIcon: string;
+    skillIcon: string;
+    sortId: number;
+    buffColor: string;
+    textColor: string;
+    buffCategory: string;
+    roomType:
+        | "CONTROL"
+        | "DORMITORY"
+        | "HIRE"
+        | "MANUFACTURE"
+        | "MEETING"
+        | "POWER"
+        | "TRADING"
+        | "TRAINING"
+        | "WORKSHOP";
+    description: string;
+};
+//#endregion
 
 //#region Database mapping
 const LANGUAGE_DB_MAP: { [key: string]: string } = {
@@ -318,4 +355,82 @@ const fetchOperatorWithSkills = async (
     }
 };
 
-export { fetchOperatorWithSkills, fetchAllOperators };
+const fetchAllBuildingData = async (lang: string = "en") => {
+    try {
+        const mongoClient = await getClient();
+        const dbName = LANGUAGE_DB_MAP[lang];
+        const db = mongoClient.db(dbName);
+        const collection = db.collection("building_data");
+
+        const charsPipeline = [
+            {
+                $project: {
+                    charsArray: { $objectToArray: "$chars" },
+                },
+            },
+            { $unwind: "$charsArray" },
+            {
+                $project: {
+                    charId: "$charsArray.k",
+                    buffChar: "$charsArray.v.buffChar",
+                },
+            },
+        ];
+        const buffsPipeline = [
+            {
+                $project: {
+                    buffsArray: { $objectToArray: "$buffs" },
+                },
+            },
+            {
+                $unwind: "$buffsArray",
+            },
+            {
+                $replaceRoot: { newRoot: "$buffsArray.v" },
+            },
+        ];
+
+        const [chars, buffs] = await Promise.all([
+            collection.aggregate<BuildingCharType>(charsPipeline).toArray(),
+            collection.aggregate<BuildingBuffType>(buffsPipeline).toArray(),
+        ]);
+
+        if (chars) {
+            console.log("Fetched chars:", chars.length);
+        }
+        if (buffs) {
+            console.log("Fetched buffs:", buffs.length);
+        }
+
+        return {
+            chars: chars.map((char) => ({
+                charId: char.charId.toString(),
+                buffChar: char.buffChar.map((buff) => ({
+                    buffData: Array.isArray(buff.buffData)
+                        ? buff.buffData.map((data) => ({
+                              buffId: data.buffId,
+                              cond: data.cond,
+                          }))
+                        : [],
+                })),
+            })),
+            buffs: buffs.map((buff) => ({
+                buffId: buff.buffId,
+                buffName: buff.buffName,
+                buffIcon: buff.buffIcon,
+                skillIcon: buff.skillIcon,
+                sortId: buff.sortId,
+                buffColor: buff.buffColor,
+                textColor: buff.textColor,
+                buffCategory: buff.buffCategory,
+                roomType: buff.roomType,
+                description: buff.description,
+            })),
+        };
+    } catch (error) {
+        console.error("Error fetching building data:", error);
+        throw new Error("Failed to fetch building data");
+    }
+};
+
+export { fetchOperatorWithSkills, fetchAllOperators, fetchAllBuildingData };
