@@ -128,6 +128,11 @@ export type OperatorType = {
 //#region building_data Type Definitions
 export type BuildingCharType = {
     charId: string;
+    charName: string;
+    charAppellation: string | null;
+    charNationId: string;
+    charTeamId: string;
+    charGroupId: string;
     buffChar: {
         buffData: {
             buffId: string;
@@ -139,6 +144,17 @@ export type BuildingCharType = {
     }[];
 };
 
+export type RoomType =
+    | "CONTROL"
+    | "DORMITORY"
+    | "HIRE"
+    | "MANUFACTURE"
+    | "MEETING"
+    | "POWER"
+    | "TRADING"
+    | "TRAINING"
+    | "WORKSHOP";
+
 export type BuildingBuffType = {
     buffId: string;
     buffName: string;
@@ -148,16 +164,7 @@ export type BuildingBuffType = {
     buffColor: string;
     textColor: string;
     buffCategory: string;
-    roomType:
-        | "CONTROL"
-        | "DORMITORY"
-        | "HIRE"
-        | "MANUFACTURE"
-        | "MEETING"
-        | "POWER"
-        | "TRADING"
-        | "TRAINING"
-        | "WORKSHOP";
+    roomType: RoomType;
     description: string;
 };
 //#endregion
@@ -213,15 +220,15 @@ const fetchAllOperators = async (
         const collection = db.collection("character_table");
 
         // TODO: add query for position, isLimited
-        let query = collection.find(
+        const pipeline = [
             {
-                $and: [
-                    { isNotObtainable: false },
-                    { maxPotentialLevel: { $gt: 0 } },
-                ],
+                $match: {
+                    isNotObtainable: false,
+                    maxPotentialLevel: { $gt: 0 },
+                },
             },
             {
-                projection: {
+                $project: {
                     _id: 1,
                     name: 1,
                     appellation: 1,
@@ -233,17 +240,22 @@ const fetchAllOperators = async (
                     groupId: 1,
                     displayNumber: 1,
                 },
-            }
-        );
+            },
+            {
+                // TODO: sort by rarity, releaseOrder, displayNumber
+                $sort: {
+                    rarity: -1,
+                    displayNumber: -1,
+                },
+            },
+        ];
 
-        // TODO: sort by rarity, releaseOrder,
-        query = query.sort({ rarity: -1, displayNumber: -1 });
-        const operators = await query.toArray();
+        const operators = await collection.aggregate(pipeline).toArray();
 
         return operators.map((op) => ({
             _id: op._id.toString(),
             name: op.name,
-            appellation: op.appellation || null,
+            appellation: cleanStringField(op.appellation),
             rarity: rarityMap[op.rarity],
             profession: op.profession,
             subProfessionId: op.subProfessionId,
@@ -370,12 +382,37 @@ const fetchAllBuildingData = async (lang: string = "en") => {
             },
             { $unwind: "$charsArray" },
             {
+                $lookup: {
+                    from: "character_table",
+                    localField: "charsArray.k",
+                    foreignField: "_id",
+                    as: "operatorData",
+                },
+            },
+            {
+                $unwind: {
+                    path: "$operatorData",
+                    preserveNullAndEmptyArrays: true,
+                },
+            },
+            {
                 $project: {
                     charId: "$charsArray.k",
+                    charName: "$operatorData.name",
+                    charAppellation: "$operatorData.appellation",
+                    charNationId: "$operatorData.nationId",
+                    charTeamId: "$operatorData.teamId",
+                    charGroupId: "$operatorData.groupId",
                     buffChar: "$charsArray.v.buffChar",
                 },
             },
+            {
+                $project: {
+                    operatorData: 0,
+                },
+            },
         ];
+
         const buffsPipeline = [
             {
                 $project: {
@@ -395,16 +432,22 @@ const fetchAllBuildingData = async (lang: string = "en") => {
             collection.aggregate<BuildingBuffType>(buffsPipeline).toArray(),
         ]);
 
-        if (chars) {
-            console.log("Fetched chars:", chars.length);
-        }
-        if (buffs) {
-            console.log("Fetched buffs:", buffs.length);
-        }
+        const nameToIdMap: { [key: string]: string } = {};
+        chars.forEach((char) => {
+            if (char.charAppellation && char.charAppellation !== " ") {
+                nameToIdMap[char.charAppellation] = char.charId;
+            }
+            nameToIdMap[char.charName] = char.charId;
+        });
 
         return {
             chars: chars.map((char) => ({
                 charId: char.charId.toString(),
+                charName: char.charName,
+                charAppellation: cleanStringField(char.charAppellation ?? ""),
+                charNationId: char.charNationId,
+                charTeamId: char.charTeamId,
+                charGroupId: char.charGroupId,
                 buffChar: char.buffChar.map((buff) => ({
                     buffData: Array.isArray(buff.buffData)
                         ? buff.buffData.map((data) => ({
@@ -426,6 +469,7 @@ const fetchAllBuildingData = async (lang: string = "en") => {
                 roomType: buff.roomType,
                 description: buff.description,
             })),
+            nameToIdMap,
         };
     } catch (error) {
         console.error("Error fetching building data:", error);
