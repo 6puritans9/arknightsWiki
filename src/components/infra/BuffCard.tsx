@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Fragment } from "react";
 import { getEliteImage } from "@/lib/apiAws";
 import { css, cva } from "../../../styled-system/css";
-import { BuildingBuffType } from "@/lib/apiMongo";
+import { BuffsObjectType } from "@/lib/apiMongo";
 
 type BuffCardProps = {
     buffData: {
@@ -12,9 +12,10 @@ type BuffCardProps = {
             level: number;
         };
     }[];
-    buffMap: { [key: string]: BuildingBuffType };
+    buffs: BuffsObjectType;
 };
 
+//#region Styles
 const container = cva({
     base: {
         padding: "0.75rem",
@@ -57,11 +58,12 @@ const buffDesc = css({
     color: "gray.600",
     marginTop: "0.25rem",
 });
+//#endregion
 
-const BuffCard = ({ buffData, buffMap }: BuffCardProps) => {
+const BuffCard = ({ buffData, buffs }: BuffCardProps) => {
     return buffData.map((data, i) => {
-        const buffDetail = buffMap[data.buffId];
-        const phase = parseInt(data.cond.phase.replace("PHASE_", ""), 10);
+        const buffDetail = buffs[data.buffId];
+        const phase = data.cond.phase[data.cond.phase.length - 1];
         const isSameCategory = buffData.length > 1;
 
         return (
@@ -86,6 +88,7 @@ const BuffCard = ({ buffData, buffMap }: BuffCardProps) => {
                     </dt>
                     <dd className={buffTitle}>{buffDetail.buffName}</dd>
                     <dd className={buffDesc}>{buffDetail.description}</dd>
+                    <dd className={buffDesc}>{buffDetail.effects}</dd>
                 </dl>
                 {isSameCategory && i < buffData.length - 1 && (
                     <hr

@@ -1,15 +1,14 @@
 import Link from "next/link";
-import Image from "next/image";
 import getS3Url from "@/lib/apiAws";
-import { BuildingBuffType, BuildingCharType } from "@/lib/apiMongo";
+import { BuffsObjectType, BuildingCharType } from "@/lib/apiMongo";
 import { nationIdMap, groupIdMap, teamIdMap } from "@/lib/constants/NameMap";
 import { css } from "../../../styled-system/css";
 import { flex } from "../../../styled-system/patterns";
-import BuffCard from "./buffCard";
+import BuffCard from "./BuffCard";
 
 type InfraCardProps = {
     char: BuildingCharType;
-    buffMap: { [key: string]: BuildingBuffType };
+    buffs: BuffsObjectType;
 };
 
 const container = flex({
@@ -26,41 +25,42 @@ const container = flex({
     alignItems: "flex-start",
 });
 
+const nameText = css({
+    color: "red",
+});
+
 const buffList = css({
     listStyle: "none",
     padding: 0,
     margin: 0,
 });
 
-const InfraCard = ({ char, buffMap }: InfraCardProps) => {
-    // const imagePath = `operators/${char.charId}/icons/${char.charId}.webp`;
+const InfraCard = ({ char, buffs }: InfraCardProps) => {
+    const imagePath = `operators/${char.charId}/icons/${char.charId}.webp`;
 
     return (
         <article key={char.charId} className={container}>
-            {/* <Link href="/operators/[charId]" as={`/infra/char/${char.charId}`}>
-                <Image
+            <Link href="/operators/[charId]" as={`/infra/char/${char.charId}`}>
+                <img
                     src={`${getS3Url(imagePath)}`}
                     alt={char.charName}
                     width={50}
                     height={50}
                 />
-            </Link> */}
-            <p>IMG</p>
-            <h2>
+            </Link>
+            {/* <p>IMG</p> */}
+            <h2 className={nameText}>
                 {char.charAppellation
                     ? `${char.charAppellation} (${char.charName})`
                     : char.charName}
             </h2>
-            <p>{`faction: ${teamIdMap[char.charTeamId] ?? groupIdMap[char.charGroupId] ?? nationIdMap[char.charNationId]}`}</p>
+            <p>{`faction: ${teamIdMap[char.teamId] ?? groupIdMap[char.groupId] ?? nationIdMap[char.nationId]}`}</p>
 
             <ul className={buffList}>
                 {char.buffChar.map((buff, i) =>
-                    buff.buffData.length === 0 ? null : (
+                    !Object.keys(buff.buffData).length ? null : (
                         <li key={i}>
-                            <BuffCard
-                                buffData={buff.buffData}
-                                buffMap={buffMap}
-                            />
+                            <BuffCard buffData={buff.buffData} buffs={buffs} />
                         </li>
                     )
                 )}
