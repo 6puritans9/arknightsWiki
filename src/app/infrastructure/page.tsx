@@ -1,8 +1,14 @@
-import { flex, grid } from "../../../styled-system/patterns";
-import { fetchAllBuildingData } from "@/lib/apiMongo";
 import InfraClientPage from "./clientPage";
-import { RoomType, BuildingBuffType } from "@/lib/apiMongo";
+import {
+    RoomType,
+    BuffsObjectType,
+    fetchAllBuildingData,
+} from "@/lib/apiMongo";
+import { flex, grid } from "../../../styled-system/patterns";
 
+import ClientSideFilterWrapper from "@/components/Filter/infra/ClientSideFilterWrapper";
+
+//#region Styles
 const wrapper = flex({
     flexDirection: "column",
     alignItems: "center",
@@ -35,61 +41,43 @@ const cardContainer = grid({
     width: "100%",
     padding: "1rem 0",
 });
+//#endregion
 
 const InfraPage = async () => {
-    const { chars, buffs, nameToIdMap } = await fetchAllBuildingData();
+    const { chars, buffs } = await fetchAllBuildingData();
 
-    const roomBuffTree = ((buffs: BuildingBuffType[]) => {
-        const _roomBuffTree: { [key in RoomType]?: BuildingBuffType[] } = {};
+    const roomEffectTree: { [key: string]: string[] } = ((
+        buffs: BuffsObjectType
+    ) => {
+        const _roomEffectTree: { [key: string]: Set<string> } = {};
 
-        buffs.forEach((buff) => {
-            const roomType = buff.roomType as RoomType;
+        Object.values(buffs).forEach((buff) => {
+            const roomType: RoomType = buff.roomType;
+            const effects: string[] = buff.effects;
 
-            if (!Array.isArray(_roomBuffTree[roomType])) {
-                _roomBuffTree[roomType] = [];
+            _roomEffectTree[roomType] ??= new Set<string>();
+            if (effects) {
+                const flatEffects = effects.flat();
+                for (const effect of flatEffects) {
+                    _roomEffectTree[roomType].add(effect);
+                }
             }
-            _roomBuffTree[roomType].push(buff);
         });
 
-        return _roomBuffTree;
+        return Object.fromEntries(
+            Object.entries(_roomEffectTree).map(([k, s]) => [k, Array.from(s)])
+        ) as { [key in RoomType]: string[] };
     })(buffs);
-
-    // const filterArgs = {
-    //     rooms: Object.keys(roomBuffTree),
-    //     buffs: Object.values(roomBuffTree).flat(),
-    // };
 
     return (
         <div className={wrapper}>
             {/* Hydration */}
             <section className={filterContainer}>
-                <div>
-                    {/* {Object.entries(roomBuffTree).map(([roomType, buffs]) => (
-                        <div key={roomType}>
-                            <h3>{roomType}</h3>
-                        </div>
-                    ))} */}
-                    <p>FILTER</p>
-                </div>
-                {/* <div>
-                    {filterArgs.buffs.map((buff) => (
-                        <div
-                            key={buff.buffId}
-                            style={{ marginBottom: "0.5rem" }}
-                        >
-                            <p>{`Name: ${buff.buffName}`}</p>
-                            <p>{`ID: ${buff.buffId}`}</p>
-                            <p>{`Category: ${buff.buffCategory}`}</p>
-                            <p>{`Description: ${buff.description}`}</p>
-                        </div>
-                    ))}
-                </div> */}
-                {/* <ClientSideFilterWrapper
-                    filterArgs={filterArgs}
-                    classTree={classTree}
-                    factionTree={factionTree}
-                    initialData={data}
-                /> */}
+                <ClientSideFilterWrapper
+                    buffs={buffs}
+                    roomEffectTree={roomEffectTree}
+                    ops={chars}
+                />
             </section>
 
             {/* Server-rendered operators */}
@@ -101,7 +89,8 @@ const InfraPage = async () => {
                         priority={index < 5}
                     />
                 ))} */}
-                <InfraClientPage initialData={{ chars, buffs, nameToIdMap }} />
+
+                <InfraClientPage initialData={{ chars, buffs }} />
             </section>
         </div>
     );

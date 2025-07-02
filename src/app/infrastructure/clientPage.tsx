@@ -1,19 +1,19 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { usePagination } from "@/hooks/usePagination";
+import usePagination from "@/hooks/usePagination";
 import { css } from "../../../styled-system/css";
-import { BuildingBuffType, BuildingCharType } from "@/lib/apiMongo";
+import { BuffsObjectType, CharsObjectType } from "@/lib/apiMongo";
 import InfraCard from "@/components/infra/InfraCard";
+import Spinner from "@/components/ui/Spinner";
+import useInfraStore from "@/stores/infraStore";
 
 type InfraClientPageProps = {
     initialData: {
-        chars: BuildingCharType[];
-        buffs: BuildingBuffType[];
-        nameToIdMap: { [key: string]: string };
+        chars: CharsObjectType;
+        buffs: BuffsObjectType;
     };
 };
-
+//#region Styles
 const container = css({
     display: "grid",
     gridTemplateColumns: {
@@ -26,81 +26,20 @@ const container = css({
     justifyItems: "center",
     padding: "1rem 0",
 });
+//#endregion
 
-// const initialFilterState = {
-//     selfName: null,
-//     facility: null,
-//     effects: null,
-//     relations: null,
-// };
+const InfraClientPage = ({ initialData: { buffs } }: InfraClientPageProps) => {
+    const { filteredOpsId, ops } = useInfraStore();
+    const filteredOps = filteredOpsId.map((id) => ops[id]);
 
-// const baseReducer = (
-//     state: BaseFilterState,
-//     action: BaseFilterAction
-// ): BaseFilterState => {
-//     switch (action.type) {
-//         case "SET_FACILITY":
-//             return {
-//                 ...state,
-//                 facility: action.payload,
-//                 selfName: action.selfName,
-//             };
-//         case "SET_EFFECTS":
-//             return {
-//                 ...initialFilterState,
-//                 effects: action.payload,
-//                 selfName: action.selfName,
-//             };
-//         case "SET_RELATIONS":
-//             return {
-//                 ...initialFilterState,
-//                 relations: action.payload,
-//                 selfName: action.selfName,
-//             };
-//         case "RESET":
-//             return initialFilterState;
-//     }
-// };
+    const { itemsToShow, hasMore, loaderRef } = usePagination(filteredOps, 20);
 
-const InfraClientPage = ({
-    initialData: { chars, buffs, nameToIdMap: pathMap },
-}: InfraClientPageProps) => {
-    const buffMap = useMemo(() => {
-        const map: { [key: string]: BuildingBuffType } = {};
-        buffs.forEach((buff) => {
-            map[buff.buffId] = buff;
-        });
-
-        return map;
-    }, [buffs]);
-
-    const { itemsToShow, hasMore, loaderRef } = usePagination(chars, 20);
-
-    //     return (
-    //         <>
-    //             {chars.map((char) => {
-    //                 return (
-    //                     <InfraCard
-    //                         key={char.charId}
-    //                         char={char}
-    //                         buffMap={buffMap}
-    //                     />
-    //                 );
-    //             })}
-    //         </>
-    //     );
-    // };
     return (
-        <>
-            <section className={container}>
-                {itemsToShow.map((char) => (
-                    <InfraCard
-                        key={char.charId}
-                        char={char}
-                        buffMap={buffMap}
-                    />
-                ))}
-            </section>
+        <section className={container}>
+            {itemsToShow.map((char) => (
+                <InfraCard key={char.charId} char={char} buffs={buffs} />
+            ))}
+
             {hasMore && (
                 <div
                     ref={loaderRef}
@@ -110,35 +49,11 @@ const InfraClientPage = ({
                         width: "100%",
                     })}
                 >
-                    <LoadingSpinner />
+                    <Spinner />
                 </div>
             )}
-        </>
+        </section>
     );
 };
-
-function LoadingSpinner() {
-    return (
-        <div
-            className={css({
-                display: "inline-block",
-                width: "2rem",
-                height: "2rem",
-                border: "4px solid rgba(0,0,0,0.1)",
-                borderRadius: "50%",
-                borderLeftColor: "#09f",
-                animation: "spin 1s linear infinite",
-            })}
-        >
-            <style jsx>{`
-                @keyframes spin {
-                    to {
-                        transform: rotate(360deg);
-                    }
-                }
-            `}</style>
-        </div>
-    );
-}
 
 export default InfraClientPage;
