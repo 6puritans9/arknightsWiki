@@ -1,4 +1,5 @@
 import { MongoClient } from "mongodb";
+import { LANGUAGE_DB_MAP, rarityMap } from "./constants/utilMap";
 
 //#region character_table Type Definitions
 type attributesKeyFrameType = {
@@ -100,14 +101,14 @@ export type ThumbnailOperatorType = {
 
 export type OperatorType = {
     _id: string;
-    isNotObtainable: boolean; // determine npc characters
+    // isNotObtainable: boolean; // determine npc characters
     name: string;
     description: string; // profession description
     itemUsage: string; // character description
     itemDesc: string; // character sub-description
     appellation: string | null; // " " or string
     position: string; // MELEE | RANGED | ALL
-    isSpChar: boolean; // weird property; does not represent limited characters
+    // isSpChar: boolean; // weird property; does not represent limited characters
     rarity: number;
     profession: string;
     subProfessionId: string;
@@ -122,28 +123,15 @@ export type OperatorType = {
     // potentialRanks: 1;
     // favorKeyFrames: 1;
     // allSkillLvlup: 1;
+    alterOpId: string | null;
+    baseOpId: string | null;
+    isLimited: boolean;
+    recruit: string[];
+    releaseOrder: number;
 };
 //#endregion Type Definitions
 
 //#region building_data Type Definitions
-export type BuildingCharType = {
-    charId: string;
-    charName: string;
-    charAppellation: string | null;
-    charNationId: string;
-    charTeamId: string;
-    charGroupId: string;
-    buffChar: {
-        buffData: {
-            buffId: string;
-            cond: {
-                phase: string;
-                level: number;
-            };
-        }[];
-    }[];
-};
-
 export type RoomType =
     | "CONTROL"
     | "DORMITORY"
@@ -155,6 +143,28 @@ export type RoomType =
     | "TRAINING"
     | "WORKSHOP";
 
+export type BuildingCharType = {
+    charId?: string;
+    charName: string;
+    charAppellation: string | null;
+    nationId: string;
+    teamId: string;
+    groupId: string;
+    buffChar: {
+        buffData: {
+            buffId: string;
+            cond: {
+                phase: string;
+                level: number;
+            };
+        }[];
+    }[];
+};
+
+export type CharsObjectType = {
+    [id: string]: BuildingCharType;
+};
+
 export type BuildingBuffType = {
     buffId: string;
     buffName: string;
@@ -162,30 +172,21 @@ export type BuildingBuffType = {
     skillIcon: string;
     sortId: number;
     buffColor: string;
-    textColor: string;
-    buffCategory: string;
+    // textColor: string;
+    // buffCategory: string;
     roomType: RoomType;
     description: string;
+    effects: string[];
+    related_facilities?: string[];
+    related_ops?: string[];
+    related_factions?: string[];
+    related_effects?: string[];
+};
+
+export type BuffsObjectType = {
+    [id: string]: BuildingBuffType;
 };
 //#endregion
-
-//#region Database mapping
-const LANGUAGE_DB_MAP: { [key: string]: string } = {
-    en: "data_en",
-    cn: "data_cn",
-    ja: "data_jp",
-    kr: "data_kr",
-    tw: "data_tw",
-};
-const rarityMap: { [key: string]: number } = {
-    TIER_1: 1,
-    TIER_2: 2,
-    TIER_3: 3,
-    TIER_4: 4,
-    TIER_5: 5,
-    TIER_6: 6,
-};
-//#endregion Database mapping
 
 // MongoDB client instance
 let client: MongoClient;
@@ -360,6 +361,11 @@ const fetchOperatorWithSkills = async (
             // potentialRanks: 1,
             // favorKeyFrames: 1,
             // allSkillLvlup: 1,
+            alterOpId: entity.alterOpId,
+            baseOpId: entity.alterOpId,
+            isLimited: entity.isLimited,
+            recruit: entity.recruit,
+            releaseOrder: entity.releaseOrder,
         } as OperatorType;
     } catch (error) {
         console.error("Error connecting to MongoDB:", error);
@@ -400,9 +406,9 @@ const fetchAllBuildingData = async (lang: string = "en") => {
                     charId: "$charsArray.k",
                     charName: "$operatorData.name",
                     charAppellation: "$operatorData.appellation",
-                    charNationId: "$operatorData.nationId",
-                    charTeamId: "$operatorData.teamId",
-                    charGroupId: "$operatorData.groupId",
+                    nationId: "$operatorData.nationId",
+                    teamId: "$operatorData.teamId",
+                    groupId: "$operatorData.groupId",
                     buffChar: "$charsArray.v.buffChar",
                 },
             },
@@ -428,47 +434,32 @@ const fetchAllBuildingData = async (lang: string = "en") => {
         ];
 
         const [chars, buffs] = await Promise.all([
-            collection.aggregate<BuildingCharType>(charsPipeline).toArray(),
-            collection.aggregate<BuildingBuffType>(buffsPipeline).toArray(),
+            collection.aggregate(charsPipeline).toArray(),
+            collection.aggregate(buffsPipeline).toArray(),
         ]);
 
+        const charsObj: CharsObjectType = Object.fromEntries(
+            chars.map(({ charId, charAppellation, ...rest }) => [
+                charId,
+                { charAppellation: cleanStringField(charAppellation), ...rest },
+            ])
+        );
+
+        const buffsObj: BuffsObjectType = Object.fromEntries(
+            buffs.map(({ buffId, ...rest }) => [buffId, rest])
+        );
+
         const nameToIdMap: { [key: string]: string } = {};
-        chars.forEach((char) => {
-            if (char.charAppellation && char.charAppellation !== " ") {
-                nameToIdMap[char.charAppellation] = char.charId;
+        Object.entries(charsObj).forEach(([charId, values]) => {
+            if (values.charAppellation) {
+                nameToIdMap[values.charAppellation] = charId;
             }
-            nameToIdMap[char.charName] = char.charId;
+            nameToIdMap[values.charName] = charId;
         });
 
         return {
-            chars: chars.map((char) => ({
-                charId: char.charId.toString(),
-                charName: char.charName,
-                charAppellation: cleanStringField(char.charAppellation ?? ""),
-                charNationId: char.charNationId,
-                charTeamId: char.charTeamId,
-                charGroupId: char.charGroupId,
-                buffChar: char.buffChar.map((buff) => ({
-                    buffData: Array.isArray(buff.buffData)
-                        ? buff.buffData.map((data) => ({
-                              buffId: data.buffId,
-                              cond: data.cond,
-                          }))
-                        : [],
-                })),
-            })),
-            buffs: buffs.map((buff) => ({
-                buffId: buff.buffId,
-                buffName: buff.buffName,
-                buffIcon: buff.buffIcon,
-                skillIcon: buff.skillIcon,
-                sortId: buff.sortId,
-                buffColor: buff.buffColor,
-                textColor: buff.textColor,
-                buffCategory: buff.buffCategory,
-                roomType: buff.roomType,
-                description: buff.description,
-            })),
+            chars: charsObj,
+            buffs: buffsObj,
             nameToIdMap,
         };
     } catch (error) {
