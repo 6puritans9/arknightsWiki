@@ -1,33 +1,3 @@
-/* 
-Filter categories:
-1. rarity
-2. position
-3. limited
-
-3. profession
-4. subProfessionId
-
-5. nationId
-6. teamId
-7. groupId
-
-
-Profession Logic:
-1. Create correct in-game NameMap for profession and subProfessionId
-
-2. Add profession in a dictionary if not exists, {profession: set()}
-3. Add subProfessionId in the dictionary, {profession: (subProfessionId)}
-4. Create class for each profession.
-5. Create branch for each subProfessionId, under the correct profession class.
-
-Faction Logic:
-1. Add nationId in a dictionary if not exists, {nationId: set()}
-2. if an operator has a groupId or teamId with nationId, {nationId: (groupId, teamId), groupId: nationId, teamId: nationId}
-3.else if an operator has a groupId or teamId without nationId, others: (groupId, teamId)
-
-4. 
-
-*/
 const professionMap: { [key: string]: string } = {
     PIONEER: "Vanguard",
     WARRIOR: "Guard",

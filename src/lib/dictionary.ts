@@ -24,3 +24,8 @@ export const footerLogoText = {
     cn: "罗德岛",
     tw: "羅德島",
 };
+
+export const notFoundText = {
+    en: "Page Not Found",
+    ko: "페이지를 찾을 수 없습니다",
+};
