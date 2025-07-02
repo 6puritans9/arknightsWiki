@@ -18,7 +18,7 @@ type State = {
 };
 
 type Action = {
-    setAllOpsId: (ops: CharsObjectType) => void;
+    setAllOpsId: (ops: Array<keyof CharsObjectType>) => void;
     setRefs: (ops: CharsObjectType, buffs: BuffsObjectType) => void;
     updateFilters: (
         category: keyof InfraFilterType,
@@ -43,17 +43,15 @@ const initialState: State = {
 const useInfraStore = create<State & Action>((set, get) => ({
     ...initialState,
 
-    setAllOpsId: (ops) => {
-        const opsIdList = Object.keys(ops);
-
+    setAllOpsId: (opsIdList) => {
         set({ allOpsId: opsIdList, filteredOpsId: opsIdList });
     },
 
     setRefs: (ops, buffs) => set({ ops, buffs }),
 
-    updateFilters: (category, value) =>
+    updateFilters: (category: "rooms" | "effects", effect) =>
         set((state) => {
-            if (!value) {
+            if (!effect) {
                 return {
                     filters: {
                         ...state.filters,
@@ -62,15 +60,27 @@ const useInfraStore = create<State & Action>((set, get) => ({
                 };
             }
 
-            const prevState = state.filters[category];
-            const exists = prevState.includes(value);
+            const prvEffects = state.filters[category];
+            if (prvEffects.includes(effect)) {
+                return {}; // No update
+            }
+
+            // const exists = prevState.includes(effect);
+            // const newState = exists
+            //     ? prevState.filter((v) => v !== effect)
+            //     : [...prevState, effect];
+
+            // if (
+            //     prevState.length === newState.length &&
+            //     prevState.every((v, i) => v === newState[i])
+            // ) {
+            //     return {}; // No update
+            // }
 
             return {
                 filters: {
                     ...state.filters,
-                    [category]: exists
-                        ? prevState.filter((v) => v !== value)
-                        : [...prevState, value],
+                    [category]: [effect],
                 },
             };
         }),
@@ -80,25 +90,32 @@ const useInfraStore = create<State & Action>((set, get) => ({
         let filteredId = allOpsId;
 
         // Filter by rooms
-        if (filters.rooms.length) {
-            filteredId = filteredId.filter((id) => {
-                const op = ops[id];
-                const allBuffs = op.buffChar;
+        // if (filters.rooms.length) {
+        filteredId = filteredId.filter((id) => {
+            const op = ops[id];
+            const charBuffs = op.buffChar;
 
-                allBuffs.forEach((elem) => {
-                    const singleBuffData = elem.buffData;
+            return charBuffs.some((elem) => {
+                const singleCharBuff = elem.buffData;
+                if (!Array.isArray(singleCharBuff) || !singleCharBuff.length) {
+                    return;
+                }
 
-                    singleBuffData.forEach((data) => {
-                        const buffId = data.buffId;
-                        const ownBuff = buffs[buffId];
+                return singleCharBuff.some((data) => {
+                    const buffId = data.buffId;
+                    const ownBuff = buffs[buffId];
 
-                        return filters.effects.some((effect) =>
+                    return (
+                        ownBuff &&
+                        Array.isArray(ownBuff.effects) &&
+                        filters.effects.some((effect) =>
                             ownBuff.effects.includes(effect)
-                        );
-                    });
+                        )
+                    );
                 });
             });
-        }
+        });
+        // }
 
         // TODO: pop a modal up for below conditions?
         // Filter by related_effects
