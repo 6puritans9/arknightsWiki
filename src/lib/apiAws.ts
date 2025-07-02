@@ -24,10 +24,14 @@ const getsubProfessionIdImage = (id: string): string =>
 const getFactionImage = (id: string): string =>
     `https://arknights-wiki-assets.s3.ap-northeast-2.amazonaws.com/public/op_misc/camplogo/logo_${id.toLocaleLowerCase()}.png`;
 
+const getEliteImage = (phase: string) =>
+    `https://arknights-wiki-assets.s3.ap-northeast-2.amazonaws.com/dynamicassets/arts/elite_hub/elite_${phase}_card.png`;
+
 export default getS3Url;
 export {
     getHomeBanners,
     getProfessionImage,
     getsubProfessionIdImage,
     getFactionImage,
+    getEliteImage,
 };
