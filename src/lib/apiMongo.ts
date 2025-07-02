@@ -144,7 +144,7 @@ export type RoomType =
     | "WORKSHOP";
 
 export type BuildingCharType = {
-    charId?: string;
+    charId: string;
     charName: string;
     charAppellation: string | null;
     nationId: string;
@@ -189,7 +189,29 @@ export type BuffsObjectType = {
 //#endregion
 
 // MongoDB client instance
+const MONGO_URI = process.env.MONGODB_URI as string;
 let client: MongoClient;
+
+const getClient = async () => {
+    if (process.env.NODE_ENV === "development") {
+        // @ts-expect-error: global type issue
+        if (!global._mongoClient) {
+            // @ts-expect-error: global type issue
+            global._mongoClient = new MongoClient(MONGO_URI);
+            // @ts-expect-error: global type issue
+            await global._mongoClient.connect();
+        }
+        // @ts-expect-error: global type issue
+        return global._mongoClient;
+    }
+
+    if (!client) {
+        client = new MongoClient(MONGO_URI);
+        await client.connect();
+    }
+
+    return client;
+};
 
 // Helper function to clean string fields
 const cleanStringField = (value: string): string | null => {
@@ -202,15 +224,6 @@ const cleanStringField = (value: string): string | null => {
 };
 
 // Main Functions
-const getClient = async () => {
-    if (!client) {
-        client = new MongoClient(process.env.MONGODB_URI as string);
-        await client.connect();
-    }
-
-    return client;
-};
-
 const fetchAllOperators = async (
     lang: string = "en"
 ): Promise<ThumbnailOperatorType[]> => {
@@ -403,6 +416,7 @@ const fetchAllBuildingData = async (lang: string = "en") => {
             },
             {
                 $project: {
+                    _id: 0,
                     charId: "$charsArray.k",
                     charName: "$operatorData.name",
                     charAppellation: "$operatorData.appellation",
@@ -441,7 +455,11 @@ const fetchAllBuildingData = async (lang: string = "en") => {
         const charsObj: CharsObjectType = Object.fromEntries(
             chars.map(({ charId, charAppellation, ...rest }) => [
                 charId,
-                { charAppellation: cleanStringField(charAppellation), ...rest },
+                {
+                    charId,
+                    charAppellation: cleanStringField(charAppellation),
+                    ...rest,
+                },
             ])
         );
 
