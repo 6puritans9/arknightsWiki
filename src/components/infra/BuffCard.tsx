@@ -37,16 +37,17 @@ const container = cva({
     },
 });
 
-const eliteWrapper = flex({
-    // gap: "0.5rem",
+const headerWrapper = flex({
     justifyContent: "flex-end",
+    gap: "0.2rem",
 });
 
 const eliteImage = css({
-    display: "inline-flex",
-    alignItems: "center",
-    marginRight: "0.5rem",
-    backgroundColor: "gray.500",
+    maxWidth: "30px",
+    maxHeight: "22.5px",
+    width: "auto",
+    height: "auto",
+    filter: "invert(1)",
 });
 
 const eliteText = css({
@@ -58,11 +59,12 @@ const eliteText = css({
     color: "gray.500",
 });
 
-const buffTitle = css({
+const buffTitle = flex({
     fontSize: {
         base: "md",
         sm: "lg",
     },
+    flex: 1,
 });
 
 const buffDesc = css({
@@ -81,6 +83,12 @@ const BuffCard = ({ buffData, buffs }: BuffCardProps) => {
         const phase = data.cond.phase[data.cond.phase.length - 1];
         const isSameCategory = buffData.length > 1;
 
+        const handleClick = () => {
+            if (buffDetail.related_ops) {
+                console.log(buffDetail.related_ops);
+            }
+        };
+
         return (
             <Fragment key={i}>
                 <dl
@@ -90,22 +98,24 @@ const BuffCard = ({ buffData, buffs }: BuffCardProps) => {
                             : container({ visual: "divde" })
                     }
                 >
-                    <dt className={eliteWrapper}>
-                        <span className={eliteImage}>
-                            <Image
-                                src={getEliteImage(phase)}
-                                width={30}
-                                height={22.5}
-                                alt={`elite ${phase}`}
-                                loading="lazy"
-                                decoding="async"
-                            />
-                        </span>
+                    <div className={headerWrapper}>
+                        <dt className={buffTitle}>{buffDetail.buffName}</dt>
+                        <Image
+                            className={eliteImage}
+                            src={getEliteImage(phase)}
+                            width={30}
+                            height={22.5}
+                            alt={`elite ${phase}`}
+                            loading="lazy"
+                            decoding="async"
+                        />
                         <span className={eliteText}>{data.cond.level}</span>
-                    </dt>
-                    <dd className={buffTitle}>{buffDetail.buffName}</dd>
-                    <dd className={buffDesc}>{buffDetail.description}</dd>
+                    </div>
+                    <dd className={buffDesc} onClick={handleClick}>
+                        {buffDetail.description}
+                    </dd>
                 </dl>
+
                 {isSameCategory && i < buffData.length - 1 && (
                     <hr
                         style={{
