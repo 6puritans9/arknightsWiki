@@ -3,6 +3,7 @@ import { Fragment } from "react";
 import { getEliteImage } from "@/lib/apiAws";
 import { css, cva } from "../../../styled-system/css";
 import { BuffsObjectType } from "@/lib/apiMongo";
+import { flex } from "../../../styled-system/patterns";
 
 type BuffCardProps = {
     buffData: {
@@ -36,11 +37,25 @@ const container = cva({
     },
 });
 
-const imageWrapper = css({
+const eliteWrapper = flex({
+    // gap: "0.5rem",
+    justifyContent: "flex-end",
+});
+
+const eliteImage = css({
     display: "inline-flex",
     alignItems: "center",
     marginRight: "0.5rem",
-    backgroundColor: "black",
+    backgroundColor: "gray.500",
+});
+
+const eliteText = css({
+    fontSize: {
+        base: "fBase",
+        lg: "fMd",
+    },
+    fontWeight: "bold",
+    color: "gray.500",
 });
 
 const buffTitle = css({
@@ -75,20 +90,21 @@ const BuffCard = ({ buffData, buffs }: BuffCardProps) => {
                             : container({ visual: "divde" })
                     }
                 >
-                    <dt>
-                        <span className={imageWrapper}>
+                    <dt className={eliteWrapper}>
+                        <span className={eliteImage}>
                             <Image
                                 src={getEliteImage(phase)}
-                                height={20}
-                                width={20}
+                                width={30}
+                                height={22.5}
                                 alt={`elite ${phase}`}
+                                loading="lazy"
+                                decoding="async"
                             />
                         </span>
-                        {`level=${data.cond.level}`}
+                        <span className={eliteText}>{data.cond.level}</span>
                     </dt>
                     <dd className={buffTitle}>{buffDetail.buffName}</dd>
                     <dd className={buffDesc}>{buffDetail.description}</dd>
-                    <dd className={buffDesc}>{buffDetail.effects}</dd>
                 </dl>
                 {isSameCategory && i < buffData.length - 1 && (
                     <hr

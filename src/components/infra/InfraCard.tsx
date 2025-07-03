@@ -5,12 +5,14 @@ import { nationIdMap, groupIdMap, teamIdMap } from "@/lib/constants/NameMap";
 import { css } from "../../../styled-system/css";
 import { flex } from "../../../styled-system/patterns";
 import BuffCard from "./BuffCard";
+import Image from "next/image";
 
 type InfraCardProps = {
     char: BuildingCharType;
     buffs: BuffsObjectType;
 };
 
+//#region Styles
 const container = flex({
     marginBottom: "1rem",
     padding: "0.5rem",
@@ -25,6 +27,11 @@ const container = flex({
     alignItems: "flex-start",
 });
 
+const row = flex({
+    alignItems: "center",
+    gap: "0.5rem",
+});
+
 const nameText = css({
     color: "red",
 });
@@ -34,27 +41,36 @@ const buffList = css({
     padding: 0,
     margin: 0,
 });
+//#endregion
 
 const InfraCard = ({ char, buffs }: InfraCardProps) => {
     const imagePath = `operators/${char.charId}/icons/${char.charId}.webp`;
 
     return (
         <article key={char.charId} className={container}>
-            <Link href="/operators/[charId]" as={`/infra/char/${char.charId}`}>
-                <img
-                    src={`${getS3Url(imagePath)}`}
-                    alt={char.charName}
-                    width={50}
-                    height={50}
-                />
-            </Link>
-            {/* <p>IMG</p> */}
-            <h2 className={nameText}>
-                {char.charAppellation
-                    ? `${char.charAppellation} (${char.charName})`
-                    : char.charName}
-            </h2>
-            <p>{`faction: ${teamIdMap[char.teamId] ?? groupIdMap[char.groupId] ?? nationIdMap[char.nationId]}`}</p>
+            <div className={row}>
+                <Link
+                    href="/operators/[charId]"
+                    as={`/infra/char/${char.charId}`}
+                >
+                    <Image
+                        unoptimized
+                        src={`${getS3Url(imagePath)}`}
+                        alt={char.charName}
+                        loading="lazy"
+                        decoding="async"
+                        width={50}
+                        height={50}
+                    />
+                </Link>
+
+                <h2 className={nameText}>
+                    {char.charAppellation
+                        ? `${char.charAppellation} (${char.charName})`
+                        : char.charName}
+                </h2>
+            </div>
+            {/* <p>{`faction: ${teamIdMap[char.teamId] ?? groupIdMap[char.groupId] ?? nationIdMap[char.nationId]}`}</p> */}
 
             <ul className={buffList}>
                 {char.buffChar.map((buff, i) =>
