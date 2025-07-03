@@ -1,4 +1,4 @@
-const richTextStyles = {
+const richTextStylesDict: { [key: string]: string } = {
     "mission.levelname": "#FFDE00",
     "mission.number": "#FFDE00",
     "tu.kw": "#0098DC",
@@ -123,4 +123,4 @@ const richTextStyles = {
     "firework.animaldesc_all": "#ffecb1",
 };
 
-export { richTextStyles };
+export default richTextStylesDict;
