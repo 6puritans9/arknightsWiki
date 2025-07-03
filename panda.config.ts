@@ -3,6 +3,10 @@ import { defineConfig } from "@pandacss/dev";
 export default defineConfig({
     // Whether to use css reset
     preflight: true,
+    // globalCss: {
+    //     extend : {
+    //     }
+    // },
 
     // Where to look for your css declarations
     include: ["./src/**/*.{js,jsx,ts,tsx}", "./pages/**/*.{js,jsx,ts,tsx}"],
@@ -14,6 +18,25 @@ export default defineConfig({
     theme: {
         extend: {
             tokens: {
+                fontSizes: {
+                    fBase: { value: "0.8rem", description: "iPhoneSE_375*667" },
+                    fSm: {
+                        value: "1rem",
+                        description: "iPhone14ProMax_430*932",
+                    },
+                    fMd: {
+                        value: "1rem",
+                        description: "iPadAir_820*1180",
+                    },
+                    fLg: {
+                        value: "1.5rem",
+                        description: "iPadPro_1024*1366",
+                    },
+                    fXl: {
+                        value: "1.8rem",
+                        description: "desktop 1440p",
+                    },
+                },
                 colors: {
                     primary: {
                         value: "#29c8cc",
@@ -28,12 +51,16 @@ export default defineConfig({
                         value: "10",
                         description: "Z-index for header",
                     },
-                    toast: {
+                    modal: {
                         value: "20",
+                        description: "Z-index for modal popup",
+                    },
+                    toast: {
+                        value: "30",
                         description: "Z-index for toast notifications",
                     },
                     overlay: {
-                        value: "30",
+                        value: "40",
                         description: "Z-index for nav overlay",
                     },
                 },
