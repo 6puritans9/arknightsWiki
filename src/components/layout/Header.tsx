@@ -4,9 +4,9 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { flex } from "../../styled-system/patterns";
-import { css } from "../../styled-system/css";
-import AuthButton from "./ui/auth/AuthButton";
+import { flex } from "../../../styled-system/patterns";
+import { css } from "../../../styled-system/css";
+import AuthButton from "../ui/auth/AuthButton";
 
 //#region Elements
 const hamburgerBtn = (
@@ -127,7 +127,6 @@ const navItem = css({
 const utilsContainer = flex({
     justifyContent: "flex-end",
     gap: "0.5rem",
-    padding: "0 1rem",
     alignItems: "center",
 });
 
@@ -135,8 +134,8 @@ const menuBtn = css({
     background: "none",
     border: "none",
     cursor: "pointer",
-    width: "40px",
-    height: "40px",
+    width: "25px",
+    height: "25px",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",

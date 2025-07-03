@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { flex } from "../../styled-system/patterns";
-import { css } from "../../styled-system/css";
+import { flex } from "../../../styled-system/patterns";
+import { css } from "../../../styled-system/css";
 import { footerLogoText } from "@/lib/dictionary";
 
 const container = flex({
