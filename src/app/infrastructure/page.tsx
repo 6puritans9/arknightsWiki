@@ -4,43 +4,17 @@ import {
     BuffsObjectType,
     fetchAllBuildingData,
 } from "@/lib/apiMongo";
-import { flex, grid } from "../../../styled-system/patterns";
-
+import { flex } from "../../../styled-system/patterns";
 import ClientSideFilterWrapper from "@/components/Filter/infra/ClientSideFilterWrapper";
 
 //#region Styles
-const wrapper = flex({
+const pageWrapper = flex({
     flexDirection: "column",
     alignItems: "center",
     width: "100%",
-    maxWidth: "1200px",
     margin: "0 auto",
 });
 
-const filterContainer = grid({
-    gridTemplateColumns: "1fr 9fr",
-    gridTemplateAreas: `
-    "rarity-label rarity-content"
-    "class-label class-content"
-    "faction-label faction-content"
-  `,
-    gap: "1rem",
-    justifyItems: "flex-start",
-    marginBottom: "1rem",
-    width: "100%",
-});
-
-const cardContainer = grid({
-    gridTemplateColumns: {
-        base: "1fr",
-        sm: "repeat(2, 1fr)",
-        lg: "repeat(4, 1fr)",
-    },
-    gap: "1rem",
-    justifyItems: "center",
-    width: "100%",
-    padding: "1rem 0",
-});
 //#endregion
 
 const InfraPage = async () => {
@@ -70,28 +44,14 @@ const InfraPage = async () => {
     })(buffs);
 
     return (
-        <div className={wrapper}>
-            {/* Hydration */}
-            <section className={filterContainer}>
-                <ClientSideFilterWrapper
-                    buffs={buffs}
-                    roomEffectTree={roomEffectTree}
-                    ops={chars}
-                />
-            </section>
+        <div className={pageWrapper}>
+            <ClientSideFilterWrapper
+                buffs={buffs}
+                roomEffectTree={roomEffectTree}
+                ops={chars}
+            />
 
-            {/* Server-rendered operators */}
-            <section id="initial-operators" className={cardContainer}>
-                {/* {initialVisibleOperators.map((operator, index) => (
-                    <OpsThumbnail
-                        key={operator._id}
-                        operator={operator}
-                        priority={index < 5}
-                    />
-                ))} */}
-
-                <InfraClientPage initialData={{ chars, buffs }} />
-            </section>
+            <InfraClientPage initialData={{ chars, buffs }} />
         </div>
     );
 };
