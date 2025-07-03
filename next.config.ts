@@ -4,20 +4,10 @@ const nextConfig: NextConfig = {
     /* config options here */
     images: {
         domains: ["arknights-wiki-assets.s3.ap-northeast-2.amazonaws.com"],
+        qualities: [75, 90, 100],
+        minimumCacheTTL: 31536000,
+        formats: ["image/webp", "image/avif"],
     },
-    // async headers() {
-    //     return [
-    //         {
-    //             source: "/_next/image(.*)",
-    //             headers: [
-    //                 {
-    //                     key: "Cache-Control",
-    //                     value: "public, max-age=31536000, immutable",
-    //                 },
-    //             ],
-    //         },
-    //     ];
-    // },
     eslint: {
         ignoreDuringBuilds: true,
     },
