@@ -2,21 +2,26 @@ import { forwardRef, PropsWithChildren } from "react";
 import { Accordion } from "radix-ui";
 import { css } from "../../../styled-system/css";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
+import { flex } from "../../../styled-system/patterns";
 
-// Root container
+//#region Styles
 export const accordionRootStyle = css({
-    borderRadius: "6px",
-    width: "80vw",
-    backgroundColor: "yellow.300",
+    backgroundColor: "gray.100",
+    width: "100%",
 });
 
-// Accordion item
+export const accordionHeaderStyle = flex({
+    // Keep this flexbox
+});
+
+// Item Container
 export const accordionItemStyle = css({
-    textAlign: "center",
-    overflow: "hidden",
-    padding: "1rem 0 1rem 0",
+    padding: "0 1rem",
+    border: "1px solid grey",
+    borderTop: "0",
     "&:first-child": {
         marginTop: 0,
+        borderTop: "1px solid grey",
         borderTopLeftRadius: "4px",
         borderTopRightRadius: "4px",
     },
@@ -31,44 +36,38 @@ export const accordionItemStyle = css({
     },
 });
 
-// Accordion header
-export const accordionHeaderStyle = css({
-    display: "flex",
-});
-
-// Accordion trigger
-export const accordionTriggerStyle = css({
-    fontFamily: "inherit",
-    backgroundColor: "transparent",
-    padding: "0 20px",
-    height: "45px",
+// Menu text
+export const accordionTriggerStyle = flex({
+    fontSize: {
+        base: "fBase",
+        md: "fSm",
+        lg: "fMd",
+        xl: "fLg",
+    },
     flex: 1,
-    display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
-    fontSize: "15px",
+    // padding: "0 1rem",
+    height: "3rem",
+    backgroundColor: "transparent",
     lineHeight: 1,
-    color: "violet.11",
-    boxShadow: "0 1px 0 var(--mauve-6)",
-    background: "white",
-    "&:hover": {
-        backgroundColor: "mauve.2",
-    },
-    // Chevron rotation handled by data-state in JSX
+    fontFamily: "inherit",
+    cursor: "pointer",
 });
 
-// Accordion content
+// Content text
 export const accordionContentStyle = css({
+    fontSize: {
+        base: "fBase",
+        lg: "fSm",
+        xl: "fMd",
+    },
+    // padding: "0 1rem",
     overflow: "hidden",
-    fontSize: "15px",
-    color: "mauve.11",
-    backgroundColor: "red.200",
-    // Animation handled by data-state in JSX
+    color: "black",
 });
-
-// Accordion content text
-export const accordionContentTextStyle = css({
-    padding: "15px 20px",
+const AccordionContentText = css({
+    margin: "1rem 0",
 });
 
 // Accordion chevron
@@ -76,7 +75,6 @@ export const accordionChevronStyle = css({
     ".AccordionTrigger[data-state='open'] > &": {
         transform: "rotate(180deg)",
     },
-
     color: "violet.10",
     transition: "transform 300ms cubic-bezier(0.87, 0, 0.13, 1)",
 });
@@ -110,7 +108,7 @@ export const AccordionContent = forwardRef<
     AccordionContentProps
 >(({ children, className = "", ...props }, forwardedRef) => (
     <Accordion.Content className={className} {...props} ref={forwardedRef}>
-        <div className="AccordionContentText">{children}</div>
+        <div className={AccordionContentText}>{children}</div>
     </Accordion.Content>
 ));
 AccordionContent.displayName = "AccordionContent";
