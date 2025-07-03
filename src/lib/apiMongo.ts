@@ -141,7 +141,8 @@ export type RoomType =
     | "POWER"
     | "TRADING"
     | "TRAINING"
-    | "WORKSHOP";
+    | "WORKSHOP"
+    | "PRIVATE";
 
 export type BuildingCharType = {
     charId: string;
