@@ -1,10 +1,11 @@
 import "./globals.css";
 import Paperlogy from "./styles/fonts";
 import type { Metadata } from "next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { TouchProvider } from "@/components/TouchProvider";
 import StoreInitializer from "@/components/StoreInitializer";
-import Header from "../components/Header";
-import Footer from "@/components/Footer";
+import Header from "../components/layout/Header";
+import Footer from "@/components/layout/Footer";
 import { flex } from "../../styled-system/patterns";
 
 export const metadata: Metadata = {
@@ -37,6 +38,7 @@ export default function RootLayout({
     return (
         <html lang="en" className={`${Paperlogy.className}`}>
             <body className={wrapper}>
+                <SpeedInsights />
                 <StoreInitializer />
                 <TouchProvider>
                     <Header />
