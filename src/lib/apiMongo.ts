@@ -1,4 +1,4 @@
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 import { LANGUAGE_DB_MAP, rarityMap } from "./constants/utilMap";
 
 //#region character_table Type Definitions
@@ -86,21 +86,27 @@ type skillDetailType = {
     }[];
 };
 
-export type ThumbnailOperatorType = {
-    _id: string;
-    name: string;
-    appellation: string | null;
-    rarity: number;
-    profession: string;
-    subProfessionId: string;
-    nationId: string;
-    teamId: string | null;
-    groupId: string | null;
-    displayNumber: string;
+type CandidateType = {
+    unlockCondition: {
+        phase: "PHASE_0" | "PHASE_1" | "PHASE_2";
+        level: number;
+    };
 };
 
-export type OperatorType = {
-    _id: string;
+type TalentType = {
+    candidates: CandidateType[];
+    requiredPotentialRank: number;
+    prefabKey: string;
+    name: string;
+    description: string;
+    blackboard: {
+        [key: string]: number;
+    };
+    isHideTalent: boolean;
+};
+
+export type SingleOpType = {
+    id: string;
     // isNotObtainable: boolean; // determine npc characters
     name: string;
     description: string; // profession description
@@ -112,14 +118,13 @@ export type OperatorType = {
     rarity: number;
     profession: string;
     subProfessionId: string;
-    itemObtainApproach: string | null;
     nationId: string;
-    groupId?: string;
-    teamId?: string;
+    groupId: string | null;
+    teamId: string | null;
     phases: PhaseType[];
     skills: skillType[];
     skillDetails: skillDetailType[];
-    // talents: 1;
+    talents: TalentType[];
     // potentialRanks: 1;
     // favorKeyFrames: 1;
     // allSkillLvlup: 1;
@@ -128,6 +133,31 @@ export type OperatorType = {
     isLimited: boolean;
     recruit: string[];
     releaseOrder: number;
+};
+
+export type SimpleOpType = {
+    name: string;
+    appellation: string | null;
+    rarity: number;
+    position: string;
+    profession: string;
+    subProfessionId: string;
+
+    nationId: string;
+    teamId: string | null;
+    groupId: string | null;
+
+    releaseOrder: number;
+    alterOpId: string | null;
+    baseOpId: string | null;
+    isLimited: boolean;
+    recruit: string[];
+};
+
+type SimpleOpQuery = SimpleOpType & { _id: ObjectId };
+
+export type OpsObjectType = {
+    [id: string]: SimpleOpType;
 };
 //#endregion Type Definitions
 
@@ -162,6 +192,8 @@ export type BuildingCharType = {
     }[];
 };
 
+type BuildingCharQuery = BuildingCharType;
+
 export type CharsObjectType = {
     [id: string]: BuildingCharType;
 };
@@ -173,8 +205,8 @@ export type BuildingBuffType = {
     skillIcon: string;
     sortId: number;
     buffColor: string;
-    // textColor: string;
-    // buffCategory: string;
+    textColor: string;
+    buffCategory: string;
     roomType: RoomType;
     description: string;
     effects: string[];
@@ -183,6 +215,8 @@ export type BuildingBuffType = {
     related_factions?: string[];
     related_effects?: string[];
 };
+
+type BuildingBuffQuery = BuildingBuffType & { _id: ObjectId };
 
 export type BuffsObjectType = {
     [id: string]: BuildingBuffType;
@@ -225,16 +259,13 @@ const cleanStringField = (value: string): string | null => {
 };
 
 // Main Functions
-const fetchAllOperators = async (
-    lang: string = "en"
-): Promise<ThumbnailOperatorType[]> => {
+const fetchAllOperators = async (lang: string = "en") => {
     try {
         const mongoClient = await getClient();
         const dbName = LANGUAGE_DB_MAP[lang];
         const db = mongoClient.db(dbName);
         const collection = db.collection("character_table");
 
-        // TODO: add query for position, isLimited
         const pipeline = [
             {
                 $match: {
@@ -248,44 +279,53 @@ const fetchAllOperators = async (
                     name: 1,
                     appellation: 1,
                     rarity: 1,
+                    position: 1,
                     profession: 1,
                     subProfessionId: 1,
                     nationId: 1,
                     teamId: 1,
                     groupId: 1,
-                    displayNumber: 1,
-                },
-            },
-            {
-                // TODO: sort by rarity, releaseOrder, displayNumber
-                $sort: {
-                    rarity: -1,
-                    displayNumber: -1,
+                    releaseOrder: 1,
+                    alterOpId: 1,
+                    baseOpId: 1,
+                    isLimited: 1,
+                    recruit: 1,
                 },
             },
         ];
 
-        const operators = await collection.aggregate(pipeline).toArray();
+        const opsArray: SimpleOpQuery[] = await collection
+            .aggregate(pipeline)
+            .toArray();
 
-        return operators.map((op) => ({
-            _id: op._id.toString(),
-            name: op.name,
-            appellation: cleanStringField(op.appellation),
-            rarity: rarityMap[op.rarity],
-            profession: op.profession,
-            subProfessionId: op.subProfessionId,
-            nationId: op.nationId,
-            teamId: op.teamId || null,
-            groupId: op.groupId || null,
-            displayNumber: op.displayNumber,
-        }));
+        return Object.fromEntries(
+            opsArray.map((op) => [
+                op._id.toString(),
+                {
+                    name: op.name,
+                    appellation: op.appellation !== " " ? op.appellation : null,
+                    rarity: rarityMap[op.rarity],
+                    position: op.position,
+                    profession: op.profession,
+                    subProfessionId: op.subProfessionId,
+                    nationId: op.nationId,
+                    teamId: op.teamId || null,
+                    groupId: op.groupId || null,
+                    releaseOrder: op.releaseOrder,
+                    alterOpId: op.alterOpId,
+                    baseOpId: op.baseOpId,
+                    isLimited: op.isLimited,
+                    recruit: op.recruit,
+                },
+            ])
+        ) as OpsObjectType;
     } catch (error) {
         console.error("Error fetching operators:", error);
         throw new Error("Failed to fetch operators");
     }
 };
 
-const fetchOperatorWithSkills = async (
+const fetchSingleOperator = async (
     name: string,
     collectionName: string,
     lang: string = "en"
@@ -353,18 +393,16 @@ const fetchOperatorWithSkills = async (
         const entity = result[0];
 
         return {
-            _id: entity._id.toString(),
+            id: entity._id.toString(),
             name: entity.name,
-            description: entity.description || "",
-            itemUsage: entity.itemUsage || "",
-            itemDesc: entity.itemDesc || "",
-            appellation: cleanStringField(entity.appellation),
+            description: entity.description,
+            itemUsage: entity.itemUsage,
+            itemDesc: entity.itemDesc,
+            appellation: entity.appellation === " " ? null : entity.appellation,
             position: entity.position,
-            isSpChar: entity.isSpChar,
             rarity: rarityMap[entity.rarity],
             profession: entity.profession,
             subProfessionId: entity.subProfessionId,
-            itemObtainApproach: cleanStringField(entity.itemObtainApproach),
             nationId: entity.nationId,
             groupId: cleanStringField(entity.groupId),
             teamId: cleanStringField(entity.teamId),
@@ -380,7 +418,7 @@ const fetchOperatorWithSkills = async (
             isLimited: entity.isLimited,
             recruit: entity.recruit,
             releaseOrder: entity.releaseOrder,
-        } as OperatorType;
+        } as SingleOpType;
     } catch (error) {
         console.error("Error connecting to MongoDB:", error);
         throw new Error("Database connection failed");
@@ -444,28 +482,37 @@ const fetchAllBuildingData = async (lang: string = "en") => {
                 $unwind: "$buffsArray",
             },
             {
-                $replaceRoot: { newRoot: "$buffsArray.v" },
+                $replaceRoot: {
+                    newRoot: {
+                        $mergeObjects: [
+                            "$buffsArray.v",
+                            { _id: "$buffsArray.k" },
+                        ],
+                    },
+                },
             },
         ];
 
-        const [chars, buffs] = await Promise.all([
-            collection.aggregate(charsPipeline).toArray(),
-            collection.aggregate(buffsPipeline).toArray(),
-        ]);
+        const [chars, buffs]: [BuildingCharQuery[], BuildingBuffQuery[]] =
+            await Promise.all([
+                collection.aggregate(charsPipeline).toArray(),
+                collection.aggregate(buffsPipeline).toArray(),
+            ]);
 
         const charsObj: CharsObjectType = Object.fromEntries(
             chars.map(({ charId, charAppellation, ...rest }) => [
                 charId,
                 {
                     charId,
-                    charAppellation: cleanStringField(charAppellation),
+                    charAppellation:
+                        charAppellation === " " ? null : charAppellation,
                     ...rest,
                 },
             ])
         );
 
         const buffsObj: BuffsObjectType = Object.fromEntries(
-            buffs.map(({ buffId, ...rest }) => [buffId, rest])
+            buffs.map(({ _id, ...rest }) => [_id.toString(), { ...rest }])
         );
 
         const nameToIdMap: { [key: string]: string } = {};
@@ -487,4 +534,4 @@ const fetchAllBuildingData = async (lang: string = "en") => {
     }
 };
 
-export { fetchOperatorWithSkills, fetchAllOperators, fetchAllBuildingData };
+export { fetchSingleOperator, fetchAllOperators, fetchAllBuildingData };
