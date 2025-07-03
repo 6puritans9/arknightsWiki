@@ -1,11 +1,11 @@
 "use client";
 
-import usePagination from "@/hooks/usePagination";
-import { css } from "../../../styled-system/css";
 import { BuffsObjectType, CharsObjectType } from "@/lib/apiMongo";
+import { css } from "../../../styled-system/css";
+import usePagination from "@/hooks/usePagination";
+import useInfraStore from "@/stores/infraStore";
 import InfraCard from "@/components/infra/InfraCard";
 import Spinner from "@/components/ui/Spinner";
-import useInfraStore from "@/stores/infraStore";
 
 type InfraClientPageProps = {
     initialData: {
@@ -26,6 +26,7 @@ const container = css({
     justifyItems: "center",
     padding: "1rem 0",
 });
+
 //#endregion
 
 const InfraClientPage = ({ initialData: { buffs } }: InfraClientPageProps) => {
