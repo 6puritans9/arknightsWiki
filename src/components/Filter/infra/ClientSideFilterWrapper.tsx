@@ -22,9 +22,10 @@ const ClientSideFilterWrapper = ({
     useEffect(() => {
         setAllOpsId(opsIdList);
         setRefs(ops, buffs);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [ops, buffs]);
 
-    return <InfraFilter buffs={buffs} roomEffectTree={roomEffectTree} />;
+    return <InfraFilter roomEffectTree={roomEffectTree} />;
 };
 
 export default ClientSideFilterWrapper;
