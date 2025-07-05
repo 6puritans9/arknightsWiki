@@ -1,4 +1,4 @@
-import { CharsObjectType, BuffsObjectType } from "@/lib/apiMongo";
+import { CharsObjectType, BuffsObjectType } from "@/api/apiMongo";
 import { create } from "zustand";
 
 //#region Types
