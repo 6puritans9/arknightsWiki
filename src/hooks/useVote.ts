@@ -5,7 +5,7 @@ import {
     checkAuth,
     fetchVote,
     submitVote,
-} from "@/lib/apiVote";
+} from "@/api/apiVote";
 
 type UseVoteProps = {
     operatorId: string;
