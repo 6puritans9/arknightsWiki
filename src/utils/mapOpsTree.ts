@@ -1,4 +1,4 @@
-import { OpsObjectType } from "@/lib/apiMongo";
+import { OpsObjectType } from "@/api/apiMongo";
 
 const mapOpsTree = (ops: OpsObjectType) => {
     //#region Class << branch
