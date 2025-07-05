@@ -2,19 +2,19 @@
 
 import Image from "next/image";
 import { useOperatorStore } from "@/stores/operatorStore";
-import { css } from "../../../styled-system/css";
-import { flex, grid } from "../../../styled-system/patterns";
+import { css } from "../../../../styled-system/css";
+import { flex, grid } from "../../../../styled-system/patterns";
 import { selected, nonSelected } from "@/app/styles/filterStyles";
 import {
     getFactionImage,
     getProfessionImage,
     getsubProfessionIdImage,
-} from "@/lib/apiAws";
+} from "@/api/apiAws";
 import {
     HybridTooltip,
     HybridTooltipContent,
     HybridTooltipTrigger,
-} from "../HybirdTooltip";
+} from "../../ui/HybirdTooltip";
 import BranchList from "./BranchList";
 import { FilterType } from "@/stores/operatorStore";
 import { professionMap } from "@/lib/constants/NameMap";
@@ -22,6 +22,19 @@ import { professionMap } from "@/lib/constants/NameMap";
 //#region Styles
 const filterSection = flex({
     gap: "1.5",
+});
+
+const filterContainer = grid({
+    gridTemplateColumns: "1fr 9fr",
+    gridTemplateAreas: `
+    "rarity-label rarity-content"
+    "class-label class-content"
+    "faction-label faction-content"
+  `,
+    gap: "1rem",
+    justifyItems: "flex-start",
+    marginBottom: "1rem",
+    width: "100%",
 });
 
 const filterTitle = css({
@@ -108,11 +121,6 @@ const customOrder: { [key: string]: number } = {
 
 //#region Types
 type OpsFilterProps = {
-    filterArgs: {
-        rarities: number[];
-        classes: string[];
-        nations: string[];
-    };
     classTree: { [key: string]: string[] };
     factionTree: { [key: string]: string[] };
 };
@@ -123,8 +131,8 @@ export type FilterCondition = {
 };
 //#endregion
 
-const OpsFilter = ({ filterArgs, classTree, factionTree }: OpsFilterProps) => {
-    const { rarities, classes, nations } = filterArgs;
+const OpsFilter = ({ classTree, factionTree }: OpsFilterProps) => {
+    const rarities = Array.from({ length: 6 }, (_, i) => 6 - i);
 
     const filters: FilterType = useOperatorStore((state) => state.filters);
     const updateFilter = useOperatorStore((state) => state.updateFilter);
@@ -268,4 +276,4 @@ const OpsFilter = ({ filterArgs, classTree, factionTree }: OpsFilterProps) => {
     );
 };
 
-export { OpsFilter };
+export default OpsFilter;

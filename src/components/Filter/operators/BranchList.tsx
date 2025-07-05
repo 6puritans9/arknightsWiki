@@ -1,10 +1,10 @@
 import Image from "next/image";
-import { getsubProfessionIdImage } from "@/lib/apiAws";
-import { flex } from "../../../styled-system/patterns";
-import { css } from "../../../styled-system/css";
-import { nonSelected, selected } from "@/app/styles/filterStyles";
+import { getsubProfessionIdImage } from "@/api/apiAws";
 import { FilterCondition } from "./OpsFilter";
 import { subProfessionIdMap } from "@/lib/constants/NameMap";
+import { flex } from "$/styled-system/patterns";
+import { css } from "$/styled-system/css";
+import { nonSelected, selected } from "@/app/styles/filterStyles";
 
 // Styles
 const popUpWrapper = flex({
