@@ -1,5 +1,5 @@
 import { MongoClient, ObjectId } from "mongodb";
-import { LANGUAGE_DB_MAP, rarityMap } from "./constants/utilMap";
+import { LANGUAGE_DB_MAP, rarityMap } from "../lib/constants/utilMap";
 
 //#region character_table Type Definitions
 type attributesKeyFrameType = {
