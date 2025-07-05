@@ -1,205 +1,183 @@
 import { create } from "zustand";
-import { ThumbnailOperatorType } from "@/lib/apiMongo";
-// import { QueryOperators } from "@/lib/types";
+import { OpsObjectType, SimpleOpType } from "@/api/apiMongo";
 
-export type FilterType = {
+//#region Types
+export type OpsFilterType = {
     rarity: number[];
     position: string[];
-    // isLimited: boolean; TODO: Implement limited filter
 
-    class: string[];
-    branch: string[];
+    profession: string[];
+    subProfessionId: string[];
 
-    nation: string[];
-    team: string[];
-    group: string[];
+    nationId: string[];
+    teamId: string[];
+    groupId: string[];
+
+    isLimited: boolean;
+    isAlter: boolean;
+
+    recruitment: string[];
 };
+//#endregion
 
+//#region State & Action
 type State = {
-    // Data
-    allOperators: ThumbnailOperatorType[];
-    filteredOperators: ThumbnailOperatorType[];
-
-    // Pagination
-    visibleCount: number;
-    itemsPerPage: number;
-    hasMore: boolean;
-
-    // Filter
-    filters: FilterType;
+    allOpsId: Array<keyof OpsObjectType>;
+    filteredOpsId: Array<keyof OpsObjectType>;
+    ops: OpsObjectType;
+    filters: OpsFilterType;
 };
 
 type Action = {
-    setAllOperators: (operators: ThumbnailOperatorType[]) => void;
-    setVisibleCount: (count: number) => void;
-    incrementVisibleCount: () => void;
-    resetVisibleCount: () => void;
-    updateFilter: (
-        category: keyof FilterType | "reset",
-        value: string | number | null
+    setAllOpsId: (ops: Array<keyof OpsObjectType>) => void;
+    setRefs: (ops: OpsObjectType) => void;
+    updateFilters: (
+        category: keyof OpsFilterType,
+        value: string | number | boolean | null
     ) => void;
-    resetFilters: () => void;
     applyFilters: () => void;
+    resetFilters: () => void;
 };
+//#endregion
 
 const initialState: State = {
-    allOperators: [],
-    filteredOperators: [],
-    visibleCount: 20,
-    itemsPerPage: 20,
-    hasMore: true,
+    allOpsId: [],
+    filteredOpsId: [],
+    ops: {},
     filters: {
         rarity: [],
         position: [],
-        class: [],
-        branch: [],
-        nation: [],
-        team: [],
-        group: [],
+
+        profession: [],
+        subProfessionId: [],
+
+        nationId: [],
+        teamId: [],
+        groupId: [],
+
+        isLimited: false,
+        isAlter: false,
+
+        recruitment: [],
     },
 };
 
-const useOperatorStore = create<State & Action>((set) => ({
+const useOperatorStore = create<State & Action>((set, get) => ({
     ...initialState,
 
-    setAllOperators: (operators) =>
-        set((state) => ({
-            allOperators: operators,
-            filteredOperators: operators,
-            hasMore: operators.length > state.visibleCount,
-        })),
+    setAllOpsId: (opsIdList) =>
+        set({
+            allOpsId: opsIdList,
+            filteredOpsId: opsIdList,
+        }),
 
-    setVisibleCount: (count: number) => {
-        set({ visibleCount: count });
+    setRefs: (ops) => {
+        set({ ops });
     },
 
-    incrementVisibleCount: () =>
+    updateFilters: (
+        category: keyof OpsFilterType,
+        value: string | number | boolean | null
+    ) =>
         set((state) => {
-            const newCount = Math.min(
-                state.visibleCount + state.itemsPerPage,
-                state.filteredOperators.length
-            );
-
-            return {
-                visibleCount: newCount,
-                hasMore: newCount < state.filteredOperators.length,
-            };
-        }),
-
-    resetVisibleCount: () =>
-        set((state) => ({
-            visibleCount: initialState.visibleCount,
-            hasMore: state.filteredOperators.length > initialState.visibleCount,
-        })),
-
-    updateFilter: (category, value) =>
-        set((state) => {
-            if (category === "reset") {
-                return { filters: initialState.filters };
+            if (!value) {
+                return {
+                    filters: {
+                        ...state.filters,
+                        [category]: Array.isArray(
+                            state.filters[category] ? [] : false
+                        ),
+                    },
+                };
             }
-
-            const newFilters = { ...state.filters };
 
             switch (category) {
-                case "rarity":
-                    if (typeof value === "number") {
-                        const index = newFilters.rarity.indexOf(value);
+                case "isLimited":
+                case "isAlter":
+                    return {
+                        filters: {
+                            ...state.filters,
+                            [category]: !state.filters[category],
+                        },
+                    };
 
-                        if (index == -1) {
-                            newFilters.rarity = [...newFilters.rarity, value];
-                        } else {
-                            newFilters.rarity = newFilters.rarity.filter(
-                                (r) => r !== value
-                            );
-                        }
-                        break;
-                    }
-                case "class":
-                    if (typeof value === "string") {
-                        const index = newFilters.class.indexOf(value);
-
-                        if (index == -1) {
-                            newFilters.class = [...newFilters.class, value];
-                        } else {
-                            newFilters.class = newFilters.class.filter(
-                                (c) => c !== value
-                            );
-                            // Reset subProfessionId when class changes
-                            newFilters.branch = newFilters.branch.filter(
-                                (b) =>
-                                    !state.allOperators.some(
-                                        (op) =>
-                                            op.profession === value &&
-                                            op.subProfessionId === b
-                                    )
-                            );
-                        }
-                    }
-                    break;
-                case "branch":
-                    if (typeof value === "string") {
-                        const index = newFilters.branch.indexOf(value);
-
-                        if (index == -1) {
-                            newFilters.branch = [...newFilters.branch, value];
-                        } else {
-                            newFilters.branch = newFilters.branch.filter(
-                                (b) => b !== value
-                            );
-                        }
-                    }
-                    break;
-                case "nation":
-                    if (typeof value === "string") {
-                        const index = newFilters.nation.indexOf(value);
-
-                        if (index == -1) {
-                            newFilters.nation = [...newFilters.nation, value];
-                        } else {
-                            newFilters.nation = newFilters.nation.filter(
-                                (f) => f !== value
-                            );
-                        }
-                    }
-                    break;
                 default:
-                    throw new Error("Invalid filter category or value");
+                    const prvValues = state.filters[category] as (
+                        | string
+                        | number
+                    )[];
+                    let newValues: (string | number)[];
+
+                    if (
+                        typeof value === "string" ||
+                        typeof value === "number"
+                    ) {
+                        if (prvValues.includes(value)) {
+                            newValues = prvValues.filter((v) => v !== value);
+                        } else {
+                            newValues = [value];
+                        }
+
+                        return {
+                            filters: {
+                                ...state.filters,
+                                [category]: newValues,
+                            },
+                        };
+                    }
+                    return {};
             }
-            return { filters: newFilters };
         }),
 
-    resetFilters: () =>
+    applyFilters: () => {
+        const { allOpsId, ops, filters } = get();
+
+        const newFiltered = allOpsId.filter((id) => {
+            const op = ops[id];
+            const keys = Object.entries(filters)
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                .filter(([_, v]) => Array.isArray(v) && v.length)
+                .map(([k]) => k as keyof OpsFilterType);
+
+            for (const key of keys) {
+                const values = filters[key] as (string | number)[];
+                const opValue = op[key as keyof SimpleOpType];
+
+                if (values.length) {
+                    if (
+                        (typeof opValue === "string" ||
+                            typeof opValue === "number") &&
+                        !values.includes(opValue)
+                    ) {
+                        return false;
+                    }
+                }
+            }
+
+            // TODO: "recruitment"
+
+            // Boolean filters: if true, op value must be true
+            if (filters.isLimited && !op.isLimited) {
+                return false;
+            }
+            if (filters.isAlter && !op.baseOpId) {
+                return false;
+            }
+
+            return true;
+        });
+
+        set({ filteredOpsId: newFiltered });
+    },
+
+    resetFilters: () => {
+        const { allOpsId } = get();
+
         set({
             filters: initialState.filters,
-        }),
-
-    applyFilters: () =>
-        set((state) => {
-            const { filters, allOperators } = state;
-
-            const filtered = allOperators.filter((operator) => {
-                const rarityMatch =
-                    filters.rarity.length === 0 ||
-                    filters.rarity.includes(operator.rarity);
-                const classMatch =
-                    filters.class.length === 0 ||
-                    filters.class.includes(operator.profession);
-                const branchMatch =
-                    filters.branch.length === 0 ||
-                    filters.branch.includes(operator.subProfessionId);
-                const factionMatch =
-                    filters.nation.length === 0 ||
-                    filters.nation.includes(operator.nationId);
-
-                return rarityMatch && classMatch && branchMatch && factionMatch;
-            });
-
-            return {
-                filteredOperators: filtered,
-                visibleCount: initialState.visibleCount,
-                hasMore: filtered.length > initialState.visibleCount,
-            };
-        }),
+            filteredOpsId: allOpsId,
+        });
+    },
 }));
 
-export { useOperatorStore };
+export default useOperatorStore;
