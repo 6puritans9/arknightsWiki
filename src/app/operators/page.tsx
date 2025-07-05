@@ -1,48 +1,58 @@
-import { fetchAllOperators } from "@/lib/apiMongo";
-import { flex, grid } from "../../../styled-system/patterns";
-import ClientSideFilterWrapper from "../../components/Filter/ClientSideFilterWrapper";
-import OpsThumbnail from "@/components/OpsThumbnail";
-import ClientPage from "./clientPage";
+import { fetchAllOperators } from "@/api/apiMongo";
 import mapOpsTree from "@/utils/mapOpsTree";
+import ClientSideFilterWrapper from "@/components/filter/operators/ClientSideFilterWrapper";
+import { flex, grid } from "../../../styled-system/patterns";
+import OpCard from "@/components/operators/OpCard";
+import OpsClientPage from "./clientPage";
 
 //#region Styles
-const contentWrapper = flex({
+const pageWrapper = flex({
     flexDirection: "column",
     alignItems: "center",
     width: "100%",
-    maxWidth: "1200px",
-    margin: "0 auto",
+    margin: "0",
 });
 
-const gridContainer = grid({
+const cardsContainer = grid({
     gridTemplateColumns: {
-        base: "repeat(3, 1fr)",
-        md: "repeat(5, 1fr)",
+        base: "repeat(2, 1fr)",
+        md: "repeat(4, 1fr)",
+        xl: "repeat(5, 1fr)",
     },
-    gap: "1rem",
-    justifyItems: "center",
     width: "100%",
+    gap: "0.5rem",
+    justifyItems: "center",
 });
 //#endregion
 
 const OperatorsPage = async () => {
     const ops = await fetchAllOperators();
+    const opsArray = Object.entries(ops).sort(
+        (prv, nxt) => nxt[1].releaseOrder - prv[1].releaseOrder
+    );
+
     const { classTree, factionTree } = mapOpsTree(ops);
-    const initialVisibleOperators = Object.entries(ops).slice(0, 20);
+    const initialVisibleOps = opsArray.slice(0, 20);
 
     return (
-        <div className={contentWrapper}>
+        <div className={pageWrapper}>
             <ClientSideFilterWrapper
                 classTree={classTree}
                 factionTree={factionTree}
-                initialOps={ops}
+                ops={ops}
             />
 
-            <section className={gridContainer}>
-                {initialVisibleOperators.map(([id, op], index) => (
-                    <OpsThumbnail key={id} operator={op} priority={index < 5} />
+            <section className={cardsContainer}>
+                {initialVisibleOps.map(([id, op], index) => (
+                    <OpCard
+                        key={id}
+                        id={id}
+                        operator={op}
+                        priority={index < 10}
+                    />
                 ))}
-                <ClientPage initialCount={initialVisibleOperators.length} />
+
+                <OpsClientPage initialCount={initialVisibleOps.length} />
             </section>
         </div>
     );
