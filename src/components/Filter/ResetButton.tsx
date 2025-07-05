@@ -1,33 +1,35 @@
-import { flex } from "../../../styled-system/patterns";
+import { css } from "$/styled-system/css";
+import { flex } from "$/styled-system/patterns";
 
 type ResetButtonProps = {
     onClick: () => void;
 };
 
-const container = flex({
+const buttonStyle = flex({
     justifyContent: "center",
+    alignItems: "end",
     flexGrow: 1,
-});
-const buttonText = flex({
-    justifyContent: "center",
-    padding: "0 0.5rem",
-    color: "red.600",
     cursor: "pointer",
-    fontWeight: "semibold",
+});
+
+const textStyle = css({
+    _active: {
+        backgroundColor: "gray.300",
+    },
     fontSize: {
         base: "fBase",
         lg: "fSm",
         xl: "fMd",
     },
-    _active: {
-        backgroundColor: "gray.300",
-    },
+    padding: "0 0.5rem",
+    color: "red.600",
+    maxHeight: "100%",
 });
 
 const ResetButton = ({ onClick }: ResetButtonProps) => {
     return (
-        <button className={container} onClick={onClick}>
-            <span className={buttonText}>RESET</span>
+        <button className={buttonStyle} onClick={onClick}>
+            <span className={textStyle}>RESET</span>
         </button>
     );
 };
