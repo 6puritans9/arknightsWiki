@@ -22,9 +22,10 @@ const ClientSideFilterWrapper = ({
     useEffect(() => {
         setAllOpsId(opsIdList);
         setRefs(ops);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [ops]);
 
-    // return <OpsFilter classTree={classTree} factionTree={factionTree} />;
+    return <OpsFilter classTree={classTree} factionTree={factionTree} />;
 };
 
 export default ClientSideFilterWrapper;

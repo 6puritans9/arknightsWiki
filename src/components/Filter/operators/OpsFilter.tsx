@@ -1,123 +1,18 @@
 "use client";
-
-import Image from "next/image";
-import { useOperatorStore } from "@/stores/operatorStore";
-import { css } from "../../../../styled-system/css";
-import { flex, grid } from "../../../../styled-system/patterns";
-import { selected, nonSelected } from "@/app/styles/filterStyles";
+import { useState } from "react";
+import { Accordion } from "radix-ui";
 import {
-    getFactionImage,
-    getProfessionImage,
-    getsubProfessionIdImage,
-} from "@/api/apiAws";
-import {
-    HybridTooltip,
-    HybridTooltipContent,
-    HybridTooltipTrigger,
-} from "../../ui/HybirdTooltip";
-import BranchList from "./BranchList";
-import { FilterType } from "@/stores/operatorStore";
-import { professionMap } from "@/lib/constants/NameMap";
-
-//#region Styles
-const filterSection = flex({
-    gap: "1.5",
-});
-
-const filterContainer = grid({
-    gridTemplateColumns: "1fr 9fr",
-    gridTemplateAreas: `
-    "rarity-label rarity-content"
-    "class-label class-content"
-    "faction-label faction-content"
-  `,
-    gap: "1rem",
-    justifyItems: "flex-start",
-    marginBottom: "1rem",
-    width: "100%",
-});
-
-const filterTitle = css({
-    fontSize: {
-        base: "sm",
-        md: "lg",
-    },
-});
-
-const rarityWrapper = flex({
-    justify: "spaceBetween",
-    align: "center",
-    cursor: "pointer",
-    gap: "0.2rem",
-});
-
-const classWrapper = flex({
-    cursor: "pointer",
-});
-
-const classImage = css({
-    height: "30px",
-    width: "auto",
-    backgroundColor: "black",
-});
-
-const factionWrapper = grid({
-    gridTemplateColumns: "repeat(10, 1fr)",
-    gridTemplateRows: "auto",
-    gap: "0",
-    justifyItems: "center",
-    alignItems: "center",
-    cursor: "pointer",
-});
-
-const factionImage = css({
-    height: "30px",
-    width: "auto",
-    backgroundColor: "black",
-});
-
-const popUpWrapper = css({
-    backgroundColor: "rgba(0,0,0,0.7)",
-    opacity: "0.9",
-    padding: "0.1rem 0.2rem 0.1rem 0.1rem",
-});
-
-const popUpText = css({
-    color: "white",
-});
-
-const resetButton = flex({
-    justify: "center",
-    color: "red.500",
-    textAlign: "center",
-    cursor: "pointer",
-    fontWeight: "bold",
-    padding: "0.5rem",
-    borderRadius: "md",
-    transition: "0.2s ease-in-out",
-    _hover: {
-        backgroundColor: "red.50",
-        opacity: "0.5",
-    },
-    _active: {
-        backgroundColor: "red.50",
-        opacity: "0.7",
-        transition: "background-color 0.1s ease-in-out",
-    },
-});
-//#endregion
-
-// Custom order for profession sorting
-const customOrder: { [key: string]: number } = {
-    Vanguard: 0,
-    Guard: 1,
-    Defender: 2,
-    Sniper: 3,
-    Caster: 4,
-    Medic: 5,
-    Supporter: 6,
-    Specialist: 7,
-};
+    AccordionTrigger,
+    AccordionContent,
+    accordionRootStyle,
+    accordionItemStyle,
+    accordionContentStyle,
+} from "@/components/ui/Accordion";
+import useOperatorStore from "@/stores/operatorStore";
+import { OpsFilterType } from "@/stores/operatorStore";
+import { flex } from "$/styled-system/patterns";
+import FilterButton from "../operators/FilterButton";
+import ResetButton from "../ResetButton";
 
 //#region Types
 type OpsFilterProps = {
@@ -125,154 +20,227 @@ type OpsFilterProps = {
     factionTree: { [key: string]: string[] };
 };
 
+type TabKey =
+    | "rarity"
+    | "isLimited"
+    | "isAlter"
+    | "profession"
+    | "subProfessionId"
+    | "nationId"
+    | "groupId"
+    | "teamId";
+
 export type FilterCondition = {
-    category: keyof FilterType | "reset";
+    category: keyof OpsFilterType | "reset";
     value: number | string | null;
 };
 //#endregion
 
+const customOrder: { [key: string]: number } = {
+    PIONEER: 0,
+    WARRIOR: 1,
+    TANK: 2,
+    SNIPER: 3,
+    CASTER: 4,
+    MEDIC: 5,
+    SUPPORT: 6,
+    SPECIAL: 7,
+};
+
+//#region Styles
+const keyWrapper = flex({
+    gap: "1rem",
+    margin: "1rem 0",
+    fontWeight: "bold",
+    flexWrap: "wrap",
+});
+
+const valueWrapper = flex({
+    gap: "1rem",
+    flexWrap: "wrap",
+});
+
+// const selected = css({
+//     fontStyle: "italic",
+// });
+//#endregion
+
+const initialTabs = {
+    rarity: null,
+    isLimited: false,
+    isAlter: false,
+    profession: null,
+    subProfessionId: null,
+    nationId: null,
+    groupId: null,
+    teamId: null,
+};
+
 const OpsFilter = ({ classTree, factionTree }: OpsFilterProps) => {
+    const [tabs, setTabs] = useState<{
+        rarity: number | null;
+        isLimited: boolean;
+        isAlter: boolean;
+        profession: string | null;
+        subProfessionId: string | null;
+        nationId: string | null;
+        groupId: string | null;
+        teamId: string | null;
+    }>(initialTabs);
+    const [openItems, setOpenItems] = useState<string[]>([]);
+    const { updateFilters, applyFilters, resetFilters } = useOperatorStore();
+
     const rarities = Array.from({ length: 6 }, (_, i) => 6 - i);
 
-    const filters: FilterType = useOperatorStore((state) => state.filters);
-    const updateFilter = useOperatorStore((state) => state.updateFilter);
-    const applyFilters = useOperatorStore((state) => state.applyFilters);
-    const resetFilters = useOperatorStore((state) => state.resetFilters);
-
-    // Helper functions
-    const handleFilterChange = (condition: FilterCondition) => {
-        if (condition.category === "reset") {
-            resetFilters();
-        } else {
-            updateFilter(condition.category, condition.value);
-        }
+    //#region helper functions
+    const handleFilter = (
+        category: keyof OpsFilterType,
+        value: string | number | boolean
+    ) => {
+        updateFilters(category, value);
         applyFilters();
     };
 
-    const handleClassClick = (value: string) => {
-        handleFilterChange({ category: "class", value: value });
+    const handleTabs = (tab: TabKey, value: string | number | boolean) => {
+        setTabs((prv) => ({
+            ...prv,
+            [tab]: prv[tab] === value ? null : value,
+        }));
     };
 
-    // Style Helper
-    const isSelected = (
-        category: keyof typeof filters,
-        value: string | number
-    ): boolean => {
-        return (filters[category] as (string | number)[]).includes(value);
+    const handleClick = (
+        category: keyof OpsFilterType,
+        value: string | number | boolean
+    ) => {
+        handleTabs(category as TabKey, value);
+        handleFilter(category, value);
     };
+
+    const handleReset = () => {
+        setTabs(initialTabs);
+        resetFilters();
+    };
+    //#endregion
 
     return (
-        <>
-            <div className={filterSection}>
-                <h3 className={filterTitle}>Rarity</h3>
-            </div>
-            <div>
-                <ul className={rarityWrapper}>
-                    {rarities.map((rarity) => (
-                        <li
-                            key={rarity}
-                            className={
-                                isSelected("rarity", rarity)
-                                    ? selected
-                                    : nonSelected
-                            }
-                            onClick={() =>
-                                handleFilterChange({
-                                    category: "rarity",
-                                    value: rarity,
-                                })
-                            }
-                        >
-                            ★{rarity}
-                        </li>
-                    ))}
-                </ul>
-            </div>
-            <div className={filterSection}>
-                <h3 className={filterTitle}>Class</h3>
-            </div>
-            <div>
-                <ul className={classWrapper}>
-                    {classes
-                        .sort((a, b) => customOrder[a] - customOrder[b])
-                        .map((classItem) => (
-                            <li key={classItem}>
-                                <HybridTooltip delayDuration={100}>
-                                    <HybridTooltipTrigger asChild>
-                                        <Image
-                                            src={getProfessionImage(classItem)}
-                                            className={
-                                                isSelected("class", classItem)
-                                                    ? `${selected} ${classImage}`
-                                                    : `${nonSelected} ${classImage}`
-                                            }
-                                            height={30}
-                                            width={30}
-                                            alt={professionMap[classItem]}
-                                            onClick={() =>
-                                                handleClassClick(classItem)
-                                            }
-                                        />
-                                    </HybridTooltipTrigger>
-                                    <HybridTooltipContent>
-                                        <BranchList
-                                            branches={classTree[classItem]}
-                                            onClick={handleFilterChange}
-                                            activeBranches={filters.branch}
-                                        />
-                                    </HybridTooltipContent>
-                                </HybridTooltip>
-                            </li>
+        <Accordion.Root
+            className={accordionRootStyle}
+            type="multiple"
+            value={openItems}
+            onValueChange={setOpenItems}
+        >
+            <Accordion.Item className={accordionItemStyle} value="desc">
+                <AccordionTrigger>About this page</AccordionTrigger>
+                <AccordionContent>
+                    <p className={accordionContentStyle}>
+                        You can click filter or you can click highlited related
+                        attributes in the card
+                    </p>
+                </AccordionContent>
+            </Accordion.Item>
+            <Accordion.Item className={accordionItemStyle} value="filter">
+                <AccordionTrigger>
+                    {openItems.includes("filter")
+                        ? "Close Filter"
+                        : "Open Filter"}
+                </AccordionTrigger>
+                <AccordionContent>
+                    <div className={keyWrapper}>
+                        {rarities.map((r) => (
+                            <FilterButton
+                                key={r}
+                                value={r}
+                                selectedTab={tabs.rarity}
+                                onClick={() => handleClick("rarity", r)}
+                            />
                         ))}
-                </ul>
-            </div>{" "}
-            *
-            <div className={filterSection}>
-                <h3 className={filterTitle}>Faction</h3>
-            </div>
-            <div>
-                <ul className={factionWrapper}>
-                    {nations.map((nationId) => (
-                        <li key={nationId}>
-                            <HybridTooltip delayDuration={100}>
-                                <HybridTooltipTrigger asChild>
-                                    <Image
-                                        src={getFactionImage(nationId)}
-                                        className={
-                                            isSelected("nation", nationId)
-                                                ? `${selected} ${factionImage}`
-                                                : `${nonSelected} ${factionImage}`
-                                        }
-                                        height={30}
-                                        width={30}
-                                        alt={nationId}
+                    </div>
+                    <div className={keyWrapper}>
+                        <FilterButton
+                            value={"Limited"}
+                            selectedTab={tabs.isLimited}
+                            onClick={() =>
+                                handleClick("isLimited", !tabs.isLimited)
+                            }
+                        />
+                        <FilterButton
+                            value={"Alter"}
+                            selectedTab={tabs.isAlter}
+                            onClick={() =>
+                                handleClick("isAlter", !tabs.isAlter)
+                            }
+                        />
+                    </div>
+                    <div className={keyWrapper}>
+                        {Object.keys(classTree)
+                            .sort((a, b) => customOrder[a] - customOrder[b])
+                            .map((_class) => (
+                                <FilterButton
+                                    key={_class}
+                                    value={_class}
+                                    selectedTab={tabs.profession}
+                                    onClick={() =>
+                                        handleClick("profession", _class)
+                                    }
+                                />
+                            ))}
+                        <ResetButton onClick={() => handleReset()} />
+                    </div>
+                    {tabs.profession && (
+                        <div className={valueWrapper}>
+                            {Object.values(classTree[tabs.profession])
+                                .sort()
+                                .map((branch) => (
+                                    <FilterButton
+                                        key={branch}
+                                        value={branch}
+                                        selectedTab={tabs.subProfessionId}
                                         onClick={() =>
-                                            handleFilterChange({
-                                                category: "nation",
-                                                value: nationId,
-                                            })
+                                            handleClick(
+                                                "subProfessionId",
+                                                branch
+                                            )
                                         }
                                     />
-                                </HybridTooltipTrigger>
-                                <HybridTooltipContent>
-                                    <div className={popUpWrapper}>
-                                        <p className={popUpText}>{nationId}</p>
-                                    </div>
-                                </HybridTooltipContent>
-                            </HybridTooltip>
-                        </li>
-                    ))}
-                </ul>
-                <div
-                    className={resetButton}
-                    onClick={() =>
-                        handleFilterChange({ category: "reset", value: null })
-                    }
-                >
-                    <span>RESET</span>
-                </div>
-            </div>
-        </>
+                                ))}
+                        </div>
+                    )}
+                    <div className={keyWrapper}>
+                        {Object.keys(factionTree)
+                            .sort()
+                            .map((nation) => (
+                                <FilterButton
+                                    key={nation}
+                                    value={nation}
+                                    selectedTab={tabs.nationId}
+                                    onClick={() =>
+                                        handleClick("nationId", nation)
+                                    }
+                                />
+                            ))}
+                    </div>
+                    {tabs.nationId &&
+                        factionTree[tabs.nationId] &&
+                        factionTree[tabs.nationId].length > 0 && (
+                            <div className={valueWrapper}>
+                                {Object.values(factionTree[tabs.nationId])
+                                    .sort()
+                                    .map((v) => (
+                                        <FilterButton
+                                            key={v}
+                                            selectedTab={tabs.groupId}
+                                            value={v}
+                                            onClick={() => {
+                                                handleClick("groupId", v);
+                                                // handleClick("teamId", v);
+                                            }}
+                                        />
+                                    ))}
+                            </div>
+                        )}
+                </AccordionContent>
+            </Accordion.Item>
+        </Accordion.Root>
     );
 };
 
