@@ -1,6 +1,6 @@
 "use client";
 
-import { BuffsObjectType, CharsObjectType } from "@/lib/apiMongo";
+import { BuffsObjectType, CharsObjectType } from "@/api/apiMongo";
 import { css } from "../../../styled-system/css";
 import usePagination from "@/hooks/usePagination";
 import useInfraStore from "@/stores/infraStore";

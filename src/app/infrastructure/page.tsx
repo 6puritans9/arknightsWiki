@@ -3,9 +3,9 @@ import {
     RoomType,
     BuffsObjectType,
     fetchAllBuildingData,
-} from "@/lib/apiMongo";
+} from "@/api/apiMongo";
 import { flex } from "../../../styled-system/patterns";
-import ClientSideFilterWrapper from "@/components/Filter/infra/ClientSideFilterWrapper";
+import ClientSideFilterWrapper from "@/components/filter/infra/ClientSideFilterWrapper";
 
 //#region Styles
 const pageWrapper = flex({

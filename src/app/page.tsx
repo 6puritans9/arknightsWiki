@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { getHomeBanners } from "@/lib/apiAws";
+import { getHomeBanners } from "@/api/apiAws";
 import { css } from "../../styled-system/css";
 import { grid } from "../../styled-system/patterns";
 import { appPageText } from "@/lib/dictionary";

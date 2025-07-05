@@ -2,8 +2,8 @@ import "./globals.css";
 import Paperlogy from "./styles/fonts";
 import type { Metadata } from "next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { TouchProvider } from "@/components/TouchProvider";
-import StoreInitializer from "@/components/StoreInitializer";
+import { TouchProvider } from "@/components/utils/TouchProvider";
+import StoreInitializer from "@/components/utils/StoreInitializer";
 import Header from "../components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { flex } from "../../styled-system/patterns";
@@ -36,6 +36,7 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
+        //TODO: change lang dynamically after i18n
         <html lang="en" className={`${Paperlogy.className}`}>
             <body className={wrapper}>
                 <SpeedInsights />
