@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { flex } from "../../../styled-system/patterns";
 import { css } from "../../../styled-system/css";
-import AuthButton from "../ui/auth/AuthButton";
+import AuthButton from "../auth/AuthButton";
 
 //#region Elements
 const hamburgerBtn = (
@@ -293,7 +293,7 @@ const Header = () => {
                 </ul>
 
                 <div className={copyrightWrapper}>
-                    <a
+                    <Link
                         className={textWithIcon}
                         target="_blank"
                         href="https://github.com/6puritans9/arknightsWiki"
@@ -301,18 +301,19 @@ const Header = () => {
                         Github
                         <Image
                             className={githubIcon}
+                            style={{ filter: "invert(1)" }}
                             src={"/docs/github.svg"}
                             alt="github"
                             height={20}
                             width={20}
                         ></Image>
-                    </a>
-                    <a
+                    </Link>
+                    <Link
                         target="_blank"
                         href=" https://freesentation.blog/paperlogyfont#feature"
                     >
                         Font by PAPERLOGY ©2024 by LEE JUIM
-                    </a>
+                    </Link>
                 </div>
             </div>
         </header>

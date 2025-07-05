@@ -1,8 +1,8 @@
 "use client";
 
-import { useTouch } from "./TouchProvider";
-import { Tooltip, TooltipTrigger, TooltipContent } from "./ui/Tooltip";
-import { Popover, PopoverTrigger, PopoverContent } from "./ui/Popover";
+import { useTouch } from "../utils/TouchProvider";
+import { Tooltip, TooltipTrigger, TooltipContent } from "./Tooltip";
+import { Popover, PopoverTrigger, PopoverContent } from "./Popover";
 import {
     TooltipContentProps,
     TooltipProps,

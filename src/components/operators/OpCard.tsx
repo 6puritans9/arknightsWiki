@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { SimpleOpType } from "@/api/apiMongo";
 import getS3Url from "@/api/apiAws";
-import { css } from "../../../styled-system/css";
+import { css } from "$/styled-system/css";
 
 type OpCardProps = {
     id: string;

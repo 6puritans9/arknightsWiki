@@ -7,25 +7,25 @@ import {
     accordionItemStyle,
     accordionContentStyle,
 } from "@/components/ui/Accordion";
-import { RoomType } from "@/lib/apiMongo";
+import { RoomType } from "@/api/apiMongo";
 // import parseDynamicKeywords from "@/utils/keywordParser";
 import FilterButton from "./FilterButton";
 import { useState } from "react";
-import { flex } from "../../../../styled-system/patterns";
-import { css } from "../../../../styled-system/css";
+import { flex } from "$/styled-system/patterns";
+import { css } from "$/styled-system/css";
 import ResetButton from "../ResetButton";
 
 type FilterProps = {
     roomEffectTree: { [key: string]: string[] };
 };
 
-const roomWrapper = flex({
+const keyWrapper = flex({
     gap: "1rem",
     margin: "1rem 0",
     fontWeight: "bold",
 });
 
-const effectWrapper = flex({
+const valueWrapper = flex({
     gap: "1rem",
     flexWrap: "wrap",
 });
@@ -43,7 +43,7 @@ const buttonStyle = css({
 // const keywordData = parseDynamicKeywords();
 
 const InfraFilter = ({ roomEffectTree }: FilterProps) => {
-    const [roomTab, setRoomTab] = useState<RoomType>("CONTROL");
+    const [roomTab, setRoomTab] = useState<RoomType | null>(null);
     const [effectTab, setEffectTab] = useState<string | null>(null);
     const [openItems, setOpenItems] = useState<string[]>([]);
     const { updateFilters, applyFilters, resetFilters } = useInfraStore();
@@ -76,7 +76,7 @@ const InfraFilter = ({ roomEffectTree }: FilterProps) => {
                         : "Open Filter"}
                 </AccordionTrigger>
                 <AccordionContent>
-                    <div className={roomWrapper}>
+                    <div className={keyWrapper}>
                         {Object.keys(roomEffectTree)
                             .sort()
                             .map((room) => (
@@ -95,7 +95,7 @@ const InfraFilter = ({ roomEffectTree }: FilterProps) => {
                             ))}
                     </div>
                     {roomTab && (
-                        <div className={effectWrapper}>
+                        <div className={valueWrapper}>
                             {Object.values(roomEffectTree[roomTab])
                                 .sort()
                                 .map((effect) => (

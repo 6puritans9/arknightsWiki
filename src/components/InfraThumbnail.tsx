@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { css } from "../../styled-system/css";
 import { QueryOperator, QueryBaseSkills } from "@/lib/types";
-import getS3Url from "@/lib/apiAws";
+import getS3Url from "@/api/apiAws";
 
 type ThumbnailProps = {
     operator: QueryOperator | QueryBaseSkills[0];

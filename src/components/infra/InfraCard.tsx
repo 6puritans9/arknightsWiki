@@ -1,6 +1,6 @@
 import Link from "next/link";
-import getS3Url from "@/lib/apiAws";
-import { BuffsObjectType, BuildingCharType } from "@/lib/apiMongo";
+import getS3Url from "@/api/apiAws";
+import { BuffsObjectType, BuildingCharType } from "@/api/apiMongo";
 import { nationIdMap, groupIdMap, teamIdMap } from "@/lib/constants/NameMap";
 import { css } from "../../../styled-system/css";
 import { flex } from "../../../styled-system/patterns";

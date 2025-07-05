@@ -1,8 +1,8 @@
 import Image from "next/image";
 import { Fragment } from "react";
-import { getEliteImage } from "@/lib/apiAws";
+import { getEliteImage } from "@/api/apiAws";
 import { css, cva } from "../../../styled-system/css";
-import { BuffsObjectType } from "@/lib/apiMongo";
+import { BuffsObjectType } from "@/api/apiMongo";
 import { flex } from "../../../styled-system/patterns";
 
 type BuffCardProps = {

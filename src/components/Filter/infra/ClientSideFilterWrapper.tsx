@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { BuffsObjectType, CharsObjectType } from "@/lib/apiMongo";
+import { BuffsObjectType, CharsObjectType } from "@/api/apiMongo";
 import useInfraStore from "@/stores/infraStore";
 import InfraFilter from "./InfraFilter";
 

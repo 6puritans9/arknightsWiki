@@ -1,5 +1,6 @@
 import { User } from "@supabase/supabase-js";
-import { flex } from "../../../../styled-system/patterns";
+import { flex } from "$/styled-system/patterns";
+import { greetMsg } from "@/lib/dictionary";
 
 const boxStyle = flex({
     alignItems: "center",
@@ -9,12 +10,11 @@ const boxStyle = flex({
 
 const UserAccount = ({ user }: { user: User }) => {
     const name = user.user_metadata.name || user.user_metadata.full_name;
-    const picture = user.user_metadata.avatar_url;
+    // const picture = user.user_metadata.avatar_url;
 
     return (
         <div className={boxStyle}>
-            {picture && <img src={picture} alt="Profile" width="50" />}
-            <span>Hello, doctor {name}</span>
+            <span>{greetMsg.ko.replace("${name}", name)}</span>
         </div>
     );
 };

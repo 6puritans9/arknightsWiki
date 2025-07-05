@@ -1,6 +1,6 @@
 "use client";
 
-import { css } from "../../../../styled-system/css";
+import { css } from "$/styled-system/css";
 
 // Style for the icon wrapper div
 const gsiIconStyles = css({
