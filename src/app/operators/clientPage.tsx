@@ -11,7 +11,9 @@ type ClientPaginationProps = {
 };
 
 const OpsClientPage = ({ initialCount }: ClientPaginationProps) => {
-    const { filteredOpsId, ops, filters } = useOperatorStore();
+    const { filteredOpsId, ops } = useOperatorStore();
+    // const filteredOps = filteredOpsId.map(id => ops[id]);
+
     const { itemsToShow, hasMore, loaderRef } = usePagination(
         filteredOpsId.sort(
             (prv, nxt) => ops[nxt].releaseOrder - ops[prv].releaseOrder
