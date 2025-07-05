@@ -1,6 +1,6 @@
-import { OperatorType } from "@/lib/apiMongo";
-import { css, cx } from "../../../styled-system/css";
-import { flex } from "../../../styled-system/patterns";
+import { OperatorType } from "@/api/apiMongo";
+import { css, cx } from "$/styled-system/css";
+import { flex } from "$/styled-system/patterns";
 
 const tabElement = flex({
     cursor: "pointer",

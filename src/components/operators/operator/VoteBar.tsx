@@ -1,5 +1,5 @@
-import { css } from "../../../styled-system/css";
-import { VoteData } from "@/lib/apiVote";
+import { css } from "$/styled-system/css";
+import { VoteData } from "@/api/apiVote";
 
 type VoteBarProps = {
     votes: VoteData;

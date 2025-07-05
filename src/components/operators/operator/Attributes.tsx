@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { css } from "../../../styled-system/css";
-import { TabProps } from "./OperatorTabs";
 import Image from "next/image";
-import { flex } from "../../../styled-system/patterns";
-import { convertAttrText } from "@/utils/TextConverter";
+import { flex } from "$/styled-system/patterns";
+import {
+    parseRichText,
+    NewlineRichText,
+} from "@/components/text/TextConverter";
+import { TabProps } from "./OperatorTabs";
 
 const phaseWrapper = flex({
     gap: "0.5rem",
@@ -43,9 +45,13 @@ const Attributes = ({ operator }: TabProps) => {
     const PHASE_IMG_SRC =
         "https://arknights-wiki-assets.s3.ap-northeast-2.amazonaws.com/dynamicassets/arts/elite_hub";
 
+    const parsed = parseRichText(operator.description);
+    const desc = NewlineRichText(parsed);
+
     return (
         <>
-            <p>Description: {convertAttrText(operator.description)}</p>
+            {/* <p>parsed: {parsed}</p> */}
+            <p>{desc}</p>
             <p>{`Position: ${operator.position}`}</p>
             <div className={phaseWrapper}>
                 <Image
