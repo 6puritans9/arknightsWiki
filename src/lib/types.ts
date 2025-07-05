@@ -1,7 +1,7 @@
 import { Database } from "./supabase";
 import { QueryData } from "@supabase/supabase-js";
-import { operatorsQuery } from "./apiSupabase";
-import { baseQuery } from "./apiBase";
+import { operatorsQuery } from "../api/apiSupabase";
+import { baseQuery } from "../api/apiBase";
 
 // Query Types
 type Operator = Database["public"]["Tables"]["operators"]["Row"];

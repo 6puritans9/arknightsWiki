@@ -1,4 +1,4 @@
-import { RoomType } from "./apiMongo";
+import { RoomType } from "../api/apiMongo";
 
 type Locales = "en" | "ko" | "ja" | "cn" | "tw";
 

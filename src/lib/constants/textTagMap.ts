@@ -5,6 +5,7 @@ const termDescriptionDict: {
         description: string;
     };
 } = {
+    //#region Status Effect
     "ba.sluggish": {
         termId: "ba.sluggish",
         termName: "Slow",
@@ -269,6 +270,8 @@ const termDescriptionDict: {
         description:
             "Amplifies all Physical damage taken by the corresponding amount (only the strongest effect of this type applies)",
     },
+    //#endregion
+    //#region Teams and Buffs
     "cc.bd_A_1": {
         termId: "cc.bd_A_1",
         termName: "Psychokinesis",
@@ -503,6 +506,8 @@ const termDescriptionDict: {
         description:
             "Includes the following Operators:\nAngelina, Lappland, Provence, Vermeil, Broca, Shamare, Suzuran, Chiave, Aosta, Penance, Lunacub, Vigil, Aroma, Vulpisfoglia, Figurino, Lappland the Decadenza",
     },
+    //#endregion
+    //#region ...Rest
     "cc.c.abyssal2_1": {
         termId: "cc.c.abyssal2_1",
         termName: "Special Bonus",
@@ -662,6 +667,7 @@ const termDescriptionDict: {
         description:
             "Special Precious Metal orders offered by Pepe that have a fixed acquisition time and earnings, and require 0 Pure Gold to trade",
     },
+    //#endregion
 };
 
 export default termDescriptionDict;
