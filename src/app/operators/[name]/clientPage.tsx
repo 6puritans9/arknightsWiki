@@ -4,27 +4,27 @@ import { useState } from "react";
 import getS3Url, {
     getProfessionImage,
     getsubProfessionIdImage,
-} from "@/lib/apiAws";
+} from "@/api/apiAws";
 import Image from "next/image";
-import { css } from "../../../../styled-system/css";
-import { flex, grid } from "../../../../styled-system/patterns";
+import { css } from "$/styled-system/css";
+import { flex, grid } from "$/styled-system/patterns";
 import { cardBackground } from "@/app/styles/shared/cardBackground";
-import OperatorTabs from "@/components/operator/OperatorTabs";
-import Attributes from "@/components/operator/Attributes";
-import Skills from "@/components/operator/Skills";
-import Review from "@/components/operator/Review";
-import Synergy from "@/components/operator/Synergy";
-import Lore from "@/components/operator/Lore";
-import VoteBar from "@/components/operator/VoteBar";
-import Button from "@/components/Button";
+import OperatorTabs from "@/components/operators/operator/OperatorTabs";
+import Attributes from "@/components/operators/operator/Attributes";
+import Skills from "@/components/operators/operator/Skills";
+import Review from "@/components/operators/operator/Review";
+import Synergy from "@/components/operators/operator/Synergy";
+import Lore from "@/components/operators/operator/Lore";
+import VoteBar from "@/components/operators/operator/VoteBar";
+import Button from "@/components/ui/Button";
 import useVote from "@/hooks/useVote";
 import Notification from "@/components/ui/Notification";
 import { nationIdMap } from "@/lib/constants/NameMap";
-import { WithId } from "mongodb";
-import { OperatorType } from "@/lib/apiMongo";
+import { SingleOpType } from "@/api/apiMongo";
+import Link from "next/link";
 
 type OperatorDetailClientProps = {
-    initialData: WithId<OperatorType>;
+    initialData: SingleOpType;
 };
 
 //#region Styles
@@ -142,25 +142,27 @@ const imageElement = css({
     maxWidth: "100%",
     width: "auto",
     objectFit: "cover",
-    transformOrigin: "center",
+    // transformOrigin: "center",
     transition:
         "object-fit 0.35s linear, transform 0.4s cubic-bezier(0.4,0,0.2,1), z-index 0s",
 
     _hover: {
-        position: "absolute",
-        objectFit: "contain",
-        zIndex: 15,
+        transform: "scale(1.2)",
+        cursor: "pointer",
+        // zIndex: 15,
+        // position: "absolute",
+        // objectFit: "contain",
     },
 
-    "&.square:hover": {
-        transform: "scale(1.2) translateY(5%)",
-    },
-    "&.tall:hover": {
-        transform: "scale(1.05)",
-    },
-    "&.wide:hover": {
-        transform: "scale(1.1)",
-    },
+    // "&.square:hover": {
+    //     transform: "scale(1.2) translateY(5%)",
+    // },
+    // "&.tall:hover": {
+    //     transform: "scale(1.05)",
+    // },
+    // "&.wide:hover": {
+    //     transform: "scale(1.1)",
+    // },
 });
 
 const feedbackContainer = flex({
@@ -189,16 +191,16 @@ const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
     //#region State management
     const [tab, setTab] = useState<number>(0);
     const [showNotification, setShowNotification] = useState<boolean>(false);
-    const [aspect, setAspect] = useState<"square" | "tall" | "wide">("tall");
+    // const [aspect, setAspect] = useState<"square" | "tall" | "wide">("tall");
     const [selectedSkin, setSelectedSkin] = useState<1 | 2>(1);
     const { votes, handleVote } = useVote({
-        operatorId: initialData._id,
+        operatorId: initialData.id,
         onUnAuthVote: () => setShowNotification(true),
     });
     //#endregion State management
 
     const operator = initialData;
-    const operatorPath = `${operator._id}`;
+    const operatorPath = `${operator.id}`;
     const getImageSource = (skinType: 1 | 2) => {
         const baseImagePath = getS3Url(
             `operators/${operatorPath}/${operatorPath}`
@@ -217,13 +219,13 @@ const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
     const faction = nationIdMap[initialData.nationId as string];
     const factionImage = getS3Url(faction);
 
-    const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
-        const img = e.currentTarget as HTMLImageElement;
-        const ratio = img.naturalWidth / img.naturalHeight;
-        if (ratio > 1.2) setAspect("wide");
-        else if (ratio < 0.8) setAspect("tall");
-        else setAspect("square");
-    };
+    // const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    //     const img = e.currentTarget as HTMLImageElement;
+    //     const ratio = img.naturalWidth / img.naturalHeight;
+    //     if (ratio > 1.2) setAspect("wide");
+    //     else if (ratio < 0.8) setAspect("tall");
+    //     else setAspect("square");
+    // };
 
     return (
         <>
@@ -296,17 +298,22 @@ const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
                                 2
                             </button>
                         </div>
-                        <div className={imageWrapper}>
+                        <Link
+                            className={imageWrapper}
+                            href={getImageSource(selectedSkin)}
+                            target="_blank"
+                        >
                             <Image
                                 src={getImageSource(selectedSkin)}
                                 alt={operator.name}
-                                className={`${imageElement} ${aspect}`}
-                                width={100}
-                                height={100}
-                                unoptimized={true}
-                                onLoad={handleImageLoad}
+                                className={imageElement}
+                                quality={90}
+                                width={300}
+                                height={300}
+                                loading="eager"
+                                decoding="async"
                             />
-                        </div>
+                        </Link>
                     </div>
 
                     <section className={tabsContainer}>

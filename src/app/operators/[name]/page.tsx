@@ -1,5 +1,5 @@
 import OperatorDetailClient from "./clientPage";
-import { fetchOperatorWithSkills } from "@/lib/apiMongo";
+import { fetchSingleOperator } from "@/api/apiMongo";
 
 type OperatorDetailProps = {
     params: Promise<{
@@ -9,7 +9,7 @@ type OperatorDetailProps = {
 
 const OperatorDetail = async ({ params }: OperatorDetailProps) => {
     const { name } = await params;
-    const data = await fetchOperatorWithSkills(name, "character_table", "en");
+    const data = await fetchSingleOperator(name, "character_table", "en");
 
     if (!data) {
         return <div>Operator not found</div>;
