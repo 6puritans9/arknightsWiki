@@ -1,4 +1,4 @@
-import { OperatorType } from "@/api/apiMongo";
+import { SingleOpType } from "@/api/apiMongo";
 import { css, cx } from "$/styled-system/css";
 import { flex } from "$/styled-system/patterns";
 
@@ -24,7 +24,7 @@ type TabsProps = {
 };
 
 export type TabProps = {
-    operator: OperatorType;
+    operator: SingleOpType;
 };
 
 const OperatorTabs = ({ onClick, activeTab }: TabsProps) => {
