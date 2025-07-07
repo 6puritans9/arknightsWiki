@@ -76,13 +76,8 @@ const imageStyles = css({
 });
 //#endregion
 
-const banners = [
-    "banners/EN_Come_Catastrophes_or_Wakes_of_Vultures_Rerun_banner.webp",
-    "banners/CN_Delicious_on_Terra_banner.webp",
-];
-
 export default function App() {
-    const { ongoing, upcoming } = getHomeBanners(banners);
+    const { ongoingUrl, upcomingUrl } = getHomeBanners();
 
     return (
         <>
@@ -98,7 +93,7 @@ export default function App() {
                 <div className={imageWrapper}>
                     <Image
                         className={imageStyles}
-                        src={`${ongoing}`}
+                        src={`${ongoingUrl}`}
                         alt="Ongoing Events"
                         fill={true}
                         unoptimized
@@ -116,7 +111,7 @@ export default function App() {
                 <div className={imageWrapper}>
                     <Image
                         className={imageStyles}
-                        src={`${upcoming}`}
+                        src={`${upcomingUrl}`}
                         alt="Upcoming Events"
                         fill={true}
                         unoptimized
@@ -134,7 +129,7 @@ export default function App() {
                 <div className={imageWrapper}>
                     <Image
                         className={imageStyles}
-                        src={`${upcoming}`}
+                        src={`${upcomingUrl}`}
                         alt="Upcoming Events"
                         fill={true}
                         unoptimized
@@ -152,7 +147,7 @@ export default function App() {
                 <div className={imageWrapper}>
                     <Image
                         className={imageStyles}
-                        src={`${upcoming}`}
+                        src={`${upcomingUrl}`}
                         alt="Upcoming Events"
                         fill={true}
                         unoptimized
@@ -170,7 +165,7 @@ export default function App() {
                 <div className={imageWrapper}>
                     <Image
                         className={imageStyles}
-                        src={`${upcoming}`}
+                        src={`${upcomingUrl}`}
                         alt="Upcoming Events"
                         fill={true}
                         unoptimized
@@ -188,7 +183,7 @@ export default function App() {
                 <div className={imageWrapper}>
                     <Image
                         className={imageStyles}
-                        src={`${upcoming}`}
+                        src={`${upcomingUrl}`}
                         alt="Upcoming Events"
                         fill={true}
                         unoptimized
