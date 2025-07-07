@@ -1,15 +1,17 @@
-import Image from "next/image";
-import { flex } from "../../../styled-system/patterns";
-import { css } from "../../../styled-system/css";
+import { flex } from "$/styled-system/patterns";
 import { footerLogoText } from "@/lib/dictionary";
 
 const container = flex({
+    // marginTop: {
+    //     base: "1.5rem",
+    //     lg: "3rem",
+    // },
     flexDirection: "column",
     alignItems: "flex-end",
     position: "relative",
     overflow: "hidden",
     width: "100%",
-    minHeight: "unset",
+    // border: "2px solid red",
 });
 
 const FooterLogo = flex({
@@ -21,24 +23,21 @@ const FooterLogo = flex({
         xl: "8rem",
         "2xl": "9rem",
     },
+    justifyContent: "center",
+    alignItems: "flex-end",
     fontWeight: "bold",
     letterSpacing: "wide",
     width: "100%",
-    justifyContent: "center",
-    alignItems: "flex-end",
     transform: "translateY(40%)",
-    zIndex: 1,
-    // position: "absolute",
-    // left: 0,
-    // bottom: 0,
+    overflowY: "hidden",
 });
 
 const Footer = () => {
     return (
         <footer className={container}>
-            <h1 className={FooterLogo} aria-label="Go to homepage">
+            <h3 className={FooterLogo} aria-label="Go to homepage">
                 {footerLogoText.en}
-            </h1>
+            </h3>
         </footer>
     );
 };

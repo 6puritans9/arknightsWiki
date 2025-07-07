@@ -14,20 +14,23 @@ export const metadata: Metadata = {
 };
 
 const wrapper = flex({
-    minHeight: "100vh",
-    padding: "0 4.5rem 0 4.5rem",
-    margin: 0,
     flexDirection: "column",
-    flex: "1 1 0%",
+    // justifyContent: "space-between",
+    padding: "0 4.5rem",
+    margin: 0,
+    // flex: "1 1 0%",
     overflowX: "hidden",
-    justifyContent: "space-between",
     gap: 0,
+    minHeight: "calc(100vh -64px)",
+    // border: "2px solid blue",
+    overflowY: "auto",
 });
 
 const container = flex({
     flexDirection: "column",
     position: "relative",
     backgroundColor: "whiteBackground",
+    flex: 1,
 });
 
 export default function RootLayout({
