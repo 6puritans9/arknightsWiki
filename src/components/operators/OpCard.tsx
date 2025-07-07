@@ -8,6 +8,7 @@ type OpCardProps = {
     id: string;
     operator: SimpleOpType;
     priority: boolean;
+    dataSsrOp?: boolean;
 };
 
 const container = css({
@@ -25,7 +26,12 @@ const nameStyle = css({
     whiteSpace: "normal",
 });
 
-const OpCard = ({ id, operator: op, priority = false }: OpCardProps) => {
+const OpCard = ({
+    id,
+    operator: op,
+    priority = false,
+    dataSsrOp,
+}: OpCardProps) => {
     const operatorPath = `${id}`;
     const imagePath = `operators/${operatorPath}/icons/${operatorPath}.webp`;
 
@@ -36,7 +42,7 @@ const OpCard = ({ id, operator: op, priority = false }: OpCardProps) => {
     };
 
     return (
-        <div className={container}>
+        <div className={container} data-ssr-op={dataSsrOp ? "" : undefined}>
             <Link href={`/operators/${op.name}`} passHref>
                 <Image
                     src={getS3Url(imagePath)}
