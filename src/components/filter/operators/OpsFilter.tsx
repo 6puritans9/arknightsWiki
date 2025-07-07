@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Accordion } from "radix-ui";
 import {
     AccordionTrigger,
@@ -60,11 +60,6 @@ const valueWrapper = flex({
     flexWrap: "wrap",
 });
 
-// const selected = css({
-//     fontStyle: "italic",
-// });
-//#endregion
-
 const initialTabs = {
     rarity: null,
     isLimited: false,
@@ -88,7 +83,22 @@ const OpsFilter = ({ classTree, factionTree }: OpsFilterProps) => {
         teamId: string | null;
     }>(initialTabs);
     const [openItems, setOpenItems] = useState<string[]>([]);
-    const { updateFilters, applyFilters, resetFilters } = useOperatorStore();
+    const { filters, updateFilters, applyFilters, resetFilters } =
+        useOperatorStore();
+
+    // Sync local tabs with global filters
+    useEffect(() => {
+        setTabs({
+            rarity: filters.rarity ?? null,
+            isLimited: filters.isLimited ?? false,
+            isAlter: filters.isAlter ?? false,
+            profession: filters.profession ?? null,
+            subProfessionId: filters.subProfessionId ?? null,
+            nationId: filters.nationId ?? null,
+            groupId: filters.groupId ?? null,
+            teamId: filters.teamId ?? null,
+        });
+    }, [filters]);
 
     const rarities = Array.from({ length: 6 }, (_, i) => 6 - i);
 
@@ -232,7 +242,6 @@ const OpsFilter = ({ classTree, factionTree }: OpsFilterProps) => {
                                             value={v}
                                             onClick={() => {
                                                 handleClick("groupId", v);
-                                                // handleClick("teamId", v);
                                             }}
                                         />
                                     ))}
