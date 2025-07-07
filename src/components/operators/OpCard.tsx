@@ -2,7 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { SimpleOpType } from "@/api/apiMongo";
 import { getPortraitImg } from "@/api/apiAws";
-import { professionMap, subProfessionIdMap } from "@/lib/constants/NameMap";
+import {
+    groupIdMap,
+    teamIdMap,
+    nationIdMap,
+    professionMap,
+    subProfessionIdMap,
+} from "@/lib/constants/NameMap";
 import { css } from "$/styled-system/css";
 import { flex } from "$/styled-system/patterns";
 
@@ -13,6 +19,7 @@ type OpCardProps = {
     dataSsrOp?: boolean;
 };
 
+//#region Styles
 const container = css({
     width: {
         base: "100px",
@@ -24,87 +31,114 @@ const container = css({
         md: "225px",
         xl: "300px",
     },
-    display: "block",
     position: "relative",
+    display: "block",
+    clipPath: "polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%)",
     marginBottom: "1rem",
-    clipPath: "polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%)", // Creates skewed shape
-    // marginLeft: "0.5rem",
-    // marginRight: "0.5rem",
 });
 
 const figureContainer = css({
     position: "relative",
     width: "100%",
     height: "100%",
-    // flex: 1,
     overflow: "hidden",
 });
 
 const imageStyle = css({
-    // width: {
-    //     base: "100px",
-    //     md: "150px",
-    //     xl: "200px",
-    // },
-    // width: "100%",
-    // height: "100%",
     objectFit: "cover",
 });
 
 const figcaptionStyle = css({
+    fontSize: {
+        base: "fSm",
+    },
     position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: "rgba(0, 0, 0, 0.7)", // Semi-transparent background
-    color: "white",
-    textAlign: "left",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
     paddingLeft: "1rem",
+    textAlign: "left",
+    color: "white",
+});
+
+const extraInfoStyle = flex({
+    gap: {
+        base: "0.3rem",
+        md: "0.8rem",
+    },
+    fontSize: {
+        base: "0.4rem",
+        md: "0.8rem",
+        xl: "0.9rem",
+    },
+    justifyContent: "flex-start",
+    position: "relative",
+    color: "white",
+    overflow: "hidden",
+    cursor: "pointer",
+});
+
+const extraInfoContent = flex({
+    gap: "inherit",
+    transition: "transform 0.3s ease",
+    _groupHover: {
+        transform: "translateY(-100%)",
+    },
+});
+
+const extraInfoAlt = css({
+    display: "flex",
+    gap: "inherit",
+    position: "absolute",
+    top: "100%",
+    left: 0,
+    right: 0,
+    transition: "transform 0.3s ease",
+    _groupHover: {
+        transform: "translateY(-100%)",
+    },
 });
 
 const rarityStyle = css({
-    position: "absolute",
-    left: "30%",
-    top: "0.5rem",
-    transform: "translateX(-30%)",
-    color: "#FF8C00",
     fontSize: {
         base: "fBase",
         xl: "fLg",
     },
-    zIndex: 2,
+    position: "absolute",
+    top: "0.5rem",
+    left: "30%",
+    transform: "translateX(-30%)",
     textAlign: "center",
+    textShadow: "0 0 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(255, 140, 0, 0.4)",
+    color: "#FF8C00",
+    zIndex: 2,
 });
 
 const iridescentRarityStyle = css({
+    fontSize: {
+        base: "fBase",
+        xl: "fLg",
+    },
+    display: "inline-block",
     position: "absolute",
-    left: "30%",
     top: "0.5rem",
-    transform: "translateX(-30%)",
+    left: "40%",
+    transform: "translateX(-40%)",
     textAlign: "center",
     background:
-        "linear-gradient(135deg, #e0e0e0 0%, #6cb4ee 25%, #fff0d1 45%, #ffc470 55%, #ff9a3c 65%, #e0e0e0 100%)",
+        "linear-gradient(135deg, #e0e0e0 0%, {colors.primary} 25%, #fff0d1 45%, #ffc470 55%, #ff9a3c 65%, #e0e0e0 100%)",
     backgroundSize: "300% 100%",
     backgroundRepeat: "repeat",
     backgroundClip: "text",
     color: "transparent",
     WebkitTextFillColor: "transparent",
-    fontWeight: "bold",
+    filter: "drop-shadow(0 0 4px rgba(0, 0, 0, 1)) drop-shadow(0 0 8px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 16px rgba(108, 180, 238, 0.6))",
     animation: "metallicFlow 3s linear infinite",
-    display: "inline-block",
-    fontSize: {
-        base: "fBase",
-        xl: "fLg",
-    },
+    fontWeight: "bold",
     zIndex: 2,
 });
-
-const extraInfoStyle = flex({
-    justifyContent: "flex-start",
-    gap: "1rem",
-    color: "white",
-    fontSize: "0.7rem",
-});
+//#endregion
 
 const OpCard = ({
     id,
@@ -112,11 +146,37 @@ const OpCard = ({
     priority = false,
     dataSsrOp,
 }: OpCardProps) => {
-    const dynamicFontSize = (name: string) => {
-        if (name.length > 18) return "1rem";
-        if (name.length > 10) return "1.1rem";
-        return "1.2rem";
+    //#region Fontsize Helpers
+    const shortNameStyle = css({
+        fontSize: {
+            base: "0.9rem",
+            md: "1.2rem",
+            xl: "1.4rem",
+        },
+    });
+
+    const mediumNameStyle = css({
+        fontSize: {
+            base: "0.8rem",
+            md: "1.1rem",
+            xl: "1.3rem",
+        },
+    });
+
+    const longNameStyle = css({
+        fontSize: {
+            base: "0.6rem",
+            md: "1.0rem",
+            xl: "1.2rem",
+        },
+    });
+
+    const getDynamicStyle = (name: string) => {
+        if (name.length > 18) return longNameStyle;
+        if (name.length > 10) return mediumNameStyle;
+        return shortNameStyle;
     };
+    //#endregion
 
     return (
         <div className={container} data-ssr-op={dataSsrOp ? "" : undefined}>
@@ -133,25 +193,33 @@ const OpCard = ({
                         src={getPortraitImg(id)}
                         className={imageStyle}
                         alt={op.name}
-                        // width={100}
-                        // height={100}
                         priority={priority}
                         fill
                     />
                     <figcaption className={figcaptionStyle}>
-                        {op.appellation ?? (
-                            <div style={{ fontSize: dynamicFontSize(op.name) }}>
+                        {op.appellation && (
+                            <div className={getDynamicStyle(op.appellation)}>
                                 {op.appellation}
                             </div>
                         )}
-                        <div style={{ fontSize: dynamicFontSize(op.name) }}>
+                        <div className={getDynamicStyle(op.name)}>
                             {op.name}
                         </div>
-                        <div className={extraInfoStyle}>
-                            <span>{professionMap[op.profession]}</span>
-                            <span>
-                                {subProfessionIdMap[op.subProfessionId]}
-                            </span>
+                        <div className={`${extraInfoStyle} group`}>
+                            <div className={extraInfoContent}>
+                                <span>{professionMap[op.profession]}</span>
+                                <span>
+                                    {subProfessionIdMap[op.subProfessionId]}
+                                </span>
+                            </div>
+                            <div className={extraInfoAlt}>
+                                <span>{op.recruit}</span>
+                                <span>
+                                    {(op.groupId && groupIdMap[op.groupId]) ||
+                                        (op.teamId && teamIdMap[op.teamId]) ||
+                                        nationIdMap[op.nationId]}
+                                </span>
+                            </div>
                         </div>
                     </figcaption>
                 </figure>
