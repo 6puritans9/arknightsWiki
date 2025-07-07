@@ -24,32 +24,48 @@ const getProfessionImage = (
     profession: string,
     isBlack: boolean = true
 ): string => {
-    return `https://arknights-wiki-assets.s3.ap-northeast-2.amazonaws.com/dynamicassets/arts/profession_large_hub/icon_profession_${profession.toLowerCase()}_large${isBlack ? "" : "_white"}.png`;
+    return (
+        BASE_URL +
+        `/dynamicassets/arts/profession_large_hub/icon_profession_${profession.toLowerCase()}_large${isBlack ? "" : "_white"}.png`
+    );
 };
 
 const getsubProfessionIdImage = (id: string): string =>
-    `https://arknights-wiki-assets.s3.ap-northeast-2.amazonaws.com/public/op_misc/subprofessionicon/sub_${id.toLocaleLowerCase()}_icon.png`;
+    BASE_URL +
+    `/public/op_misc/subprofessionicon/sub_${id.toLocaleLowerCase()}_icon.png`;
 
 const getFactionImage = (id: string): string =>
-    `https://arknights-wiki-assets.s3.ap-northeast-2.amazonaws.com/public/op_misc/camplogo/logo_${id.toLocaleLowerCase()}.png`;
+    BASE_URL + `/public/op_misc/camplogo/logo_${id.toLocaleLowerCase()}.png`;
 
 const getEliteImage = (phase: string) =>
-    `https://arknights-wiki-assets.s3.ap-northeast-2.amazonaws.com/dynamicassets/arts/elite_hub/elite_${phase}.png`;
+    BASE_URL + `/dynamicassets/arts/elite_hub/elite_${phase}.png`;
 
 const getRoomImage = (room: RoomType): string => {
     if (room == "CONTROL" || room == "TRAINING" || room == "WORKSHOP") {
-        return `https://arknights-wiki-assets.s3.ap-northeast-2.amazonaws.com/dynamicassets/arts/building/architect/room_icon_sprite_hub/icon_${room.toLowerCase()}.png`;
+        return (
+            BASE_URL +
+            `/dynamicassets/arts/building/architect/room_icon_sprite_hub/icon_${room.toLowerCase()}.png`
+        );
     }
 
     if (room == "DORMITORY") {
-        return `https://arknights-wiki-assets.s3.ap-northeast-2.amazonaws.com/dynamicassets/arts/building/architect/room_icon_sprite_hub/icon_title_dorm.png`;
+        return (
+            BASE_URL +
+            `/dynamicassets/arts/building/architect/room_icon_sprite_hub/icon_title_dorm.png`
+        );
     }
 
     if (room == "MANUFACTURE") {
-        return `https://arknights-wiki-assets.s3.ap-northeast-2.amazonaws.com/dynamicassets/arts/building/architect/room_icon_sprite_hub/icon_title_manufact.png`;
+        return (
+            BASE_URL +
+            `/dynamicassets/arts/building/architect/room_icon_sprite_hub/icon_title_manufact.png`
+        );
     }
 
-    return `https://arknights-wiki-assets.s3.ap-northeast-2.amazonaws.com/dynamicassets/arts/building/architect/room_icon_sprite_hub/icon_title_${room.toLowerCase()}.png`;
+    return (
+        BASE_URL +
+        `/dynamicassets/arts/building/architect/room_icon_sprite_hub/icon_title_${room.toLowerCase()}.png`
+    );
 };
 
 export {
