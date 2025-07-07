@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import getS3Url, {
     getProfessionImage,
     getsubProfessionIdImage,
@@ -22,6 +22,8 @@ import Notification from "@/components/ui/Notification";
 import { nationIdMap } from "@/lib/constants/NameMap";
 import { SingleOpType } from "@/api/apiMongo";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import useNavStore from "@/stores/navStore";
 
 type OperatorDetailClientProps = {
     initialData: SingleOpType;
@@ -226,6 +228,13 @@ const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
     //     else if (ratio < 0.8) setAspect("tall");
     //     else setAspect("square");
     // };
+
+    const pathname = usePathname();
+    const setPrvPathname = useNavStore((s) => s.setPrvPathname);
+
+    useEffect(() => {
+        setPrvPathname(pathname);
+    }, [pathname, setPrvPathname]);
 
     return (
         <>
