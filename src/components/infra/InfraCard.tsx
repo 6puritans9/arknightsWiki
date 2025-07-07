@@ -1,5 +1,5 @@
 import Link from "next/link";
-import getS3Url from "@/api/apiAws";
+import { getThumbnailImg } from "@/api/apiAws";
 import { BuffsObjectType, BuildingCharType } from "@/api/apiMongo";
 import { nationIdMap, groupIdMap, teamIdMap } from "@/lib/constants/NameMap";
 import { css } from "../../../styled-system/css";
@@ -44,8 +44,6 @@ const buffList = css({
 //#endregion
 
 const InfraCard = ({ char, buffs }: InfraCardProps) => {
-    const imagePath = `operators/${char.charId}/icons/${char.charId}.webp`;
-
     return (
         <article key={char.charId} className={container}>
             <div className={row}>
@@ -55,7 +53,7 @@ const InfraCard = ({ char, buffs }: InfraCardProps) => {
                 >
                     <Image
                         unoptimized
-                        src={`${getS3Url(imagePath)}`}
+                        src={`${getThumbnailImg(char.charId)}`}
                         alt={char.charName}
                         loading="lazy"
                         decoding="async"
