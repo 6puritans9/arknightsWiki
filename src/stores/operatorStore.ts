@@ -113,9 +113,11 @@ const useOperatorStore = create<State & Action>((set, get) => ({
                     filterValue !== false &&
                     filterValue !== undefined
                 ) {
-                    if (key === "isLimited" || key === "isAlter") {
+                    if (key === "isLimited") {
                         if (filterValue && !op[key as keyof SimpleOpType])
                             return false;
+                    } else if (key === "isAlter") {
+                        if (filterValue && !op.baseOpId) return false;
                     } else if (key !== "recruitment") {
                         if (op[key] !== filterValue) return false;
                     }
