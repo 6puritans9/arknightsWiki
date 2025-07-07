@@ -20,6 +20,10 @@ const getPortraitImg = (id: string) => {
     return BASE_URL + `/public/operators/${id}/portraits/${id}_1.webp`;
 };
 
+const getStandardImage = (id: string, skintype: number) => {
+    return BASE_URL + `/public/operators/${id}/${id}_${skintype}.webp`;
+};
+
 const getProfessionImage = (
     profession: string,
     isBlack: boolean = true
@@ -72,6 +76,7 @@ export {
     getHomeBanners,
     getThumbnailImg,
     getPortraitImg,
+    getStandardImage,
     getProfessionImage,
     getsubProfessionIdImage,
     getFactionImage,
