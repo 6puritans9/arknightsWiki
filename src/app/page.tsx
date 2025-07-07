@@ -3,6 +3,7 @@ import { getHomeBanners } from "@/api/apiAws";
 import { css } from "../../styled-system/css";
 import { grid } from "../../styled-system/patterns";
 import { appPageText } from "@/lib/dictionary";
+import AppClientPage from "./clientPage";
 
 //#region Styles
 const container = grid({
@@ -105,7 +106,7 @@ export default function App() {
                 </div>
             </article>
 
-            <article className={container}>
+            {/* <article className={container}>
                 <section className={textWrapper}>
                     <h2 className={bannerTitle}>
                         {appPageText.event.upcoming.en.toUpperCase()}
@@ -193,7 +194,10 @@ export default function App() {
                         unoptimized
                     />
                 </div>
-            </article>
+            </article> */}
+            <div aria-hidden="true">
+                <AppClientPage />
+            </div>
         </>
     );
 }
