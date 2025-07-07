@@ -3,7 +3,12 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
     /* config options here */
     images: {
-        domains: ["arknights-wiki-assets.s3.ap-northeast-2.amazonaws.com"],
+        remotePatterns: [
+            {
+                hostname:
+                    "arknights-wiki-assets.s3.ap-northeast-2.amazonaws.com",
+            },
+        ],
         qualities: [75, 90, 100],
         minimumCacheTTL: 31536000,
         formats: ["image/webp", "image/avif"],
