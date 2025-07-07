@@ -303,7 +303,7 @@ const fetchAllOperators = async (lang: string = "en") => {
                 op._id.toString(),
                 {
                     name: op.name,
-                    appellation: op.appellation !== " " ? op.appellation : null,
+                    appellation: op.appellation === " " ? null : op.appellation,
                     rarity: rarityMap[op.rarity],
                     position: op.position,
                     profession: op.profession,
