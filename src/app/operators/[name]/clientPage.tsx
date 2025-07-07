@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import getS3Url, {
+import {
+    getStandardImage,
     getProfessionImage,
     getsubProfessionIdImage,
+    getFactionImage,
 } from "@/api/apiAws";
 import Image from "next/image";
 import { css } from "$/styled-system/css";
@@ -26,7 +28,7 @@ import { usePathname } from "next/navigation";
 import useNavStore from "@/stores/navStore";
 
 type OperatorDetailClientProps = {
-    initialData: SingleOpType;
+    op: SingleOpType;
 };
 
 //#region Styles
@@ -189,45 +191,21 @@ const buttonWrapper = flex({
 });
 //#endregion Styles
 
-const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
+const OperatorDetailClient = ({ op }: OperatorDetailClientProps) => {
     //#region State management
     const [tab, setTab] = useState<number>(0);
     const [showNotification, setShowNotification] = useState<boolean>(false);
     // const [aspect, setAspect] = useState<"square" | "tall" | "wide">("tall");
     const [selectedSkin, setSelectedSkin] = useState<1 | 2>(1);
     const { votes, handleVote } = useVote({
-        operatorId: initialData.id,
+        operatorId: op.id,
         onUnAuthVote: () => setShowNotification(true),
     });
     //#endregion State management
 
-    const operator = initialData;
-    const operatorPath = `${operator.id}`;
-    const getImageSource = (skinType: 1 | 2) => {
-        const baseImagePath = getS3Url(
-            `operators/${operatorPath}/${operatorPath}`
-        );
-
-        switch (skinType) {
-            case 1:
-                return `${baseImagePath}_1.webp`;
-            case 2:
-                return `${baseImagePath}_2.webp`;
-            default:
-                return `${baseImagePath}_1.webp`;
-        }
-    };
-
-    const faction = nationIdMap[initialData.nationId as string];
-    const factionImage = getS3Url(faction);
-
-    // const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    //     const img = e.currentTarget as HTMLImageElement;
-    //     const ratio = img.naturalWidth / img.naturalHeight;
-    //     if (ratio > 1.2) setAspect("wide");
-    //     else if (ratio < 0.8) setAspect("tall");
-    //     else setAspect("square");
-    // };
+    const operator = op;
+    const faction = nationIdMap[op.nationId as string];
+    const factionImage = getFactionImage(faction);
 
     const pathname = usePathname();
     const setPrvPathname = useNavStore((s) => s.setPrvPathname);
@@ -309,11 +287,11 @@ const OperatorDetailClient = ({ initialData }: OperatorDetailClientProps) => {
                         </div>
                         <Link
                             className={imageWrapper}
-                            href={getImageSource(selectedSkin)}
+                            href={getStandardImage(op.id, selectedSkin)}
                             target="_blank"
                         >
                             <Image
-                                src={getImageSource(selectedSkin)}
+                                src={getStandardImage(op.id, selectedSkin)}
                                 alt={operator.name}
                                 className={imageElement}
                                 quality={90}

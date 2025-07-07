@@ -9,13 +9,13 @@ type OperatorDetailProps = {
 
 const OperatorDetail = async ({ params }: OperatorDetailProps) => {
     const { name } = await params;
-    const data = await fetchSingleOperator(name, "character_table", "en");
+    const op = await fetchSingleOperator(name, "character_table", "en");
 
-    if (!data) {
+    if (!op) {
         return <div>Operator not found</div>;
     }
 
-    return <OperatorDetailClient initialData={data} />;
+    return <OperatorDetailClient op={op} />;
 };
 
 export default OperatorDetail;
