@@ -3,10 +3,6 @@ import { defineConfig } from "@pandacss/dev";
 export default defineConfig({
     // Whether to use css reset
     preflight: true,
-    // globalCss: {
-    //     extend : {
-    //     }
-    // },
 
     // Where to look for your css declarations
     include: ["./src/**/*.{js,jsx,ts,tsx}", "./pages/**/*.{js,jsx,ts,tsx}"],
@@ -84,6 +80,25 @@ export default defineConfig({
                     to: {
                         transform:
                             "translateX(calc(100% + var(--viewport-padding)))",
+                    },
+                },
+                spin: {
+                    to: { transform: "rotate(360deg)" },
+                },
+                borderPulse: {
+                    "0%": { borderWidth: "4px;" },
+                    "50%": { borderWidth: "8px;" },
+                    "100%": { borderWidth: "4px;" },
+                },
+                dash: {
+                    "0%": { strokeDasharray: "1, 150", strokeDashoffset: "0" },
+                    "50%": {
+                        strokeDasharray: "90, 150",
+                        strokeDashoffset: "-35",
+                    },
+                    "100%": {
+                        strokeDasharray: "1, 150",
+                        strokeDashoffset: "-125",
                     },
                 },
             },
