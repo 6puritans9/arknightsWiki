@@ -7,7 +7,8 @@ import { css } from "$/styled-system/css";
 type OpCardProps = {
     id: string;
     operator: SimpleOpType;
-    priority: boolean;
+    priority?: boolean;
+    initialDisplay?: boolean;
     dataSsrOp?: boolean;
 };
 
