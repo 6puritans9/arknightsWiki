@@ -44,7 +44,6 @@ const OperatorsPage = async () => {
             />
 
             <section className={cardsContainer}>
-                {/* <div id="ssr-ops"> */}
                 {initialRenderOps.map(([id, op], index) => (
                     <OpCard
                         key={id}
@@ -54,7 +53,6 @@ const OperatorsPage = async () => {
                         dataSsrOp
                     />
                 ))}
-                {/* </div> */}
 
                 <OpsClientPage initialOpsIds={initialOpsIds} />
             </section>
