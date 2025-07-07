@@ -1,16 +1,23 @@
 import { RoomType } from "./apiMongo";
 
-const getS3Url = (path: string) => {
-    const baseUrl = process.env.NEXT_PUBLIC_S3_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_S3_URL;
 
-    return `${baseUrl}/public/${path}`;
+const getHomeBanners = () => {
+    const ongoingUrl =
+        BASE_URL +
+        "/public/banners/EN_Come_Catastrophes_or_Wakes_of_Vultures_Rerun_banner.webp";
+    const upcomingUrl =
+        BASE_URL + "/public/banners/CN_Delicious_on_Terra_banner.webp";
+
+    return { ongoingUrl, upcomingUrl };
 };
 
-const getHomeBanners = (pathArray: Array<string>) => {
-    const ongoing = getS3Url(pathArray[0]);
-    const upcoming = getS3Url(pathArray[1]);
+const getThumbnailImg = (id: string) => {
+    return BASE_URL + `/public/operators/${id}/icons/${id}.webp`;
+};
 
-    return { ongoing, upcoming };
+const getPortraitImg = (id: string) => {
+    return BASE_URL + `/public/operators/${id}/portraits/${id}_1.webp`;
 };
 
 const getProfessionImage = (
@@ -45,9 +52,10 @@ const getRoomImage = (room: RoomType): string => {
     return `https://arknights-wiki-assets.s3.ap-northeast-2.amazonaws.com/dynamicassets/arts/building/architect/room_icon_sprite_hub/icon_title_${room.toLowerCase()}.png`;
 };
 
-export default getS3Url;
 export {
     getHomeBanners,
+    getThumbnailImg,
+    getPortraitImg,
     getProfessionImage,
     getsubProfessionIdImage,
     getFactionImage,
