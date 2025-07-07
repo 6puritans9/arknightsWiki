@@ -3,20 +3,20 @@ import { OpsObjectType, SimpleOpType } from "@/api/apiMongo";
 
 //#region Types
 export type OpsFilterType = {
-    rarity: number[];
-    position: string[];
+    rarity: number | null;
+    position: string | null;
 
-    profession: string[];
-    subProfessionId: string[];
+    profession: string | null;
+    subProfessionId: string | null;
 
-    nationId: string[];
-    teamId: string[];
-    groupId: string[];
+    nationId: string | null;
+    teamId: string | null;
+    groupId: string | null;
 
     isLimited: boolean;
     isAlter: boolean;
 
-    recruitment: string[];
+    recruitment: string | null;
 };
 //#endregion
 
@@ -45,20 +45,16 @@ const initialState: State = {
     filteredOpsId: [],
     ops: {},
     filters: {
-        rarity: [],
-        position: [],
-
-        profession: [],
-        subProfessionId: [],
-
-        nationId: [],
-        teamId: [],
-        groupId: [],
-
+        rarity: null,
+        position: null,
+        profession: null,
+        subProfessionId: null,
+        nationId: null,
+        teamId: null,
+        groupId: null,
         isLimited: false,
         isAlter: false,
-
-        recruitment: [],
+        recruitment: null,
     },
 };
 
@@ -80,17 +76,6 @@ const useOperatorStore = create<State & Action>((set, get) => ({
         value: string | number | boolean | null
     ) =>
         set((state) => {
-            if (!value) {
-                return {
-                    filters: {
-                        ...state.filters,
-                        [category]: Array.isArray(
-                            state.filters[category] ? [] : false
-                        ),
-                    },
-                };
-            }
-
             switch (category) {
                 case "isLimited":
                 case "isAlter":
@@ -102,30 +87,15 @@ const useOperatorStore = create<State & Action>((set, get) => ({
                     };
 
                 default:
-                    const prvValues = state.filters[category] as (
-                        | string
-                        | number
-                    )[];
-                    let newValues: (string | number)[];
-
-                    if (
-                        typeof value === "string" ||
-                        typeof value === "number"
-                    ) {
-                        if (prvValues.includes(value)) {
-                            newValues = prvValues.filter((v) => v !== value);
-                        } else {
-                            newValues = [value];
-                        }
-
-                        return {
-                            filters: {
-                                ...state.filters,
-                                [category]: newValues,
-                            },
-                        };
-                    }
-                    return {};
+                    return {
+                        filters: {
+                            ...state.filters,
+                            [category]:
+                                state.filters[category] === value
+                                    ? null
+                                    : value,
+                        },
+                    };
             }
         }),
 
@@ -134,36 +104,24 @@ const useOperatorStore = create<State & Action>((set, get) => ({
 
         const newFiltered = allOpsId.filter((id) => {
             const op = ops[id];
-            const keys = Object.entries(filters)
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                .filter(([_, v]) => Array.isArray(v) && v.length)
-                .map(([k]) => k as keyof OpsFilterType);
 
-            for (const key of keys) {
-                const values = filters[key] as (string | number)[];
-                const opValue = op[key as keyof SimpleOpType];
-
-                if (values.length) {
-                    if (
-                        (typeof opValue === "string" ||
-                            typeof opValue === "number") &&
-                        !values.includes(opValue)
-                    ) {
-                        return false;
+            // Check single-value filters
+            for (const key of Object.keys(filters) as (keyof OpsFilterType)[]) {
+                const filterValue = filters[key];
+                if (
+                    filterValue !== null &&
+                    filterValue !== false &&
+                    filterValue !== undefined
+                ) {
+                    if (key === "isLimited" || key === "isAlter") {
+                        if (filterValue && !op[key as keyof SimpleOpType])
+                            return false;
+                    } else if (key !== "recruitment") {
+                        if (op[key] !== filterValue) return false;
                     }
+                    // TODO: "recruitment"
                 }
             }
-
-            // TODO: "recruitment"
-
-            // Boolean filters: if true, op value must be true
-            if (filters.isLimited && !op.isLimited) {
-                return false;
-            }
-            if (filters.isAlter && !op.baseOpId) {
-                return false;
-            }
-
             return true;
         });
 
