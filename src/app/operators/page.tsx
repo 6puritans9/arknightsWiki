@@ -1,7 +1,7 @@
 import { fetchAllOperators } from "@/api/apiMongo";
 import mapOpsTree from "@/utils/mapOpsTree";
+import { flex, grid } from "$/styled-system/patterns";
 import ClientSideFilterWrapper from "@/components/filter/operators/ClientSideFilterWrapper";
-import { flex, grid } from "../../../styled-system/patterns";
 import OpCard from "@/components/operators/OpCard";
 import OpsClientPage from "./clientPage";
 
@@ -19,6 +19,7 @@ const cardsContainer = grid({
         md: "repeat(4, 1fr)",
         xl: "repeat(5, 1fr)",
     },
+    marginTop: "2rem",
     width: "100%",
     gap: "0.5rem",
     justifyItems: "center",

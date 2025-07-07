@@ -1,8 +1,11 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useMemo, useEffect } from "react";
 import useOperatorStore from "@/stores/operatorStore";
 import usePagination from "@/hooks/usePagination";
+import useNavStore from "@/stores/navStore";
+import { flex } from "$/styled-system/patterns";
 import OpCard from "@/components/operators/OpCard";
 import Spinner from "@/components/ui/Spinner";
 
@@ -10,9 +13,18 @@ type ClientPaginationProps = {
     initialOpsIds: string[];
 };
 
-const OpsClientPage = ({ initialOpsIds }: ClientPaginationProps) => {
-    const { filteredOpsId, ops, filters } = useOperatorStore();
+const spinnerWrapper = flex({
+    gridColumn: "1 / -1",
+    justifyContent: "center",
+    width: "100%",
+    marginTop: "1rem",
+});
 
+const OpsClientPage = ({ initialOpsIds }: ClientPaginationProps) => {
+    const { filteredOpsId, ops, filters, applyFilters, resetFilters } =
+        useOperatorStore();
+
+    // Check filter state and modify display
     const isFilterActive = useMemo(() => {
         return Object.entries(filters).some(([, value]) =>
             Array.isArray(value) ? value.length : !!value
@@ -21,17 +33,39 @@ const OpsClientPage = ({ initialOpsIds }: ClientPaginationProps) => {
 
     useEffect(() => {
         const ssrCards = document.querySelectorAll("[data-ssr-op]");
+
         ssrCards.forEach(
             (card) =>
                 ((card as HTMLElement).style.display = isFilterActive
                     ? "none"
                     : "")
         );
-        // if (ssrOps) {
-        //     ssrOps.style.display = isFilterActive ? "none" : "";
-        // }
     }, [isFilterActive]);
 
+    // Check route changes to manange filter state
+    const pathname = usePathname();
+    const setPrvPathname = useNavStore((s) => s.setPrvPathname);
+
+    const prvPathname = useNavStore().prvPathname;
+    console.log(pathname);
+    console.log(prvPathname);
+
+    // If previous pages were on the same group, keep the state
+    useEffect(() => {
+        const wasOpPage = /^\/operators(\/[^/]+)?\/?$/.test(prvPathname || "");
+        const isOpPage = /^\/operators(\/[^/]+)?\/?$/.test(pathname);
+
+        if (!wasOpPage && isOpPage) {
+            console.log("reset");
+            resetFilters();
+        } else {
+            applyFilters();
+        }
+
+        setPrvPathname(pathname);
+    }, [pathname, prvPathname, applyFilters, resetFilters, setPrvPathname]);
+
+    //#region Helper functions
     // filtered: Show only filtered ops, sorted by rarity, release order
     const filteredOpsToShow = useMemo(() => {
         return (filteredOpsId as string[]).slice().sort((prv, nxt) => {
@@ -53,27 +87,16 @@ const OpsClientPage = ({ initialOpsIds }: ClientPaginationProps) => {
     const opsToShow = isFilterActive ? filteredOpsToShow : unfilteredOpsToShow;
 
     const { itemsToShow, hasMore, loaderRef } = usePagination(opsToShow, 20);
+    //#endregion
 
     return (
         <>
             {itemsToShow.map((char) => (
-                <OpCard
-                    key={char}
-                    id={char as string}
-                    operator={ops[char]}
-                    priority={false}
-                />
+                <OpCard key={char} id={char as string} operator={ops[char]} />
             ))}
 
             {hasMore && (
-                <div
-                    ref={loaderRef}
-                    // className={css({
-                    //     padding: "2rem",
-                    //     textAlign: "center",
-                    //     width: "100%",
-                    // })}
-                >
+                <div ref={loaderRef} className={spinnerWrapper}>
                     <Spinner />
                 </div>
             )}
