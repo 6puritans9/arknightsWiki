@@ -32,7 +32,8 @@ const OperatorsPage = async () => {
     );
 
     const { classTree, factionTree } = mapOpsTree(ops);
-    const initialVisibleOps = opsArray.slice(0, 20);
+    const initialRenderOps = opsArray.slice(0, 20);
+    const initialOpsIds = initialRenderOps.map(([id]) => id);
 
     return (
         <div className={pageWrapper}>
@@ -43,16 +44,19 @@ const OperatorsPage = async () => {
             />
 
             <section className={cardsContainer}>
-                {initialVisibleOps.map(([id, op], index) => (
+                {/* <div id="ssr-ops"> */}
+                {initialRenderOps.map(([id, op], index) => (
                     <OpCard
                         key={id}
                         id={id}
                         operator={op}
                         priority={index < 10}
+                        dataSsrOp
                     />
                 ))}
+                {/* </div> */}
 
-                <OpsClientPage initialCount={initialVisibleOps.length} />
+                <OpsClientPage initialOpsIds={initialOpsIds} />
             </section>
         </div>
     );
