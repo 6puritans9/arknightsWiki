@@ -47,8 +47,6 @@ const OpsClientPage = ({ initialOpsIds }: ClientPaginationProps) => {
     const setPrvPathname = useNavStore((s) => s.setPrvPathname);
 
     const prvPathname = useNavStore().prvPathname;
-    console.log(pathname);
-    console.log(prvPathname);
 
     // If previous pages were on the same group, keep the state
     useEffect(() => {
@@ -56,7 +54,6 @@ const OpsClientPage = ({ initialOpsIds }: ClientPaginationProps) => {
         const isOpPage = /^\/operators(\/[^/]+)?\/?$/.test(pathname);
 
         if (!wasOpPage && isOpPage) {
-            console.log("reset");
             resetFilters();
         } else {
             applyFilters();
