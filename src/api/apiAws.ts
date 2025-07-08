@@ -77,6 +77,22 @@ const getRoomImage = (room: RoomType): string => {
     );
 };
 
+const getIconImage = (name: string): string => {
+    if (name === "blockCnt") {
+        name = "block";
+    } else if (name === "attackSpeed") {
+        name = "attack_speed";
+    } else if (name === "magicResistance") {
+        name = "res";
+    } else if (name === "respawnTime") {
+        name = "time";
+    } else if (name === "maxHp") {
+        name = "hp";
+    }
+
+    return BASE_URL + `/dynamicassets/ui/uni_equip_page/icon_${name}.png`;
+};
+
 export {
     getHomeBanners,
     getThumbnailImg,
@@ -87,4 +103,5 @@ export {
     getFactionImage,
     getEliteImage,
     getRoomImage,
+    getIconImage,
 };
