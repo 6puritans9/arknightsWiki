@@ -15,15 +15,15 @@ export const metadata: Metadata = {
 
 const wrapper = flex({
     flexDirection: "column",
-    // justifyContent: "space-between",
-    padding: "0 4.5rem",
+    padding: "layoutX",
     margin: 0,
-    // flex: "1 1 0%",
     overflowX: "hidden",
-    gap: 0,
-    minHeight: "calc(100vh -64px)",
-    // border: "2px solid blue",
     overflowY: "auto",
+    gap: 0,
+    minHeight: "100vh",
+    // flex: "1 1 0%",
+    // justifyContent: "space-between",
+    // border: "2px solid blue",
 });
 
 const container = flex({

@@ -117,7 +117,7 @@ const navItem = css({
     transition: "color 0.2s ease",
     fontWeight: "bold",
     color: "headerText",
-    fontSize: { base: "sm", sm: "md", lg: "8rem" },
+    fontSize: { base: "3rem", sm: "4rem", lg: "8rem" },
     _hover: {
         color: "headerText",
         opacity: "0.5",
@@ -168,10 +168,12 @@ const menuBtn = css({
 const navOverlay = css({
     position: "absolute",
     top: "4rem",
-    left: 0,
+    left: "-4.5rem",
+    right: "-4.5rem",
     width: "100vw",
-    height: "calc(100vh + 4rem)",
-    overflow: "hidden",
+    height: "calc(100vh - 4rem)",
+    overflowY: "hidden",
+    padding: "layoutX",
     backgroundColor: "whiteBackground",
     pointerEvents: "none",
     zIndex: "overlay",
@@ -258,10 +260,7 @@ const Header = () => {
                 </div>
             </nav>
 
-            <div
-                className={`${navOverlay} ${open ? "open" : ""}`}
-                // onClick={() => setOpen((v) => !v)}
-            >
+            <div className={`${navOverlay} ${open ? "open" : ""}`}>
                 <ul>
                     <li>
                         <Link
