@@ -117,7 +117,7 @@ const navItem = css({
     transition: "color 0.2s ease",
     fontWeight: "bold",
     color: "headerText",
-    fontSize: { base: "3rem", sm: "4rem", lg: "8rem" },
+    fontSize: { base: "2rem", md: "4rem", lg: "8rem" },
     _hover: {
         color: "headerText",
         opacity: "0.5",
