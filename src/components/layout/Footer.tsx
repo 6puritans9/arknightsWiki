@@ -11,7 +11,7 @@ const container = flex({
 
 const FooterLogo = flex({
     fontSize: {
-        base: "1.6rem",
+        base: "1.4rem",
         sm: "4rem",
         md: "4.5rem",
         lg: "6rem",
