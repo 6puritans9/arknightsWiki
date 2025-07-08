@@ -1,8 +1,8 @@
 import Image from "next/image";
 import { getHomeBanners } from "@/api/apiAws";
+import { appPageText } from "@/lib/dictionary";
 import { css } from "../../styled-system/css";
 import { grid } from "../../styled-system/patterns";
-import { appPageText } from "@/lib/dictionary";
 import AppClientPage from "./clientPage";
 
 //#region Styles
@@ -11,13 +11,7 @@ const container = grid({
         base: "1fr",
         md: "repeat(22, 1fr)",
     },
-    width: {
-        base: "480px",
-        md: "550px",
-        lgToXl: "800px",
-        xl: "100%",
-    },
-    maxWidth: "100vw",
+    width: "100%",
     height: "100%",
     marginTop: "2rem",
     gap: "2rem",
@@ -25,16 +19,14 @@ const container = grid({
 
 const textWrapper = css({
     gridColumn: {
-        base: "1",
-        md: "1 / 11",
+        md: "1/ 8",
     },
     height: "fit-content",
     position: "sticky",
     top: "4rem",
-    width: {
-        base: "50%",
-        xl: "100%",
-    },
+    zIndex: 1,
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    backdropFilter: "blur(5px)",
 });
 
 // Text styles
@@ -101,7 +93,7 @@ export default function App() {
                 </div>
             </article>
 
-            {/* <article className={container}>
+            <article className={container}>
                 <section className={textWrapper}>
                     <h2 className={bannerTitle}>
                         {appPageText.event.upcoming.en.toUpperCase()}
@@ -189,7 +181,7 @@ export default function App() {
                         unoptimized
                     />
                 </div>
-            </article> */}
+            </article>
             <div aria-hidden="true">
                 <AppClientPage />
             </div>
