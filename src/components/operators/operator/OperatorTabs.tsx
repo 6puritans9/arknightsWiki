@@ -28,7 +28,7 @@ export type TabProps = {
 };
 
 const OperatorTabs = ({ onClick, activeTab }: TabsProps) => {
-    const items = ["Attributes", "Skills", "Review", "Synergy", "Lore"];
+    const items = ["Attributes", "Skills", "Review", "Modules", "Lore"];
 
     return items.map((item, index) => (
         <div
