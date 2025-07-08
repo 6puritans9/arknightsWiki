@@ -2,16 +2,11 @@ import { flex } from "$/styled-system/patterns";
 import { footerLogoText } from "@/lib/dictionary";
 
 const container = flex({
-    // marginTop: {
-    //     base: "1.5rem",
-    //     lg: "3rem",
-    // },
     flexDirection: "column",
     alignItems: "flex-end",
     position: "relative",
     overflow: "hidden",
     width: "100%",
-    // border: "2px solid red",
 });
 
 const FooterLogo = flex({
