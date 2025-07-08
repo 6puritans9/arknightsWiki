@@ -38,8 +38,13 @@ const getsubProfessionIdImage = (id: string): string =>
     BASE_URL +
     `/public/op_misc/subprofessionicon/sub_${id.toLocaleLowerCase()}_icon.png`;
 
-const getFactionImage = (id: string): string =>
-    BASE_URL + `/public/op_misc/camplogo/logo_${id.toLocaleLowerCase()}.png`;
+const getFactionImage = (id: string): string => {
+    if (id === "s.w.e.e.p.") {
+        id = "sweep";
+    }
+
+    return BASE_URL + `/public/op_misc/camplogo/logo_${id.toLowerCase()}.png`;
+};
 
 const getEliteImage = (phase: string) =>
     BASE_URL + `/dynamicassets/arts/elite_hub/elite_${phase}.png`;
