@@ -60,6 +60,13 @@ export default defineConfig({
                         description: "Z-index for nav overlay",
                     },
                 },
+                spacing: {
+                    layoutX: {
+                        value: "0 4.5rem",
+                        description:
+                            "Horizontal spacing values applied to the layout's outer edges",
+                    },
+                },
             },
             keyframes: {
                 hide: {
