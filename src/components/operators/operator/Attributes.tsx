@@ -72,6 +72,7 @@ const phaseContainer = flex({
     justifyContent: "center",
     alignItems: "center",
     paddingX: { base: "0", md: "3rem" },
+    marginY: { base: "0.7rem" },
     cursor: "pointer",
     transition: "all 0.2s ease",
     _hover: {
@@ -98,6 +99,10 @@ const levelTextStyle = css({
     },
     textAlign: "center",
     fontWeight: "bolder",
+});
+
+const descTextStyle = css({
+    textAlign: "center",
 });
 
 const inverted = css({
@@ -184,7 +189,7 @@ const Attributes = ({ operator: op }: TabProps) => {
 
     return (
         <>
-            <p>{desc}</p>
+            <p className={descTextStyle}>{desc}</p>
 
             <div className={phaseWrapper}>
                 <div
