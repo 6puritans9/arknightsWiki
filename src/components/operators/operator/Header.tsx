@@ -30,6 +30,9 @@ const nameStyle = flex({
     justifyContent: "flex-start",
     alignItems: "flex-start",
     gap: "0.3rem",
+    flexWrap: "wrap",
+    wordBreak: "break-word",
+    overflowWrap: "break-word",
 });
 
 const infoContainer = flex({
