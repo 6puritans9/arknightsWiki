@@ -85,3 +85,66 @@ export const roomNameMap: { [key in RoomType]: { [key in Locales]: string } } =
             tw: "",
         },
     };
+
+export const statsMap: { [key: string]: { [key in Locales]: string } } = {
+    maxHp: {
+        en: "HP",
+        cn: "",
+        ja: "",
+        ko: "HP",
+        tw: "HP",
+    },
+    atk: { en: "ATK", cn: "", ja: "", ko: "공격력", tw: "" },
+    def: { en: "DEF", cn: "", ja: "", ko: "방어력", tw: "" },
+    magicResistance: { en: "RES", cn: "", ja: "", ko: "저항력", tw: "" },
+    cost: { en: "COST", cn: "", ja: "", ko: "코스트", tw: "" },
+    blockCnt: { en: "BLOCK", cn: "", ja: "", ko: "저지", tw: "" },
+    attackSpeed: { en: "ATKSPD", cn: "", ja: "", ko: "공격 속도", tw: "" },
+    moveSpeed: { en: "MOVSPD", cn: "", ja: "", ko: "이동 속도", tw: "" },
+    respawnTime: { en: "RESPAWN", cn: "", ja: "", ko: "재배치", tw: "" },
+
+    //extra
+    baseAttackTime: {
+        en: "Base Attack Time",
+        cn: "",
+        ja: "",
+        ko: "기본 공격 시간",
+        tw: "",
+    },
+    hpRecoveryPerSec: {
+        en: "HP Recovery/Sec",
+        cn: "",
+        ja: "",
+        ko: "초당 HP 회복",
+        tw: "",
+    },
+    spRecoveryPerSec: {
+        en: "SP Recovery/Sec",
+        cn: "",
+        ja: "",
+        ko: "초당 SP 회복",
+        tw: "",
+    },
+    maxDeployCount: {
+        en: "Max Deploy Count",
+        cn: "",
+        ja: "",
+        ko: "최대 배치",
+        tw: "",
+    },
+    maxDeckStackCnt: {
+        en: "Max Stack Count",
+        cn: "",
+        ja: "",
+        ko: "최대 충전",
+        tw: "",
+    },
+    tauntLevel: {
+        en: "Taunt Level",
+        cn: "",
+        ja: "",
+        ko: "어그로 등급",
+        tw: "",
+    },
+    massLevel: { en: "Mass Level", cn: "", ja: "", ko: "무게", tw: "" },
+};

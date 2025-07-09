@@ -8,15 +8,15 @@ import { TabProps } from "./OperatorTabs";
 import { flex, grid } from "$/styled-system/patterns";
 import { getEliteImage, getIconImage } from "@/api/apiAws";
 import { css } from "$/styled-system/css";
+import { statsMap } from "@/lib/dictionary";
 
 //#region Styles
 const phaseWrapper = flex({
-    padding: "0.5rem 3rem",
+    padding: { base: "0.5rem 1rem", md: "0.5rem 3rem" },
     justifyContent: "space-between",
     alignItems: "center",
     gap: "0.5rem",
     cursor: "pointer",
-    filter: "invert(1)",
 });
 
 const infoContainer = grid({
@@ -32,29 +32,73 @@ const extraStatsContainer = grid({
     },
 });
 
-const toggleButton = css({
-    width: "100%",
-    cursor: "pointer",
-    padding: "0.5rem",
-    backgroundColor: "gray.200",
-    border: "1px solid gray.400",
-    borderRadius: "4px",
-    marginTop: "0.5rem",
-    textAlign: "center",
-    _hover: {
-        backgroundColor: "gray.300",
-    },
-});
-
-const statWrapper = flex({
-    justifyContent: "space-between",
-});
-
 const imageTextWrapper = flex({
     justifyContent: "flex-start",
     gap: {
         base: "0.1rem",
         md: "0.3rem",
+    },
+});
+
+const statsValueWrapper = flex({
+    fontSize: {
+        base: "0.7rem",
+        md: "fMd",
+    },
+    wordBreak: "break-word",
+    justifyContent: "space-between",
+    width: "100%",
+});
+
+const toggleButton = css({
+    fontSize: {
+        base: "fBase",
+        md: "fMd",
+    },
+    width: "100%",
+    padding: "0.5rem",
+    cursor: "pointer",
+    textAlign: "center",
+    backgroundColor: "gray.200",
+    border: "1px solid gray.400",
+    marginTop: "0.5rem",
+    _hover: {
+        backgroundColor: "gray.300",
+    },
+});
+
+const phaseContainer = flex({
+    justifyContent: "center",
+    alignItems: "center",
+    paddingX: { base: "0", md: "3rem" },
+    cursor: "pointer",
+    transition: "all 0.2s ease",
+    _hover: {
+        transform: {
+            base: "scale(1.3)",
+            md: "scale(1.5)",
+        },
+    },
+});
+
+const infoImageStyle = css({
+    aspectRatio: "1/1",
+    objectFit: "contain",
+    height: { base: "20px", md: "40px" },
+    width: {
+        base: "20px",
+        md: "40px",
+    },
+});
+
+const inverted = css({
+    filter: "invert(1)",
+});
+
+const selected = css({
+    transform: {
+        base: "scale(1.3)",
+        md: "scale(1.5)",
     },
 });
 //#endregion
@@ -97,6 +141,7 @@ const Attributes = ({ operator: op }: TabProps) => {
     const [phaseIdx, setPhaseIdx] = useState(0);
     const [showExtraStats, setShowExtraStats] = useState(false);
 
+    //#region Memoization
     const desc = useMemo(() => {
         const parsed = parseRichText(op.description);
 
@@ -124,58 +169,73 @@ const Attributes = ({ operator: op }: TabProps) => {
 
     const handlePhaseChange = useCallback((index: number) => {
         setPhaseIdx(index);
-        setShowExtraStats(false);
     }, []);
 
-    const handleShowExtraStats = useCallback(() => {
-        setShowExtraStats(true);
-    }, []);
+    //#endregion
 
     return (
         <>
-            {/* <p>parsed: {parsed}</p> */}
             <p>{desc}</p>
 
             <div className={phaseWrapper}>
-                <Image
-                    src={getEliteImage("0")}
-                    width={30}
-                    height={30}
-                    alt="elite0"
+                <div
+                    className={`${phaseContainer} ${phaseIdx === 0 ? selected : ""}`}
                     onClick={() => handlePhaseChange(0)}
-                ></Image>
-                <Image
-                    src={getEliteImage("1")}
-                    width={30}
-                    height={30}
-                    alt="elite1"
+                >
+                    <Image
+                        src={getEliteImage("0")}
+                        width={30}
+                        height={30}
+                        alt="elite0"
+                        className={inverted}
+                    />
+                </div>
+                <div
+                    className={`${phaseContainer} ${phaseIdx === 1 ? selected : ""}`}
                     onClick={() => handlePhaseChange(1)}
-                ></Image>
-                <Image
-                    src={getEliteImage("2")}
-                    width={30}
-                    height={30}
-                    alt="elite2"
+                >
+                    <Image
+                        src={getEliteImage("1")}
+                        width={30}
+                        height={30}
+                        alt="elite1"
+                        className={inverted}
+                    />
+                </div>
+                <div
+                    className={`${phaseContainer} ${phaseIdx === 2 ? selected : ""}`}
                     onClick={() => handlePhaseChange(2)}
-                ></Image>
+                >
+                    <Image
+                        src={getEliteImage("2")}
+                        width={30}
+                        height={30}
+                        alt="elite2"
+                        className={inverted}
+                    />
+                </div>
             </div>
+
             <div style={{ overflow: "hidden" }}>
                 <p>range: {currentPhase.rangeId}</p>
-                <p>Level: {currentPhase.maxLevel}</p>
+                <p>At Level {currentPhase.maxLevel}(Max)</p>
 
                 <div className={infoContainer}>
                     {Object.entries(mainStats).map(([key, value]) => (
-                        <div key={key} className={statWrapper}>
+                        <div key={key}>
                             <div className={imageTextWrapper}>
                                 <Image
                                     src={getIconImage(key)}
+                                    className={infoImageStyle}
                                     alt={key}
                                     width={20}
                                     height={20}
                                 />
-                                <dt>{key}</dt>
+                                <div className={statsValueWrapper}>
+                                    <dt>{statsMap[key].en}</dt>
+                                    <dd>{value}</dd>
+                                </div>
                             </div>
-                            <dd>{value}</dd>
                         </div>
                     ))}
                 </div>
@@ -183,7 +243,7 @@ const Attributes = ({ operator: op }: TabProps) => {
                 {!showExtraStats && (
                     <button
                         className={toggleButton}
-                        onClick={handleShowExtraStats}
+                        onClick={() => setShowExtraStats(true)}
                     >
                         Show Additional Stats
                     </button>
@@ -192,11 +252,13 @@ const Attributes = ({ operator: op }: TabProps) => {
                 {showExtraStats && (
                     <div className={extraStatsContainer}>
                         {Object.entries(extraStats).map(([key, value]) => (
-                            <div key={key} className={statWrapper}>
+                            <div key={key}>
                                 <div className={imageTextWrapper}>
-                                    <dt>{key}</dt>
+                                    <div className={statsValueWrapper}>
+                                        <dt>{statsMap[key].en}</dt>
+                                        <dd>{value}</dd>
+                                    </div>
                                 </div>
-                                <dd>{value}</dd>
                             </div>
                         ))}
                     </div>
