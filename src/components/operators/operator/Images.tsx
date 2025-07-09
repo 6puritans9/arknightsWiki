@@ -74,12 +74,18 @@ const selectorWrapper = flex({
 const selectorStyle = css({
     cursor: "pointer",
     _hover: {
-        color: "#f0f0f0/60",
+        transform: {
+            base: "scale(1.3)",
+            md: "scale(1.5)",
+        },
     },
 });
 
 const selected = css({
-    color: "#f0f0f0/60",
+    transform: {
+        base: "scale(1.3)",
+        md: "scale(1.5)",
+    },
 });
 
 //#endregion
