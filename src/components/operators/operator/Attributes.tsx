@@ -9,6 +9,7 @@ import { flex, grid } from "$/styled-system/patterns";
 import { getEliteImage, getIconImage } from "@/api/apiAws";
 import { css } from "$/styled-system/css";
 import { statsMap } from "@/lib/dictionary";
+import RangeTable from "./RangeTable";
 
 //#region Styles
 const phaseWrapper = flex({
@@ -89,6 +90,14 @@ const infoImageStyle = css({
         base: "20px",
         md: "40px",
     },
+});
+
+const levelTextStyle = css({
+    margin: {
+        base: "1rem 0",
+    },
+    textAlign: "center",
+    fontWeight: "bolder",
 });
 
 const inverted = css({
@@ -217,8 +226,11 @@ const Attributes = ({ operator: op }: TabProps) => {
             </div>
 
             <div style={{ overflow: "hidden" }}>
-                <p>range: {currentPhase.rangeId}</p>
-                <p>At Level {currentPhase.maxLevel}(Max)</p>
+                <RangeTable range={currentPhase.rangeId} />
+
+                <p className={levelTextStyle}>
+                    At Level {currentPhase.maxLevel}(Max)
+                </p>
 
                 <div className={infoContainer}>
                     {Object.entries(mainStats).map(([key, value]) => (
