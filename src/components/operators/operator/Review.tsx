@@ -1,6 +1,10 @@
-import { TabProps } from "./OperatorTabs";
+import { SingleOpType } from "@/api/apiMongo";
 
-const Review = ({ operator }: TabProps) => {
+type ReviewProps = {
+    operator: SingleOpType;
+};
+
+const Review = ({ operator }: ReviewProps) => {
     return (
         <div>
             <p>In Construction👷‍♂️</p>

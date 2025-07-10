@@ -1,7 +1,11 @@
-import { TabProps } from "./OperatorTabs";
+import { SingleOpType } from "@/api/apiMongo";
 import { nationIdMap, groupIdMap, teamIdMap } from "@/lib/constants/NameMap";
 
-const Lore = ({ operator }: TabProps) => {
+type LoreProps = {
+    operator: SingleOpType;
+};
+
+const Lore = ({ operator }: LoreProps) => {
     const nation = nationIdMap[operator.nationId] || operator.nationId;
     const group = operator.groupId
         ? groupIdMap[operator.groupId] || operator.groupId

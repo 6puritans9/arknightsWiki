@@ -1,6 +1,10 @@
-import { TabProps } from "./OperatorTabs";
+import { SingleOpType } from "@/api/apiMongo";
 
-const Modules = ({ operator }: TabProps) => {
+type ModulesProps = {
+    operator: SingleOpType;
+};
+
+const Modules = ({ operator }: ModulesProps) => {
     return (
         <div>
             <p>In Construction👷‍♂️</p>
