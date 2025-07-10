@@ -2,7 +2,7 @@ import Image from "next/image";
 import { useCallback, useMemo, useState } from "react";
 import {
     parseRichText,
-    NewlineRichText,
+    newlineRichText,
 } from "@/components/text/TextConverter";
 import { TabProps } from "./OperatorTabs";
 import { flex, grid } from "$/styled-system/patterns";
@@ -159,7 +159,7 @@ const Attributes = ({ operator: op }: TabProps) => {
     const desc = useMemo(() => {
         const parsed = parseRichText(op.description);
 
-        return NewlineRichText(parsed);
+        return newlineRichText(parsed);
     }, [op.description]);
 
     const currentPhase = useMemo(() => {
