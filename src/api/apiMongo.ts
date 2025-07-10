@@ -62,12 +62,22 @@ type skillType = {
     levelUpCostCond: levelUpCostCondType[];
 };
 
+export type BlackboardEntry = {
+    key: string;
+    value: number;
+    valueStr?: string;
+};
+
+export type BlackboardType = { [key: string]: number } | BlackboardEntry[];
+
 type skillDetailType = {
     _id: string;
     skillId: string;
+    iconId: string;
     hidden: boolean;
     levels: {
         name: string;
+        rangeId?: string;
         description: string;
         skillType: string;
         durationType: string;
@@ -80,9 +90,7 @@ type skillDetailType = {
         };
         prefabId: string;
         duration: number;
-        blackboard: {
-            [key: string]: number;
-        };
+        blackboard?: BlackboardType;
     }[];
 };
 
