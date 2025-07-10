@@ -1,15 +1,16 @@
 import Image from "next/image";
 import { useCallback, useMemo, useState } from "react";
-import {
-    parseRichText,
-    newlineRichText,
-} from "@/components/text/TextConverter";
-import { TabProps } from "./OperatorTabs";
+import TextProcessor from "@/components/text/TextProcessor";
 import { flex, grid } from "$/styled-system/patterns";
 import { getEliteImage, getIconImage } from "@/api/apiAws";
 import { css } from "$/styled-system/css";
 import { statsMap } from "@/lib/dictionary";
 import RangeTable from "./RangeTable";
+import { SingleOpType } from "@/api/apiMongo";
+
+type AttributesProps = {
+    operator: SingleOpType;
+};
 
 //#region Styles
 const phaseWrapper = flex({
@@ -117,6 +118,7 @@ const selected = css({
 });
 //#endregion
 
+//#region Helpers
 const MAIN_STAT_KEYS = [
     "maxHp",
     "atk",
@@ -150,16 +152,20 @@ const extraStatKeys = (data: { [key: string]: number | boolean }) => {
         Object.entries(data).filter(([key]) => EXTRA_STAT_KEYS.includes(key))
     );
 };
+//#endregion
 
-const Attributes = ({ operator: op }: TabProps) => {
+const Attributes = ({ operator: op }: AttributesProps) => {
     const [phaseIdx, setPhaseIdx] = useState(0);
     const [showExtraStats, setShowExtraStats] = useState(false);
 
     //#region Memoization
     const desc = useMemo(() => {
-        const parsed = parseRichText(op.description);
+        const rawDescription = op.description;
 
-        return newlineRichText(parsed);
+        return TextProcessor.from(rawDescription)
+            .parseRichText()
+            .parseNewlines()
+            .getResult();
     }, [op.description]);
 
     const currentPhase = useMemo(() => {
