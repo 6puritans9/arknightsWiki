@@ -1,36 +1,96 @@
-import { useState } from "react";
+import Image from "next/image";
+import { useState, useMemo } from "react";
+import { getSkillImage } from "@/api/apiAws";
 import { TabProps } from "./OperatorTabs";
 import { flex } from "$/styled-system/patterns";
-import { parseRichText } from "@/components/text/TextConverter";
+import { css } from "$/styled-system/css";
+import {
+    filledRichText,
+    newlineRichText,
+    parseRichText,
+    extractSkillRange,
+} from "@/components/text/TextConverter";
+import RangeTable from "./RangeTable";
 
+//#region Styles
 const selectorWrapper = flex({
+    justifyContent: "space-between",
     gap: "0.5rem",
     cursor: "pointer",
-    marginBottom: "1rem",
+    width: "100%",
+    marginBottom: {
+        base: "1rem",
+    },
 });
 
-const getImgSrc = (skillId: string) => [
-    `https://arknights-wiki-assets.s3.ap-northeast-2.amazonaws.com/public/skills/skill_icon_${skillId}.png`,
-    `https://arknights-wiki-assets.s3.ap-northeast-2.amazonaws.com/public/skills/skill_icon_${skillId}/skill_icon_${skillId}.png/skill_icon_${skillId}.png`, // Fallback image
-];
+const skillImageStyle = css({
+    height: {
+        base: "30px",
+        md: "60px",
+    },
+});
+
+const selectorStyle = flex({
+    gap: {
+        base: "0.5rem",
+    },
+});
+
+const levelSelectorWrapper = flex({
+    gap: {
+        base: "0.5rem",
+    },
+});
+
+const selected = css({
+    color: "red",
+});
+//#endregion
 
 const Skills = ({ operator }: TabProps) => {
-    const [activeSkill, setActiveSkill] = useState<number>(0);
+    const [activeSkillId, setActiveSkillId] = useState<string>(
+        operator.skills[0].skillId
+    );
     const [activeLevel, setActiveLevel] = useState<number>(
-        operator.skillDetails[0]?.levels.length - 1 || 9
+        operator.skillDetails[0].levels.length - 1
     );
 
     //#region Helper Functions
-    // Order of skills is determined by the index in operator.skillDetails
     const skillTableMap = Object.fromEntries(
         operator.skillDetails.map((detail) => [detail._id, detail])
-    ); // creates a map of skill details by their ID then transforms it into an object
+    );
     const orderedSkillTable = operator.skills.map(
         (skill) => skillTableMap[skill.skillId]
-    ); // maps the skills to their details based on skillId
+    );
 
-    const handleSkillClick = (idx: number) => {
-        setActiveSkill(idx);
+    const currentSkill = skillTableMap[activeSkillId];
+    const currentSkillIndex = operator.skillDetails.findIndex(
+        (detail) => detail._id === activeSkillId
+    );
+
+    //#endregion
+
+    //#region caching dynamic text
+    const parsedDesc = useMemo(() => {
+        if (!currentSkill) return [];
+
+        return filledRichText(
+            newlineRichText(
+                parseRichText(currentSkill.levels[activeLevel].description)
+            ),
+            operator,
+            currentSkillIndex,
+            activeLevel
+        );
+    }, [currentSkill, currentSkillIndex, activeLevel, operator]);
+
+    const skillRange = useMemo(() => {
+        return extractSkillRange(operator, currentSkillIndex, activeLevel);
+    }, [operator, currentSkillIndex, activeLevel]);
+    //#endregion
+
+    const handleSkillClick = (skillId: string, idx: number) => {
+        setActiveSkillId(skillId);
         setActiveLevel(operator.skillDetails[idx]?.levels.length - 1 || 9);
     };
 
@@ -38,74 +98,76 @@ const Skills = ({ operator }: TabProps) => {
         <>
             <div>
                 <div className={selectorWrapper}>
-                    {orderedSkillTable.map((_, idx) => (
-                        <span
-                            key={idx}
-                            onClick={() => handleSkillClick(idx)}
-                            style={{
-                                fontWeight:
-                                    activeSkill === idx ? "bold" : "normal",
-                                textDecoration:
-                                    activeSkill === idx ? "underline" : "none",
-                            }}
-                        >
-                            {idx + 1}
-                        </span>
-                    ))}
-                </div>
-                <ul>
-                    {orderedSkillTable.map((skill, index) => {
-                        if (activeSkill !== index) return null;
+                    {orderedSkillTable.map((skill, idx) => {
                         const id = skill.skillId;
+                        const iconId = skill.iconId || id;
                         const skillName = skill.levels[0].name;
-                        const [primary, fallback] = getImgSrc(id);
 
                         return (
-                            <li key={id}>
-                                <article>
-                                    <section>
-                                        {skillName}
-                                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                                        <img
-                                            src={primary}
-                                            width="30"
-                                            height="30"
-                                            alt={skillName}
-                                            onError={(e) => {
-                                                const target = e.currentTarget;
-                                                if (target.src !== fallback) {
-                                                    target.src = fallback;
-                                                }
-                                            }}
-                                        />
-                                    </section>
-                                    <div>
-                                        {skill.levels.map((level, idx) => (
-                                            <span
-                                                key={idx}
-                                                onClick={() =>
-                                                    setActiveLevel(idx)
-                                                }
-                                            >
-                                                {idx + 1}
-                                            </span>
-                                        ))}
-                                    </div>
-                                    <section>
-                                        {/* <p>
-                                            {parseRichText(
-                                                skill.levels[activeLevel]
-                                                    ?.description,
-                                                skill.levels[activeLevel]
-                                                    ?.blackboard
-                                            )}
-                                        </p> */}
-                                    </section>
-                                </article>
-                            </li>
+                            <figure
+                                key={idx}
+                                onClick={() => handleSkillClick(id, idx)}
+                                className={selectorStyle}
+                            >
+                                <Image
+                                    src={getSkillImage(iconId)}
+                                    className={skillImageStyle}
+                                    width={60}
+                                    height={60}
+                                    alt="skillImg"
+                                />
+                                <figcaption>
+                                    <section>{skillName}</section>
+                                </figcaption>
+                            </figure>
                         );
                     })}
-                </ul>
+                </div>
+                {currentSkill && (
+                    <article>
+                        <div className={levelSelectorWrapper}>
+                            {currentSkill.levels.map((level, idx) => (
+                                <span
+                                    key={idx}
+                                    className={
+                                        activeLevel === idx ? selected : ""
+                                    }
+                                    onClick={() => setActiveLevel(idx)}
+                                >
+                                    {idx === 7
+                                        ? "M1"
+                                        : idx === 8
+                                          ? "M2"
+                                          : idx === 9
+                                            ? "M3"
+                                            : idx + 1}
+                                </span>
+                            ))}
+                        </div>
+                        <section>
+                            <p>{parsedDesc}</p>
+                            {skillRange && (
+                                <>
+                                    <p style={{ textAlign: "center" }}>
+                                        projectile buff range
+                                    </p>
+                                    <RangeTable
+                                        range={skillRange}
+                                        projectileSelf={true}
+                                    />
+                                </>
+                            )}
+
+                            {currentSkill.levels[activeLevel].rangeId && (
+                                <RangeTable
+                                    range={
+                                        currentSkill.levels[activeLevel].rangeId
+                                    }
+                                />
+                            )}
+                        </section>
+                    </article>
+                )}
             </div>
         </>
     );
