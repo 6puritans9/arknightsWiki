@@ -1,9 +1,10 @@
 import { memo } from "react";
-import { css } from "$/styled-system/css";
+import { css, cva } from "$/styled-system/css";
 import { flex } from "$/styled-system/patterns";
 
 type RangeTableProps = {
     range: string;
+    projectileSelf?: boolean;
 };
 
 const CELL_TYPES = {
@@ -41,9 +42,18 @@ const activeCellStyle = css({
     border: "1px solid gray",
 });
 
-const operatorCellStyle = css({
+const selfCellStyle = cva({
     ...baseCellStyle,
-    backgroundColor: "primary",
+    variants: {
+        projectile: {
+            true: {
+                backgroundColor: "fuchsia.400",
+            },
+            false: {
+                backgroundColor: "primary",
+            },
+        },
+    },
 });
 
 const emptyCellStyle = css({
@@ -63,12 +73,12 @@ const srOnlyStyle = css({
 });
 //#endregion
 
-const getCellClass = (cellType: string): string => {
+const getCellClass = (cellType: string, projectileSelf: boolean): string => {
     switch (cellType) {
         case "active":
             return activeCellStyle;
         case "self":
-            return operatorCellStyle;
+            return selfCellStyle({ projectile: projectileSelf });
         case "empty":
         default:
             return emptyCellStyle;
@@ -114,6 +124,26 @@ const createGrid = (rangeId: string) => {
                 [ACTIVE, ACTIVE, EMPTY, EMPTY],
             ];
         }
+        case "3-9": {
+            return [
+                [ACTIVE, ACTIVE, ACTIVE, EMPTY, EMPTY],
+                [ACTIVE, ACTIVE, ACTIVE, ACTIVE, EMPTY],
+                [SELF, ACTIVE, ACTIVE, ACTIVE, ACTIVE],
+                [ACTIVE, ACTIVE, ACTIVE, ACTIVE, EMPTY],
+                [ACTIVE, ACTIVE, ACTIVE, EMPTY, EMPTY],
+            ];
+        }
+        case "3-7": {
+            return [
+                [ACTIVE, EMPTY, EMPTY, EMPTY],
+                [ACTIVE, ACTIVE, EMPTY, EMPTY],
+                [ACTIVE, ACTIVE, ACTIVE, EMPTY],
+                [SELF, ACTIVE, ACTIVE, ACTIVE],
+                [ACTIVE, ACTIVE, ACTIVE, EMPTY],
+                [ACTIVE, ACTIVE, EMPTY, EMPTY],
+                [ACTIVE, EMPTY, EMPTY, EMPTY],
+            ];
+        }
         case "3-6": {
             return [
                 [ACTIVE, ACTIVE, ACTIVE],
@@ -153,6 +183,14 @@ const createGrid = (rangeId: string) => {
                 [ACTIVE, EMPTY, EMPTY],
             ];
         }
+        case "1-2": {
+            return [
+                [ACTIVE, EMPTY],
+                [SELF, ACTIVE],
+                [ACTIVE, EMPTY],
+            ];
+        }
+
         case "1-1":
         default: {
             return [[SELF]];
@@ -160,51 +198,56 @@ const createGrid = (rangeId: string) => {
     }
 };
 
-const RangeTable = memo(({ range }: RangeTableProps) => {
-    const grid = createGrid(range);
+const RangeTable = memo(
+    ({ range, projectileSelf = false }: RangeTableProps) => {
+        const grid = createGrid(range);
 
-    return (
-        <div className={container}>
-            <table className={tableStyle}>
-                <thead>
-                    <tr>
-                        <th className={srOnlyStyle}></th>
-                        {grid[0]?.map((_, colIndex) => (
-                            <th
-                                key={colIndex}
-                                scope="col"
-                                className={srOnlyStyle}
-                            >
-                                Y{colIndex + 1}
-                            </th>
-                        ))}
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {grid.map((row, rowIndex) => (
-                        <tr key={rowIndex} className={rowStyle}>
-                            <th scope="row" className={srOnlyStyle}>
-                                X{rowIndex + 1}
-                            </th>
-
-                            {row.map((cellType, colIndex) => (
-                                <td
+        return (
+            <div className={container}>
+                <table className={tableStyle}>
+                    <thead>
+                        <tr>
+                            <th className={srOnlyStyle}></th>
+                            {grid[0]?.map((_, colIndex) => (
+                                <th
                                     key={colIndex}
-                                    className={getCellClass(cellType)}
+                                    scope="col"
+                                    className={srOnlyStyle}
                                 >
-                                    <span className={srOnlyStyle}>
-                                        {getCellText(cellType)}
-                                    </span>
-                                </td>
+                                    Y{colIndex + 1}
+                                </th>
                             ))}
                         </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
-    );
-});
+                    </thead>
+
+                    <tbody>
+                        {grid.map((row, rowIndex) => (
+                            <tr key={rowIndex} className={rowStyle}>
+                                <th scope="row" className={srOnlyStyle}>
+                                    X{rowIndex + 1}
+                                </th>
+
+                                {row.map((cellType, colIndex) => (
+                                    <td
+                                        key={colIndex}
+                                        className={getCellClass(
+                                            cellType,
+                                            projectileSelf
+                                        )}
+                                    >
+                                        <span className={srOnlyStyle}>
+                                            {getCellText(cellType)}
+                                        </span>
+                                    </td>
+                                ))}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        );
+    }
+);
 
 RangeTable.displayName = "RangeTable";
 
