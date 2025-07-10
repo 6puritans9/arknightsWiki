@@ -1,5 +1,24 @@
 import { ReactNode, isValidElement, cloneElement } from "react";
 import richTextStylesDict from "@/app/styles/textStyleMap";
+import { SingleOpType, BlackboardType, BlackboardEntry } from "@/api/apiMongo";
+
+//#region helper functions
+const normalizeBlackboard = (
+    blackboard: BlackboardEntry[]
+): { [key: string]: number | string } => {
+    // Convert array to object
+    return Object.fromEntries(
+        blackboard.map((entry) => [entry.key, entry.value])
+    );
+};
+
+const isObjectBlackboard = (
+    blackboard: BlackboardType
+): blackboard is { [key: string]: number } => {
+    return !Array.isArray(blackboard);
+};
+
+//#endregion
 
 const parseRichText = (text: string) => {
     const tagRegex = /<@([a-zA-Z0-9.]+)>(.*?)<\/>/g;
@@ -31,7 +50,7 @@ const parseRichText = (text: string) => {
     return result;
 };
 
-const NewlineRichText = (nodes: ReactNode[]): ReactNode[] => {
+const newlineRichText = (nodes: ReactNode[]): ReactNode[] => {
     const result: ReactNode[] = [];
     let key = 0;
     for (const node of nodes) {
@@ -91,4 +110,91 @@ const NewlineRichText = (nodes: ReactNode[]): ReactNode[] => {
     return result;
 };
 
-export { parseRichText, NewlineRichText };
+const filledRichText = (
+    nodes: ReactNode[],
+    op: SingleOpType,
+    activeSkill: number,
+    activeLevel: number
+): ReactNode[] => {
+    const result: ReactNode[] = [];
+
+    for (const node of nodes) {
+        if (
+            isValidElement(node) &&
+            typeof (node.props as { children?: unknown }).children === "string"
+        ) {
+            const childrenStr = (node.props as { children?: unknown })
+                .children as string;
+            const rawBlackboard =
+                op.skillDetails[activeSkill].levels[activeLevel].blackboard;
+
+            if (
+                rawBlackboard &&
+                childrenStr.includes("{") &&
+                childrenStr.includes("}")
+            ) {
+                let blackboard: { [key: string]: number };
+                if (isObjectBlackboard(rawBlackboard)) {
+                    blackboard = rawBlackboard;
+                } else {
+                    blackboard = normalizeBlackboard(rawBlackboard) as {
+                        [key: string]: number;
+                    };
+                }
+
+                const translated = childrenStr.replace(
+                    /\{([^}]+)\}/g,
+                    (match, keyword) => {
+                        const key = keyword.split(":")[0].toLowerCase();
+
+                        let value;
+                        let shouldNegate = false;
+
+                        if (key.startsWith("-")) {
+                            const actualKey = key.substring(1);
+                            value = blackboard[actualKey];
+                            shouldNegate = true;
+                        } else {
+                            value = blackboard[key];
+                        }
+
+                        if (value !== undefined) {
+                            const finalValue = shouldNegate ? -value : value;
+
+                            return String(finalValue);
+                        }
+
+                        return value !== undefined ? String(value) : match;
+                    }
+                );
+                result.push(cloneElement(node, { key: node.key }, translated));
+            } else {
+                result.push(node);
+            }
+        } else {
+            result.push(node);
+        }
+    }
+    return result;
+};
+
+const extractSkillRange = (
+    op: SingleOpType,
+    activeSkill: number,
+    activeLevel: number
+): string | null => {
+    const rawBlackboard =
+        op.skillDetails[activeSkill].levels[activeLevel].blackboard;
+
+    if (Array.isArray(rawBlackboard)) {
+        for (const entry of rawBlackboard) {
+            if (entry.valueStr) {
+                return entry.valueStr;
+            }
+        }
+    }
+
+    return null;
+};
+
+export { parseRichText, newlineRichText, filledRichText, extractSkillRange };
