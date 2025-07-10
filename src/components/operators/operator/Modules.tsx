@@ -3,7 +3,7 @@ import { TabProps } from "./OperatorTabs";
 const Modules = ({ operator }: TabProps) => {
     return (
         <div>
-            <h1>MODULEs</h1>
+            <p>In Construction👷‍♂️</p>
         </div>
     );
 };
