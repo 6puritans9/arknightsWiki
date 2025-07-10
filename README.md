@@ -1,160 +1,111 @@
 # ArknightsWiki
 
-Greetings Doctor!\
-Currently under construction.👷‍♂️🔨🚧
+![kal'tsit](./public/kal'tsit.gif)
 
-## Tools
+Greetings, Doctor!\
+This is the source page of [Rhodes Island](https://arknights-wiki.vercel.app/).\
+I've poured lots of time and love into making this happen.\
+Feel free to browse and reference it as you like🥰\
+Thanks for visiting!
 
-![Next.js](./public/docs/next-js.svg)
-![Typescript](./public/docs/typescript.svg)
-![Sass](./public/docs/sass.svg)
-![Supabase](./public/docs/supabase.svg)
+## Features
+
+### Wiki
+
+-   Filter infrastructure skills by categorized effects
+-   Advanced filtering by rarity, class, branch, faction, limited status, alter status, recruit type, and more
+-   Voting features for quick operator feedback, implemented with debouncing and optimistic UI
+
+TODO:
+
+-   Modals for easy lookup of related operators, factions, and effects
+
+### Tech
+
+-   Static site with server-side rendering (SSR) and hydration for efficient pagination
+-   Caching with React hooks and Zustand store for optimized client performance
+
+TODO:
+
+-   Implement i18n support in 5 languages (to reach a global audience)
+-   Add custom image optimization and loader powered by AWS Lambda(to reduce cost)
+-   Enable incremental Static Regeneration (ISR) to keep data fresh without full rebuilds
+-   Build end-to-end data update pipeline using GitHub Actions and PyMongo
 
 ## Architecture
 
-### Routing
+TODO: Add architecture diagram here
 
 ```
-                    home
+                    app
                      |
-    -----------------------------------------
-    |          |          |                 |
-/operators    /tierlist   /infrastructure   /materials
+    --------------------------
+    |          |             |
+/operators   /infra      (...others)
     |
   [name]
 ```
 
-### DB
+### Testing
 
-![db_flow](./public/docs/db_flow.png)
+-   Unit tests with Jest
 
-## Features
+TODO:
 
-### React
+-   Add integration tests
+-   Set up E2E tests with Cypress
+-   Integrate test runs into CI pipeline
 
-[] Language Support
-[] Search
+## Tools
 
-_Home_
+### Frontend
 
-```
+<img src="./public/docs/next-js.svg" width="50" height="50" alt="nextJs">
+<img src="./public/docs/typescript.svg" width="50" height="50" alt="typescript">
+<img src="./public/docs/pandacss.svg" width="50" height="50" alt="pandaCss">
+<img src="./public/docs/radix.svg" width="50" height="50" alt="radixui">
+<img src="./public/docs/zustand.svg" width="50" height="50" alt="zustand">
+<img src="./public/docs/jest.svg" width="50" height="50" alt="jest">
 
-```
+-   Next.js
+-   TypeScript
+-   PandaCSS (build-time CSS-in-JS styling)
+-   Radix UI (headless UI primitives)
+-   Zustand (state management)
+-   Jest (unit testing)
 
-_Operators_
+### Backend
 
-```
-\\ Filter
-[x] Filter by category
-  [x] rarity
-  [x] class
-    [x] branch
-    [x] Pop corresponding branches up when a class is selected
-  [x] faction
-[x] Custom Sort for className
-[x] Implement overlapping conditions
-  [x] Class with corresponding branches
-  [x] Rarity - Class(branch) - Faction
-  [] Clicking twice will unselect the selected
+<img src="./public/docs/supabase.svg" width="50" height="50" alt="supabase">
+<img src="./public/docs/oauth.svg" width="50" height="50" alt="oAuth2">
+<img src="./public/docs/s3.svg" width="50" height="50" alt="s3">
+<!-- <img src="./public/docs/lambda.svg" width="50" height="50" alt="lambda"> -->
 
+-   Supabase (auth & database service)
+-   OAuth 2.0 (third-party authentication)
+-   AWS S3 (asset storage)
+<!-- -   AWS Lambda (custom image optimization) -->
 
-\\ Overview
-[] View operators with rarity grouping
-[x] Refactor to server-side data fetching
+### Data
 
-\\ Details
-[x] Tab Selection(useState)
-[x] Every column fetching
-[] Tags | Votes(to draw or not)
-  [] Votes could be represented in shpae of rope fight
-```
+<img src="./public/docs/postgres.svg" width="50" height="50" alt="postgreSql">
+<img src="./public/docs/mongo.svg" width="50" height="50" alt="mongoDb">
+<img src="./public/docs/python.svg" width="50" height="50" alt="python">
 
-_Infra_
-
-```
-\\ Filter
-[] Apply facility tree structure for initialData
-[x] Refactor the filtering logic can be overlapped with useReducer
-[x] Clicked operator should be remained in the page
-
-\\ Overview
-[x] Query operators JOIN base
-  [x] When an operator is selected, filter view to its realtions
-[x] Refactor to server-side data fetching
-[] ?Save preset
-```
-
-### CSS
-
-_Header_
-
-```
-[x] Nav
-[] Sticky
-```
-
-_Home_
-
-```
-[x] Background Video
-[] Banners(Carousel)
-```
-
-_Footer_
-
-```
-[x] Background color
-[] Version
-[] Stick to the bottom
-```
-
-_Operators_
-
-```
-\\ Filter
-[x] Adjust rarity margin
-[] Make background color change when elements are being selected
-[] Fix corresponding desc to show up for branches
-[] Apply accordions
-  [] (faction)Show the most popular 6 factions and put Extend button below
-[] Make every image background size constant in branch
-
-\\ Overview
-[] Grid(_grid.scss)
-  [x] 6 repeated columns
-  [] when hovered, the icon shines according to its rarity
-  [] Dropdown rarity bar to show/hide corresponding operators
-[] Modal
-  [] when hovered, a preview pops up as a modal
-[]
-```
-
-_Operators_Details_
-![details_layout](./public/docs/details_layout.png)
-
-```
-[]
-```
-
-_Infra_
-
-```
-[x] Highlight only hovered skill, not the operator itself
-[] Add accordion for each category
-```
-
-### DB
-
-_Operators_
-[x] UPDATE COLUMN name_en TO name
-
-_Infra_
-[x] connect operators with base
+-   PostgreSQL (via Supabase)
+-   MongoDB (for game data)
+-   Python (data processing pipeline)
 
 ### Deploy
 
-```
-[x] S3 bucket for static assets
-[x] Fix Image src to S3
-[] Refactor using ISR
-```
+<img src="./public/docs/github.svg" width="50" height="50" alt="github">
+<img src="./public/docs/vercel.svg" width="50" height="50" alt="vercel">
+
+-   GitHub (CI/CD & version control)
+-   Vercel (static site hosting)
+
+## Initial Designs
+
+![db_flow](./public/docs/db_flow.png)
+
+![details_layout](./public/docs/details_layout.png)
