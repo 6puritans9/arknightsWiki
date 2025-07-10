@@ -18,7 +18,7 @@ const container = css({
     overflow: "hidden",
 });
 
-const tabStyle = css({
+const baseTabStyle = {
     fontSize: {
         base: "fMd",
         md: "fXl",
@@ -27,10 +27,23 @@ const tabStyle = css({
     width: "fit-content",
     fontWeight: "semibold",
     cursor: "pointer",
+};
+
+const tabStyle = css({
+    ...baseTabStyle,
+});
+
+const emptyTabStyle = css({
+    ...baseTabStyle,
+    cursor: "default",
+    textDecoration: "line-through",
 });
 
 const Contents = ({ data: op }: ContentsProps) => {
     const [tab, setTab] = useState<number | null>(null);
+
+    const hasSkills = Object.keys(op.skills).length ? true : false;
+    // const hasModules = op.modules ? true : false;
 
     return (
         <div className={container}>
@@ -43,12 +56,12 @@ const Contents = ({ data: op }: ContentsProps) => {
             {tab === 0 && <Attributes operator={op} />}
 
             <h2
-                className={tabStyle}
+                className={hasSkills ? tabStyle : emptyTabStyle}
                 onClick={() => (tab === 1 ? setTab(null) : setTab(1))}
             >
                 SKILLS
             </h2>
-            {tab === 1 && <Skills operator={op} />}
+            {tab === 1 && op.rarity > 1 && <Skills operator={op} />}
 
             <h2
                 className={tabStyle}
