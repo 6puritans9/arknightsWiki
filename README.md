@@ -1,6 +1,7 @@
 # ArknightsWiki
 
-![kal'tsit](./public/kal'tsit.gif)
+![kal'tsit](./public/kal'tsit.gif)\
+[Source: coconut-emoji.tistory.com](https://coconut-emoji.tistory.com/148)
 
 Greetings, Doctor!\
 This is the source page of [Rhodes Island](https://arknights-wiki.vercel.app/).\
@@ -60,12 +61,14 @@ TODO:
 
 ### Frontend
 
+<div style="display: flex; align-items: center; gap: 1rem;">
 <img src="./public/docs/next-js.svg" width="50" height="50" alt="nextJs">
 <img src="./public/docs/typescript.svg" width="50" height="50" alt="typescript">
 <img src="./public/docs/pandacss.svg" width="50" height="50" alt="pandaCss">
 <img src="./public/docs/radix.svg" width="50" height="50" alt="radixui">
 <img src="./public/docs/zustand.svg" width="50" height="50" alt="zustand">
 <img src="./public/docs/jest.svg" width="50" height="50" alt="jest">
+</div>
 
 -   Next.js
 -   TypeScript
@@ -76,10 +79,12 @@ TODO:
 
 ### Backend
 
+<div style="display: flex; align-items: center; gap: 1rem;">
 <img src="./public/docs/supabase.svg" width="50" height="50" alt="supabase">
 <img src="./public/docs/oauth.svg" width="50" height="50" alt="oAuth2">
 <img src="./public/docs/s3.svg" width="50" height="50" alt="s3">
 <!-- <img src="./public/docs/lambda.svg" width="50" height="50" alt="lambda"> -->
+</div>
 
 -   Supabase (auth & database service)
 -   OAuth 2.0 (third-party authentication)
@@ -88,9 +93,11 @@ TODO:
 
 ### Data
 
+<div style="display: flex; align-items: center; gap: 1rem;">
 <img src="./public/docs/postgres.svg" width="50" height="50" alt="postgreSql">
 <img src="./public/docs/mongo.svg" width="50" height="50" alt="mongoDb">
 <img src="./public/docs/python.svg" width="50" height="50" alt="python">
+</div>
 
 -   PostgreSQL (via Supabase)
 -   MongoDB (for game data)
@@ -98,8 +105,10 @@ TODO:
 
 ### Deploy
 
+<div style="display: flex; align-items: center; gap: 1rem;">
 <img src="./public/docs/github.svg" width="50" height="50" alt="github">
 <img src="./public/docs/vercel.svg" width="50" height="50" alt="vercel">
+</div>
 
 -   GitHub (CI/CD & version control)
 -   Vercel (static site hosting)
