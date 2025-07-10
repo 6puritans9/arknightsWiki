@@ -93,6 +93,10 @@ const getIconImage = (name: string): string => {
     return BASE_URL + `/dynamicassets/ui/uni_equip_page/icon_${name}.png`;
 };
 
+const getSkillImage = (iconId: string) => {
+    return BASE_URL + `/dynamicassets/arts/skills/skill_icon_${iconId}.png`;
+};
+
 export {
     getHomeBanners,
     getThumbnailImg,
@@ -104,4 +108,5 @@ export {
     getEliteImage,
     getRoomImage,
     getIconImage,
+    getSkillImage,
 };
