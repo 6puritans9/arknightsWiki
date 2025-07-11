@@ -25,6 +25,14 @@ export const appPageText: { [key: string]: { [key: string]: string } } = {
     },
 };
 
+export const LogoutText: { [key: string]: string } = {
+    "en-US": "Logout",
+    "ko-KR": "로그아웃",
+    "ja-JP": "ログアウト",
+    "zh-CN": "登出",
+    "zh-TW": "登出",
+};
+
 export const footerLogoText: { [key: string]: string } = {
     "en-US": "RHODES ISLAND",
     "ko-KR": "로도스 아일랜드",
