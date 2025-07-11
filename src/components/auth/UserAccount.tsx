@@ -2,19 +2,23 @@ import { User } from "@supabase/supabase-js";
 import { flex } from "$/styled-system/patterns";
 import { greetMsg } from "@/lib/dictionary";
 
+type UserAccountProps = {
+    locale: string;
+    user: User;
+};
+
 const boxStyle = flex({
     alignItems: "center",
     gap: "0.5rem",
     maxWidth: "400px",
 });
 
-const UserAccount = ({ user }: { user: User }) => {
+const UserAccount = ({ locale, user }: UserAccountProps) => {
     const name = user.user_metadata.name || user.user_metadata.full_name;
-    // const picture = user.user_metadata.avatar_url;
 
     return (
         <div className={boxStyle}>
-            <span>{greetMsg.ko.replace("${name}", name)}</span>
+            <span>{greetMsg[locale].replace("${name}", name)}</span>
         </div>
     );
 };

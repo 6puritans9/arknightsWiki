@@ -5,7 +5,11 @@ import LogoutButton from "./LogoutButton";
 import UserAccount from "./UserAccount";
 import { useAuthStore } from "@/stores/authStore";
 
-const AuthButton = () => {
+type AuthButtonProps = {
+    locale: string;
+};
+
+const AuthButton = ({ locale }: AuthButtonProps) => {
     const user = useAuthStore((state) => state.user);
     const loading = useAuthStore((state) => state.loading);
     const storeLogin = useAuthStore((state) => state.login);
@@ -23,8 +27,8 @@ const AuthButton = () => {
 
     return user ? (
         <div>
-            <UserAccount user={user} />
-            <LogoutButton onLogout={handleLogout} />
+            <UserAccount locale={locale} user={user} />
+            <LogoutButton locale={locale} onLogout={handleLogout} />
         </div>
     ) : (
         <LoginButton onClick={handleLogin} />

@@ -1,6 +1,11 @@
 import { css } from "$/styled-system/css";
 
-const logoutButton = css({
+type LogoutButtonProps = {
+    locale: string;
+    onLogout: () => void;
+};
+
+const buttonStyle = css({
     userSelect: "none",
     appearance: "none",
     backgroundColor: "secondary", // A more distinct background color (e.g., a shade of red for logout)
@@ -47,9 +52,9 @@ const logoutButton = css({
     },
 });
 
-const LogoutButton = ({ onLogout }: { onLogout: () => void }) => {
+const LogoutButton = ({ locale, onLogout }: LogoutButtonProps) => {
     return (
-        <button onClick={onLogout} className={logoutButton}>
+        <button onClick={onLogout} className={buttonStyle}>
             Logout
         </button>
     );
