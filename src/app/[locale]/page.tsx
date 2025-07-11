@@ -68,7 +68,7 @@ const imageStyles = css({
 });
 //#endregion
 
-const App = async ({ params }: { params: { locale: string } }) => {
+const App = async ({ params }: { params: Promise<{ locale: string }> }) => {
     const { ongoingUrl, upcomingUrl } = getHomeBanners();
     const { locale } = await params;
 

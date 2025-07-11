@@ -1,15 +1,15 @@
 import { NextResponse } from "next/server";
 import createClient from "@/utils/supabase/server";
 
-export async function GET(
+const GET = async (
     request: Request,
-    { params }: { params: { locale: string } }
-) {
+    { params }: { params: Promise<{ locale: string }> }
+) => {
     const { searchParams, origin } = new URL(request.url);
     const code = searchParams.get("code");
     // if "next" is in param, use it as the redirect URL
     const next = searchParams.get("next") ?? "/";
-    const { locale } = params;
+    const { locale } = await params;
 
     if (code) {
         const supabase = await createClient();
@@ -34,4 +34,6 @@ export async function GET(
 
     // return the user to an error page with instructions
     return NextResponse.redirect(`${origin}/auth/auth-code-error`);
-}
+};
+
+export { GET };
