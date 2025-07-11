@@ -47,13 +47,13 @@ export async function updateSession(request: NextRequest) {
         path === "/" ? currentPath === path : currentPath.startsWith(path)
     );
 
-    if (!user && !pathIsPublic) {
-        // no user, potentially respond by redirecting the user to the login page
-        const url = request.nextUrl.clone();
-        url.pathname = "/login";
+    // if (!user && !pathIsPublic) {
+    //     // no user, potentially respond by redirecting the user to the login page
+    //     const url = request.nextUrl.clone();
+    //     url.pathname = "/login";
 
-        return NextResponse.redirect(url);
-    }
+    //     return NextResponse.redirect(url);
+    // }
 
     // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're
     // creating a new response object with NextResponse.next() make sure to:

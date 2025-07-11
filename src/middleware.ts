@@ -1,32 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { updateSession } from "@/utils/supabase/middleware";
-
-const locales = ["en-US", "ko-KR", "zh-CN", "zh-TW", "ja-JP"];
-const defaultLocale = "en-Us";
-
-//#region helpers
-const hasLocaleInPath = (pathname: string): boolean => {
-    return locales.some(
-        (locale) =>
-            pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
-    );
-};
-
-const getPreferredLocale = (request: NextRequest): string => {
-    const acceptLanguage = request.headers.get("accept-language");
-    if (acceptLanguage) {
-        for (const locale of locales) {
-            if (
-                acceptLanguage.includes(locale) ||
-                acceptLanguage.includes(locale.split("-")[0])
-            ) {
-                return locale;
-            }
-        }
-    }
-    return defaultLocale;
-};
-//#endregion
+import { hasLocaleInPath, getPreferredLocale } from "./utils/i18n/locales";
 
 export async function middleware(request: NextRequest) {
     const pathname = request.nextUrl.pathname;
