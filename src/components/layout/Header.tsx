@@ -45,8 +45,8 @@ const navItem = css({
 
 const utilsContainer = flex({
     justifyContent: "flex-end",
-    gap: "0.5rem",
     alignItems: "center",
+    gap: { base: "0.2rem", md: "0.5rem" },
 });
 
 const menuBtn = css({
