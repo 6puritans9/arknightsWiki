@@ -4,7 +4,7 @@ import {
     BuffsObjectType,
     fetchAllBuildingData,
 } from "@/api/apiMongo";
-import { flex } from "../../../styled-system/patterns";
+import { flex } from "$/styled-system/patterns";
 import ClientSideFilterWrapper from "@/components/filter/infra/ClientSideFilterWrapper";
 
 //#region Styles

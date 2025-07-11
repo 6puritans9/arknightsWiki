@@ -1,9 +1,9 @@
 "use client";
 
 import { BuffsObjectType, CharsObjectType } from "@/api/apiMongo";
-import { css } from "../../../styled-system/css";
 import usePagination from "@/hooks/usePagination";
 import useInfraStore from "@/stores/infraStore";
+import { css } from "$/styled-system/css";
 import InfraCard from "@/components/infra/InfraCard";
 import Spinner from "@/components/ui/Spinner";
 
