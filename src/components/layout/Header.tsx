@@ -7,7 +7,9 @@ import Link from "next/link";
 import { flex } from "$/styled-system/patterns";
 import { css } from "$/styled-system/css";
 import AuthButton from "../auth/AuthButton";
-import { hamburgerBtn, closeBtn, glass, globe } from "../ui/NavButtons";
+import { hamburgerBtn, closeBtn } from "../ui/NavButtons";
+import LocaleSelector from "../ui/LocaleSelector";
+import SearchBar from "../ui/SearchBar";
 
 type HeaderProps = {
     locale: string;
@@ -171,8 +173,8 @@ const Header = ({ locale }: HeaderProps) => {
                 </button>
 
                 <div className={utilsContainer}>
-                    {glass}
-                    {globe}
+                    <SearchBar />
+                    <LocaleSelector locale={locale} />
                     <AuthButton locale={locale} />
                 </div>
             </nav>
