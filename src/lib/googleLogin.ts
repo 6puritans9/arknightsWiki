@@ -1,14 +1,21 @@
 import supabase from "../utils/supabase/client";
+import { getCurrentLocale, getPathWithoutLocale } from "@/utils/i18n/locales";
 
 const googleLogin = async () => {
     try {
         const currentPath = window.location.pathname;
-        const nextPath = currentPath && currentPath !== "/" ? currentPath : "/";
+        const currentLocale = getCurrentLocale(currentPath);
+        const pathWithoutLocale = getPathWithoutLocale(currentPath);
+
+        const nextPath =
+            pathWithoutLocale && pathWithoutLocale !== "/"
+                ? pathWithoutLocale
+                : "/";
 
         const { data, error } = await supabase.auth.signInWithOAuth({
             provider: "google",
             options: {
-                redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextPath)}`,
+                redirectTo: `${window.location.origin}/${currentLocale}/auth/callback?next=${encodeURIComponent(nextPath)}`,
             },
         });
 
@@ -17,9 +24,10 @@ const googleLogin = async () => {
             return null;
         }
 
-        // If Supabase provides a URL, it means we need to manually redirect.
+        console.log(data, data.url);
+
         if (data && data.url) {
-            window.location.href = data.url; // Perform the redirect
+            window.location.href = data.url;
         } else {
             // This case might happen if Supabase *did* auto-redirect,
             // or if there's an unexpected response structure (though less likely for OAuth).
@@ -29,12 +37,10 @@ const googleLogin = async () => {
             );
         }
     } catch (e) {
-        // Catch any other unexpected errors during the function's execution
         console.error(
             "googleLogin: Critical error in googleLogin function:",
             e
         );
-        // alert(`Critical Login Error: ${e instanceof Error ? e.message : String(e)}`); // For quick debugging
     }
 };
 
