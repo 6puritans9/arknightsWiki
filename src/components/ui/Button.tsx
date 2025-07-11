@@ -1,5 +1,5 @@
-import { css } from "../../../styled-system/css";
 import Image from "next/image";
+import { css } from "$/styled-system/css";
 
 type buttonProps = {
     content?: string;
@@ -37,7 +37,7 @@ const Button = ({ content, onClick, isSelected }: buttonProps) => {
             onClick={onClick}
         >
             <Image
-                src={`https://arknights-wiki-assets.s3.ap-northeast-2.amazonaws.com/public/${content}.png`}
+                src={`/${content}.png`}
                 width="50"
                 height="50"
                 alt={content as string}
