@@ -8,6 +8,10 @@ import { flex } from "../../../styled-system/patterns";
 import { css } from "../../../styled-system/css";
 import AuthButton from "../auth/AuthButton";
 
+type HeaderProps = {
+    locale: string;
+};
+
 //#region Elements
 const hamburgerBtn = (
     <svg
@@ -218,7 +222,7 @@ const githubIcon = css({
 });
 //#endregion
 
-const Header = () => {
+const Header = ({ locale }: HeaderProps) => {
     const [open, setOpen] = useState(false);
     const pathname = usePathname();
 
@@ -256,7 +260,7 @@ const Header = () => {
                 <div className={utilsContainer}>
                     {glass}
                     {globe}
-                    <AuthButton />
+                    <AuthButton locale={locale} />
                 </div>
             </nav>
 
@@ -282,9 +286,9 @@ const Header = () => {
                     </li>
                     <li>
                         <Link
-                            href="/infrastructure"
+                            href="/infra"
                             className={navItem}
-                            onClick={() => handleNavClick("/infrastructure")}
+                            onClick={() => handleNavClick("/infra")}
                         >
                             R.I.I.C.
                         </Link>

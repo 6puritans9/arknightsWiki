@@ -1,6 +1,10 @@
 import { flex } from "$/styled-system/patterns";
 import { footerLogoText } from "@/lib/dictionary";
 
+type FooterProps = {
+    locale: string;
+};
+
 const container = flex({
     flexDirection: "column",
     alignItems: "flex-end",
@@ -27,11 +31,11 @@ const FooterLogo = flex({
     overflowY: "hidden",
 });
 
-const Footer = () => {
+const Footer = ({ locale }: FooterProps) => {
     return (
         <footer className={container}>
             <h3 className={FooterLogo} aria-label="Go to homepage">
-                {footerLogoText.en}
+                {footerLogoText[locale]}
             </h3>
         </footer>
     );
