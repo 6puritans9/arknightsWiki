@@ -15,20 +15,8 @@ const OperatorDetail = async ({
 }: OperatorDetailProps) => {
     const { locale } = await params;
     const { id } = await searchParams;
-    const dbLocaleMap: { [key: string]: string } = {
-        "en-US": "en",
-        "ko-KR": "kr",
-        "zh-CN": "cn",
-        "zh-TW": "tw",
-        "ja-JP": "ja",
-    };
-    console.log(dbLocaleMap[locale]);
 
-    const op = await fetchSingleOperator(
-        id,
-        dbLocaleMap[locale],
-        "character_table"
-    );
+    const op = await fetchSingleOperator(id, locale, "character_table");
 
     if (!op) {
         return <div>Operator not found</div>;

@@ -33,7 +33,7 @@ const cardsContainer = grid({
 const OperatorsPage = async ({ params }: OperatorsPageProps) => {
     const { locale } = await params;
 
-    const ops = await fetchAllOperators();
+    const ops = await fetchAllOperators(locale);
     const opsArray = Object.entries(ops).sort(
         (prv, nxt) => nxt[1].releaseOrder - prv[1].releaseOrder
     );
