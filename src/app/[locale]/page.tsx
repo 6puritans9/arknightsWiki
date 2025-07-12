@@ -89,7 +89,6 @@ const App = async ({ params }: { params: Promise<{ locale: string }> }) => {
                         src={`${ongoingUrl}`}
                         alt="Ongoing Events"
                         fill={true}
-                        unoptimized
                     />
                 </div>
             </article>
@@ -107,7 +106,6 @@ const App = async ({ params }: { params: Promise<{ locale: string }> }) => {
                         src={`${upcomingUrl}`}
                         alt="Upcoming Events"
                         fill={true}
-                        unoptimized
                     />
                 </div>
             </article>
