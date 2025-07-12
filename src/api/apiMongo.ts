@@ -334,11 +334,11 @@ const fetchAllOperators = async (lang: string = "en") => {
 };
 
 const fetchSingleOperator = async (
-    name: string,
-    collectionName: string,
-    lang: string = "en"
+    id: string,
+    lang: string = "en",
+    collectionName: string
 ) => {
-    const decodedName = decodeURIComponent(name);
+    const decodedId = decodeURIComponent(id);
 
     try {
         const mongoClient = await getClient();
@@ -349,7 +349,7 @@ const fetchSingleOperator = async (
         const pipeline = [
             {
                 $match: {
-                    name: decodedName,
+                    _id: decodedId,
                     isNotObtainable: false, // filter npc characters
                 },
             },
@@ -393,7 +393,7 @@ const fetchSingleOperator = async (
         const result = await collection.aggregate(pipeline).toArray();
         if (!result || result.length === 0) {
             console.warn(
-                `Entity with name "${decodedName}" not found in collection "${collectionName}"`
+                `Entity with name "${decodedId}" not found in collection "${collectionName}"`
             );
             return null;
         }
