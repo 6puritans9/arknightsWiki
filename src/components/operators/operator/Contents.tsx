@@ -64,7 +64,7 @@ const Contents = ({ data: op, locale }: ContentsProps) => {
         const search = current.toString();
         const query = search ? `?${search}` : "";
 
-        router.push(`${pathname}${query}`, { scroll: false });
+        router.replace(`${pathname}${query}`, { scroll: false });
     };
 
     const hasSkills = Object.keys(op.skills).length ? true : false;
