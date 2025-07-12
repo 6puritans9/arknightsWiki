@@ -15,6 +15,7 @@ import { flex } from "$/styled-system/patterns";
 type OpCardProps = {
     id: string;
     operator: SimpleOpType;
+    locale: string;
     priority?: boolean;
     dataSsrOp?: boolean;
 };
@@ -143,6 +144,7 @@ const iridescentRarityStyle = css({
 const OpCard = ({
     id,
     operator: op,
+    locale,
     priority = false,
     dataSsrOp,
 }: OpCardProps) => {
@@ -180,7 +182,7 @@ const OpCard = ({
 
     return (
         <div className={container} data-ssr-op={dataSsrOp ? "" : undefined}>
-            <Link href={`/operators/${op.name}`} passHref>
+            <Link href={`/${locale}/operators/${op.name}?id=${id}`} passHref>
                 <figure className={figureContainer}>
                     <span
                         className={

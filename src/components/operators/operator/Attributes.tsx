@@ -10,6 +10,7 @@ import { SingleOpType } from "@/api/apiMongo";
 
 type AttributesProps = {
     operator: SingleOpType;
+    locale: string;
 };
 
 //#region Styles
@@ -154,7 +155,7 @@ const extraStatKeys = (data: { [key: string]: number | boolean }) => {
 };
 //#endregion
 
-const Attributes = ({ operator: op }: AttributesProps) => {
+const Attributes = ({ operator: op, locale }: AttributesProps) => {
     const [phaseIdx, setPhaseIdx] = useState(0);
     const [showExtraStats, setShowExtraStats] = useState(false);
 
@@ -255,7 +256,7 @@ const Attributes = ({ operator: op }: AttributesProps) => {
                                     height={20}
                                 />
                                 <div className={statsValueWrapper}>
-                                    <dt>{statsMap[key].en}</dt>
+                                    <dt>{statsMap[key][locale]}</dt>
                                     <dd>{value}</dd>
                                 </div>
                             </div>
@@ -278,7 +279,7 @@ const Attributes = ({ operator: op }: AttributesProps) => {
                             <div key={key}>
                                 <div className={imageTextWrapper}>
                                     <div className={statsValueWrapper}>
-                                        <dt>{statsMap[key].en}</dt>
+                                        <dt>{statsMap[key][locale]}</dt>
                                         <dd>{value}</dd>
                                     </div>
                                 </div>
