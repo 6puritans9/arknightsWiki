@@ -8,6 +8,7 @@ import LocaleInitializer from "@/components/utils/LocaleInitializer";
 import { langMap } from "@/utils/i18n/locales";
 import Header from "@/components/layout/Header";
 import { flex } from "$/styled-system/patterns";
+import Footer from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
     title: "Rhodes Island",
@@ -52,6 +53,7 @@ export default async function LocaleLayout({
                 <TouchProvider>
                     <Header />
                     <main className={container}>{children}</main>
+                    <Footer locale={locale} />
                 </TouchProvider>
             </body>
         </html>

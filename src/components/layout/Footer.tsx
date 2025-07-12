@@ -4,7 +4,6 @@ import { footerLogoText } from "@/lib/dictionary";
 type FooterProps = {
     locale: string;
 };
-
 const container = flex({
     flexDirection: "column",
     alignItems: "flex-end",
