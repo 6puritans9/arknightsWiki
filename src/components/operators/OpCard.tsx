@@ -22,16 +22,12 @@ type OpCardProps = {
 
 //#region Styles
 const container = css({
-    width: {
-        base: "100px",
-        md: "150px",
-        xl: "200px",
-    },
     height: {
-        base: "150px",
+        base: "160px",
         md: "225px",
         xl: "300px",
     },
+    width: "100%",
     position: "relative",
     display: "block",
     clipPath: "polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%)",

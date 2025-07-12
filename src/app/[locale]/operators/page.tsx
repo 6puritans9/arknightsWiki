@@ -19,14 +19,14 @@ const pageWrapper = flex({
 
 const cardsContainer = grid({
     gridTemplateColumns: {
-        base: "repeat(2, 1fr)",
+        base: "repeat(3, 1fr)",
         md: "repeat(4, 1fr)",
-        xl: "repeat(5, 1fr)",
+        xl: "repeat(6, 1fr)",
     },
+    justifyItems: "center",
     marginTop: "2rem",
     width: "100%",
-    gap: "0.5rem",
-    justifyItems: "center",
+    gap: "0",
 });
 //#endregion
 
@@ -39,7 +39,7 @@ const OperatorsPage = async ({ params }: OperatorsPageProps) => {
     );
 
     const { classTree, factionTree } = mapOpsTree(ops);
-    const initialRenderOps = opsArray.slice(0, 20);
+    const initialRenderOps = opsArray.slice(0, 24);
     const initialOpsIds = initialRenderOps.map(([id]) => id);
 
     return (
