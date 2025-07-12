@@ -8,6 +8,7 @@ import useNavStore from "@/stores/navStore";
 import { flex } from "$/styled-system/patterns";
 import OpCard from "@/components/operators/OpCard";
 import Spinner from "@/components/ui/Spinner";
+import { getPathWithoutLocale } from "@/utils/i18n/locales";
 
 type ClientPaginationProps = {
     initialOpsIds: string[];
@@ -45,6 +46,8 @@ const OpsClientPage = ({ initialOpsIds, locale }: ClientPaginationProps) => {
 
     // Check route changes to manange filter state
     const pathname = usePathname();
+    const pathWithoutLocale = getPathWithoutLocale(pathname);
+
     const setPrvPathname = useNavStore((s) => s.setPrvPathname);
 
     const prvPathname = useNavStore().prvPathname;
@@ -52,7 +55,7 @@ const OpsClientPage = ({ initialOpsIds, locale }: ClientPaginationProps) => {
     // If previous pages were on the same group, keep the state
     useEffect(() => {
         const wasOpPage = /^\/operators(\/[^/]+)?\/?$/.test(prvPathname || "");
-        const isOpPage = /^\/operators(\/[^/]+)?\/?$/.test(pathname);
+        const isOpPage = /^\/operators(\/[^/]+)?\/?$/.test(pathWithoutLocale);
 
         if (!wasOpPage && isOpPage) {
             resetFilters();
@@ -60,8 +63,14 @@ const OpsClientPage = ({ initialOpsIds, locale }: ClientPaginationProps) => {
             applyFilters();
         }
 
-        setPrvPathname(pathname);
-    }, [pathname, prvPathname, applyFilters, resetFilters, setPrvPathname]);
+        setPrvPathname(pathWithoutLocale);
+    }, [
+        pathWithoutLocale,
+        prvPathname,
+        applyFilters,
+        resetFilters,
+        setPrvPathname,
+    ]);
 
     //#region Helper functions
     // filtered: Show only filtered ops, sorted by rarity, release order

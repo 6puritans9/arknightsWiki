@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { SingleOpType } from "@/api/apiMongo";
 import useNavStore from "@/stores/navStore";
 import useVote from "@/hooks/useVote";
+import { getPathWithoutLocale } from "@/utils/i18n/locales";
 import { flex, grid } from "$/styled-system/patterns";
 import Notification from "@/components/ui/Notification";
 import VoteBar from "@/components/operators/operator/VoteBar";
@@ -12,6 +13,7 @@ import Button from "@/components/ui/Button";
 import Header from "@/components/operators/operator/Header";
 import Images from "@/components/operators/operator/Images";
 import Contents from "@/components/operators/operator/Contents";
+import { toastMsg } from "@/lib/dictionary";
 
 type OperatorDetailClientProps = {
     op: SingleOpType;
@@ -55,20 +57,20 @@ const container = grid({
     },
 });
 
-const contentWrapper = flex({
-    flexDirection: "column",
-    overflowY: "hidden",
-    height: "100%",
-    fontSize: {
-        base: "0.8rem",
-    },
-});
+// const contentWrapper = flex({
+//     flexDirection: "column",
+//     overflowY: "hidden",
+//     height: "100%",
+//     fontSize: {
+//         base: "0.8rem",
+//     },
+// });
 
-const feedbackContainer = flex({
-    gridArea: "feedback",
-    flexDirection: "column",
-    gap: "1rem",
-});
+// const feedbackContainer = flex({
+//     gridArea: "feedback",
+//     flexDirection: "column",
+//     gap: "1rem",
+// });
 
 const tagsWrapper = flex({
     justifyContent: "center",
@@ -96,17 +98,20 @@ const OperatorDetailClient = ({ op, locale }: OperatorDetailClientProps) => {
     });
 
     const pathname = usePathname();
+    const pathWithoutLocale = getPathWithoutLocale(pathname);
+
     const setPrvPathname = useNavStore((s) => s.setPrvPathname);
+
     useEffect(() => {
-        setPrvPathname(pathname);
-    }, [pathname, setPrvPathname]);
+        setPrvPathname(pathWithoutLocale);
+    }, [pathWithoutLocale, setPrvPathname]);
 
     return (
         <>
             <Notification
-                title="Login required"
-                description="You need to be logged in to vote."
-                variant="Close"
+                title={toastMsg["loginReq"]["title"][locale]}
+                description={toastMsg["loginReq"]["desc"][locale]}
+                variant={toastMsg["loginReq"]["variant"][locale]}
                 open={showNotification}
                 onOpenChange={setShowNotification}
             />
@@ -116,7 +121,7 @@ const OperatorDetailClient = ({ op, locale }: OperatorDetailClientProps) => {
                 <Images data={op} />
 
                 <section className={voteWrapper}>
-                    <h1>Should I pull?</h1>
+                    <h3>Should I pull?</h3>
                     <div className={buttonWrapper}>
                         <Button
                             content="upvote"

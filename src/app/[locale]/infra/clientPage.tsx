@@ -6,6 +6,10 @@ import useInfraStore from "@/stores/infraStore";
 import { css } from "$/styled-system/css";
 import InfraCard from "@/components/infra/InfraCard";
 import Spinner from "@/components/ui/Spinner";
+import { usePathname } from "next/navigation";
+import { getPathWithoutLocale } from "@/utils/i18n/locales";
+import useNavStore from "@/stores/navStore";
+import { useEffect } from "react";
 
 type InfraClientPageProps = {
     initialData: {
@@ -30,6 +34,15 @@ const container = css({
 //#endregion
 
 const InfraClientPage = ({ initialData: { buffs } }: InfraClientPageProps) => {
+    const pathname = usePathname();
+    const pathWithoutLocale = getPathWithoutLocale(pathname);
+
+    const setPrvPathname = useNavStore((s) => s.setPrvPathname);
+
+    useEffect(() => {
+        setPrvPathname(pathWithoutLocale);
+    }, [pathWithoutLocale, setPrvPathname]);
+
     const { filteredOpsId, ops } = useInfraStore();
     const filteredOps = filteredOpsId.map((id) => ops[id]);
 
