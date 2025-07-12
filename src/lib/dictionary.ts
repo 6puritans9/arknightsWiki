@@ -8,6 +8,36 @@ export const greetMsg: { [key: string]: string } = {
     "zh-TW": "你好，${name} 博士",
 };
 
+export const toastMsg: {
+    [key: string]: { [key: string]: { [key: string]: string } };
+} = {
+    loginReq: {
+        title: {
+            "en-US": "Login required",
+            "ko-KR": "로그인이 필요합니다",
+            "ja-JP": "ログインが必要です",
+            "zh-CN": "需要登录",
+            "zh-TW": "需要登入",
+        },
+
+        desc: {
+            "en-US": "You need to be logged in to vote.",
+            "ko-KR": "투표하려면 로그인해주세요",
+            "ja-JP": "投票するにはログインしてください",
+            "zh-CN": "投票需要先登录",
+            "zh-TW": "投票需要先登入",
+        },
+
+        variant: {
+            "en-US": "Close",
+            "ko-KR": "닫기",
+            "ja-JP": "閉じる",
+            "zh-CN": "关闭",
+            "zh-TW": "關閉",
+        },
+    },
+};
+
 export const appPageText: { [key: string]: { [key: string]: string } } = {
     ongoing: {
         "en-US": "Ongoing",

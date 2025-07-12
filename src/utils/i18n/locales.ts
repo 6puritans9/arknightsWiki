@@ -1,7 +1,14 @@
 import { NextRequest } from "next/server";
 
-const locales = ["en-US", "ko-KR", "zh-CN", "zh-TW", "ja-JP"];
-const defaultLocale = "en-Us";
+export const locales = ["en-US", "ko-KR", "zh-CN", "zh-TW", "ja-JP"];
+export const defaultLocale = "en-Us";
+export const langMap: { [key: string]: string } = {
+    "en-US": "en",
+    "ko-KR": "ko",
+    "ja-JP": "ja",
+    "zh-CN": "zh-CN",
+    "zh-TW": "zh-TW",
+};
 
 const hasLocaleInPath = (pathname: string): boolean => {
     return locales.some(
@@ -44,8 +51,6 @@ const getPathWithoutLocale = (pathname: string): string => {
 };
 
 export {
-    locales,
-    defaultLocale,
     hasLocaleInPath,
     getCurrentLocale,
     getPreferredLocale,
