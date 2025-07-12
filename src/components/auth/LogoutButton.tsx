@@ -1,8 +1,8 @@
+import useLocaleStore from "@/stores/localeStore";
 import { css } from "$/styled-system/css";
 import { LogoutText } from "@/lib/dictionary";
 
 type LogoutButtonProps = {
-    locale: string;
     onLogout: () => void;
 };
 
@@ -39,7 +39,9 @@ const buttonStyle = css({
     },
 });
 
-const LogoutButton = ({ locale, onLogout }: LogoutButtonProps) => {
+const LogoutButton = ({ onLogout }: LogoutButtonProps) => {
+    const { locale } = useLocaleStore();
+
     return (
         <button onClick={onLogout} className={buttonStyle}>
             {LogoutText[locale]}

@@ -1,10 +1,10 @@
 import { User } from "@supabase/supabase-js";
+import useLocaleStore from "@/stores/localeStore";
 import { flex } from "$/styled-system/patterns";
 import { greetMsg } from "@/lib/dictionary";
 import { css } from "$/styled-system/css";
 
 type UserAccountProps = {
-    locale: string;
     user: User;
 };
 
@@ -21,7 +21,9 @@ const textStyle = css({
     },
 });
 
-const UserAccount = ({ locale, user }: UserAccountProps) => {
+const UserAccount = ({ user }: UserAccountProps) => {
+    const { locale } = useLocaleStore();
+
     const name = user.user_metadata.name || user.user_metadata.full_name;
 
     return (
