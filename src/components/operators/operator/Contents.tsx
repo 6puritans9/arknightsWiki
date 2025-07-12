@@ -1,6 +1,8 @@
-import { useState } from "react";
-import { css } from "$/styled-system/css";
+"use client";
+
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { SingleOpType } from "@/api/apiMongo";
+import { css } from "$/styled-system/css";
 import Attributes from "./Attributes";
 import Skills from "./Skills";
 import Modules from "./Modules";
@@ -9,8 +11,10 @@ import Lore from "./Lore";
 
 type ContentsProps = {
     data: SingleOpType;
+    locale: string;
 };
 
+//#region Styles
 const container = css({
     gridArea: "contents",
     width: "100%",
@@ -38,9 +42,30 @@ const emptyTabStyle = css({
     cursor: "default",
     textDecoration: "line-through",
 });
+//#endregion
 
-const Contents = ({ data: op }: ContentsProps) => {
-    const [tab, setTab] = useState<number | null>(null);
+const Contents = ({ data: op, locale }: ContentsProps) => {
+    const searchParams = useSearchParams();
+    const router = useRouter();
+    const pathname = usePathname();
+
+    const currentTab = searchParams.get("tab");
+    const tab = currentTab ? parseInt(currentTab, 10) : null;
+
+    const setTab = (newTab: number | null) => {
+        const current = new URLSearchParams(Array.from(searchParams.entries()));
+
+        if (newTab === null) {
+            current.delete("tab");
+        } else {
+            current.set("tab", newTab.toString());
+        }
+
+        const search = current.toString();
+        const query = search ? `?${search}` : "";
+
+        router.push(`${pathname}${query}`, { scroll: false });
+    };
 
     const hasSkills = Object.keys(op.skills).length ? true : false;
     // const hasModules = op.modules ? true : false;
@@ -53,7 +78,7 @@ const Contents = ({ data: op }: ContentsProps) => {
             >
                 ATTRIBUTES
             </h2>
-            {tab === 0 && <Attributes operator={op} />}
+            {tab === 0 && <Attributes operator={op} locale={locale} />}
 
             <h2
                 className={hasSkills ? tabStyle : emptyTabStyle}
