@@ -267,10 +267,10 @@ const cleanStringField = (value: string): string | null => {
 };
 
 // Main Functions
-const fetchAllOperators = async (lang: string = "en") => {
+const fetchAllOperators = async (locale: string) => {
     try {
         const mongoClient = await getClient();
-        const dbName = LANGUAGE_DB_MAP[lang];
+        const dbName = LANGUAGE_DB_MAP[locale] || "data_en";
         const db = mongoClient.db(dbName);
         const collection = db.collection("character_table");
 
@@ -335,14 +335,14 @@ const fetchAllOperators = async (lang: string = "en") => {
 
 const fetchSingleOperator = async (
     id: string,
-    lang: string = "en",
+    locale: string,
     collectionName: string
 ) => {
     const decodedId = decodeURIComponent(id);
 
     try {
         const mongoClient = await getClient();
-        const dbName = LANGUAGE_DB_MAP[lang];
+        const dbName = LANGUAGE_DB_MAP[locale];
         const db = mongoClient.db(dbName);
         const collection = db.collection(collectionName);
 
