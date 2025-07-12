@@ -4,7 +4,8 @@ import type { Metadata } from "next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { TouchProvider } from "@/components/utils/TouchProvider";
 import StoreInitializer from "@/components/utils/StoreInitializer";
-// import LocaleInitializer from "@/components/utils/LocaleInitializer";
+import LocaleInitializer from "@/components/utils/LocaleInitializer";
+import { langMap } from "@/utils/i18n/locales";
 import Header from "@/components/layout/Header";
 import { flex } from "$/styled-system/patterns";
 
@@ -35,29 +36,21 @@ const container = flex({
     flex: 1,
 });
 
-const localeToLang: { [key: string]: string } = {
-    "en-US": "en",
-    "ko-KR": "ko",
-    "ja-JP": "ja",
-    "zh-CN": "zh-CN",
-    "zh-TW": "zh-TW",
-};
-
 export default async function LocaleLayout({
     children,
     params,
 }: LocaleLayoutProps) {
     const { locale } = await params;
-    const htmlLang = localeToLang[locale] || "en";
+    const htmlLang = langMap[locale] || "en";
 
     return (
         <html lang={htmlLang} className={`${Paperlogy.className}`}>
             <body className={wrapper}>
                 <SpeedInsights />
                 <StoreInitializer />
-                {/* <LocaleInitializer /> */}
+                <LocaleInitializer />
                 <TouchProvider>
-                    <Header locale={locale} />
+                    <Header />
                     <main className={container}>{children}</main>
                 </TouchProvider>
             </body>
