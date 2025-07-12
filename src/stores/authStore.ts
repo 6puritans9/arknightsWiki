@@ -1,55 +1,120 @@
 import { create } from "zustand";
-import { User } from "@supabase/supabase-js";
+import { User, Session } from "@supabase/supabase-js";
 import supabase from "@/utils/supabase/client";
 import googleLogin from "@/lib/googleLogin";
 
-type AuthState = {
+type State = {
     user: User | null;
+    session: Session | null;
     loading: boolean;
-    initializeAuth: () => () => void; // Returns a cleanup function to unsubscribe from auth changes
-    login: () => Promise<void>;
-    logout: () => Promise<void>;
+    initialized: boolean;
 };
 
-export const useAuthStore = create<AuthState>((set) => ({
+type Action = {
+    initializeAuth: () => Promise<() => void>;
+    login: () => Promise<void>;
+    logout: () => Promise<void>;
+    setNullSession: () => void;
+};
+
+const initialState: State = {
     user: null,
+    session: null,
     loading: true,
-    initializeAuth: () => {
-        (async () => {
-            try {
-                const { data, error } = await supabase.auth.getSession();
-                if (error) {
-                    console.error("Error fetching session:", error.message);
-                    set({ loading: false });
-                    return;
+    initialized: false,
+};
+
+const useAuthStore = create<State & Action>((set, get) => ({
+    ...initialState,
+
+    initializeAuth: async () => {
+        const { setNullSession } = get();
+
+        try {
+            const {
+                data: { session },
+                error,
+            } = await supabase.auth.getSession();
+
+            if (error) {
+                console.error("Error fetching session:", error.message);
+                setNullSession();
+                return () => {};
+            }
+
+            if (!session) {
+                setNullSession();
+            }
+
+            set({
+                user: session?.user ?? null,
+                session,
+                loading: false,
+                initialized: true,
+            });
+
+            const {
+                data: { subscription },
+            } = supabase.auth.onAuthStateChange(async (event, session) => {
+                console.log("Auth state changed:", event, session?.user?.email); //TODO: remove
+
+                if (event === "SIGNED_OUT") {
+                    set({ user: null, session: null, loading: false });
+                } else if (
+                    event === "SIGNED_IN" ||
+                    event === "TOKEN_REFRESHED"
+                ) {
+                    set({
+                        user: session?.user ?? null,
+                        session,
+                        loading: false,
+                    });
+                } else if (event === "USER_UPDATED") {
+                    set({
+                        user: session?.user ?? null,
+                        session,
+                        loading: false,
+                    });
                 }
+            });
 
-                set({ user: data.session?.user ?? null, loading: false });
-            } catch (e) {
-                console.error("Error initializing auth:", e);
-                set({ loading: false });
-            }
-        })();
-
-        const { data: authListener } = supabase.auth.onAuthStateChange(
-            (event, session) => {
-                set({ user: session?.user ?? null, loading: false });
-            }
-        );
-
-        return () => {
-            if (authListener) {
-                authListener.subscription.unsubscribe();
-            }
-        };
+            return () => {
+                subscription?.unsubscribe();
+            };
+        } catch (e) {
+            console.error("Error initializing auth:", e);
+            setNullSession();
+            return () => {};
+        }
     },
 
     login: async () => {
-        await googleLogin();
+        set({ loading: true });
+
+        try {
+            await googleLogin();
+        } catch (e) {
+            console.error("Login error:", e);
+            set({ loading: false });
+        }
     },
 
     logout: async () => {
-        await supabase.auth.signOut();
-        set({ user: null });
+        set({ loading: true });
+        try {
+            const { error } = await supabase.auth.signOut();
+            if (error) {
+                console.error("Logout error:", error);
+            }
+            set({ user: null, session: null, loading: false });
+        } catch (e) {
+            console.error("Logout error:", e);
+            set({ user: null, session: null, loading: false });
+        }
     },
+
+    setNullSession: () =>
+        set({ user: null, session: null, loading: false, initialized: true }),
 }));
+
+export default useAuthStore;
