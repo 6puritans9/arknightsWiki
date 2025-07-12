@@ -1,19 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
+import useLocaleStore from "@/stores/localeStore";
 import { flex } from "$/styled-system/patterns";
 import { css } from "$/styled-system/css";
 import AuthButton from "../auth/AuthButton";
 import { hamburgerBtn, closeBtn } from "../ui/NavButtons";
 import LocaleSelector from "../ui/LocaleSelector";
 import SearchBar from "../ui/SearchBar";
-
-type HeaderProps = {
-    locale: string;
-};
 
 //#region Styles
 const container = css({
@@ -137,9 +134,10 @@ const githubIcon = css({
 });
 //#endregion
 
-const Header = ({ locale }: HeaderProps) => {
+const Header = () => {
     const [open, setOpen] = useState(false);
     const pathname = usePathname();
+    const { locale } = useLocaleStore();
 
     const handleNavClick = (href: string) => {
         if (pathname === href) {
@@ -174,8 +172,8 @@ const Header = ({ locale }: HeaderProps) => {
 
                 <div className={utilsContainer}>
                     <SearchBar />
-                    <LocaleSelector locale={locale} />
-                    <AuthButton locale={locale} />
+                    <LocaleSelector />
+                    <AuthButton />
                 </div>
             </nav>
 
