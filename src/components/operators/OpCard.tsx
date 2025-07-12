@@ -180,6 +180,8 @@ const OpCard = ({
     };
     //#endregion
 
+    const isEnLocale = locale === "en-US";
+
     return (
         <div className={container} data-ssr-op={dataSsrOp ? "" : undefined}>
             <Link href={`/${locale}/operators/${op.name}?id=${id}`} passHref>
@@ -199,7 +201,7 @@ const OpCard = ({
                         fill
                     />
                     <figcaption className={figcaptionStyle}>
-                        {op.appellation && (
+                        {isEnLocale && op.appellation && (
                             <div className={getDynamicStyle(op.appellation)}>
                                 {op.appellation}
                             </div>
