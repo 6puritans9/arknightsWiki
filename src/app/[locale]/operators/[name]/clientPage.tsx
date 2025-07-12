@@ -15,6 +15,7 @@ import Contents from "@/components/operators/operator/Contents";
 
 type OperatorDetailClientProps = {
     op: SingleOpType;
+    locale: string;
 };
 
 //#region Styles
@@ -87,7 +88,7 @@ const buttonWrapper = flex({
 });
 //#endregion Styles
 
-const OperatorDetailClient = ({ op }: OperatorDetailClientProps) => {
+const OperatorDetailClient = ({ op, locale }: OperatorDetailClientProps) => {
     const [showNotification, setShowNotification] = useState<boolean>(false);
     const { votes, handleVote } = useVote({
         operatorId: op.id,
@@ -111,7 +112,7 @@ const OperatorDetailClient = ({ op }: OperatorDetailClientProps) => {
             />
             <article className={container}>
                 <Header data={op} />
-                <Contents data={op} />
+                <Contents data={op} locale={locale} />
                 <Images data={op} />
 
                 <section className={voteWrapper}>

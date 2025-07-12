@@ -11,6 +11,7 @@ import Spinner from "@/components/ui/Spinner";
 
 type ClientPaginationProps = {
     initialOpsIds: string[];
+    locale: string;
 };
 
 const spinnerWrapper = flex({
@@ -20,7 +21,7 @@ const spinnerWrapper = flex({
     marginTop: "1rem",
 });
 
-const OpsClientPage = ({ initialOpsIds }: ClientPaginationProps) => {
+const OpsClientPage = ({ initialOpsIds, locale }: ClientPaginationProps) => {
     const { filteredOpsId, ops, filters, applyFilters, resetFilters } =
         useOperatorStore();
 
@@ -89,7 +90,12 @@ const OpsClientPage = ({ initialOpsIds }: ClientPaginationProps) => {
     return (
         <>
             {itemsToShow.map((char) => (
-                <OpCard key={char} id={char as string} operator={ops[char]} />
+                <OpCard
+                    key={char}
+                    id={char as string}
+                    operator={ops[char]}
+                    locale={locale}
+                />
             ))}
 
             {hasMore && (

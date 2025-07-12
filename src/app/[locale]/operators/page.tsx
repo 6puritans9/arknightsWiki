@@ -5,6 +5,10 @@ import ClientSideFilterWrapper from "@/components/filter/operators/ClientSideFil
 import OpCard from "@/components/operators/OpCard";
 import OpsClientPage from "./clientPage";
 
+type OperatorsPageProps = {
+    params: Promise<{ locale: string }>;
+};
+
 //#region Styles
 const pageWrapper = flex({
     flexDirection: "column",
@@ -26,7 +30,9 @@ const cardsContainer = grid({
 });
 //#endregion
 
-const OperatorsPage = async () => {
+const OperatorsPage = async ({ params }: OperatorsPageProps) => {
+    const { locale } = await params;
+
     const ops = await fetchAllOperators();
     const opsArray = Object.entries(ops).sort(
         (prv, nxt) => nxt[1].releaseOrder - prv[1].releaseOrder
@@ -50,12 +56,13 @@ const OperatorsPage = async () => {
                         key={id}
                         id={id}
                         operator={op}
+                        locale={locale}
                         priority={index < 10}
                         dataSsrOp
                     />
                 ))}
 
-                <OpsClientPage initialOpsIds={initialOpsIds} />
+                <OpsClientPage initialOpsIds={initialOpsIds} locale={locale} />
             </section>
         </div>
     );
