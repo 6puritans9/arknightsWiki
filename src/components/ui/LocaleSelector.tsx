@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Popover } from "radix-ui";
 import { GlobeIcon } from "@radix-ui/react-icons";
 import { locales } from "@/utils/i18n/locales";
@@ -95,6 +95,7 @@ const langs: { [key: string]: { name: string; flag: string } } = {
 const LocaleSelector = ({ locale: curLocale }: LocaleSelectorProps) => {
     const pathname = usePathname();
     const router = useRouter();
+    const searchParams = useSearchParams();
 
     const handleLocaleChange = (newLocale: string) => {
         if (newLocale === curLocale) return;
@@ -102,7 +103,13 @@ const LocaleSelector = ({ locale: curLocale }: LocaleSelectorProps) => {
         // Replace current locale with new locale in pathname
         const pathWithoutLocale = pathname.replace(`/${curLocale}`, "") || "/";
         const newPath = `/${newLocale}${pathWithoutLocale}`;
-        router.push(newPath);
+
+        const currentSearchParams = searchParams.toString();
+        const finalUrl = currentSearchParams
+            ? `${newPath}}?${currentSearchParams}`
+            : newPath;
+
+        router.push(finalUrl, { scroll: false });
     };
 
     return (
