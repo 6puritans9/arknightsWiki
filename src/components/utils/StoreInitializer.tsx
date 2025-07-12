@@ -1,16 +1,26 @@
 "use client";
 
-import { useEffect } from "react";
-import { useAuthStore } from "@/stores/authStore";
+import { useEffect, useRef } from "react";
+import useAuthStore from "@/stores/authStore";
 
 const StoreInitializer = () => {
     const initializeAuth = useAuthStore((state) => state.initializeAuth);
+    const cleanupRef = useRef<(() => void) | null>(null);
 
     useEffect(() => {
-        const unsubscribe = initializeAuth();
+        let isMounted = true;
+        (async () => {
+            const unsubscribe = await initializeAuth();
+            if (isMounted) {
+                cleanupRef.current = unsubscribe;
+            }
+        })();
 
         return () => {
-            unsubscribe();
+            isMounted = false;
+            if (cleanupRef.current) {
+                cleanupRef.current();
+            }
         };
     }, [initializeAuth]);
 
