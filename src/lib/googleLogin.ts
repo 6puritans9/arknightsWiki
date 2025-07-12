@@ -24,8 +24,6 @@ const googleLogin = async () => {
             return null;
         }
 
-        console.log(data, data.url);
-
         if (data && data.url) {
             window.location.href = data.url;
         } else {
