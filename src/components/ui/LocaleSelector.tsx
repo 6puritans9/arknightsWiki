@@ -3,13 +3,10 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Popover } from "radix-ui";
 import { GlobeIcon } from "@radix-ui/react-icons";
+import useLocaleStore from "@/stores/localeStore";
 import { locales } from "@/utils/i18n/locales";
 import { css } from "$/styled-system/css";
 import { flex } from "$/styled-system/patterns";
-
-type LocaleSelectorProps = {
-    locale: string;
-};
 
 //#region styles
 const triggerButton = css({
@@ -92,13 +89,18 @@ const langs: { [key: string]: { name: string; flag: string } } = {
     "zh-TW": { name: "繁體中文", flag: "🇹🇼" },
 };
 
-const LocaleSelector = ({ locale: curLocale }: LocaleSelectorProps) => {
+const LocaleSelector = () => {
     const pathname = usePathname();
     const router = useRouter();
     const searchParams = useSearchParams();
+    const { locale: curLocale, setLocale } = useLocaleStore();
 
     const handleLocaleChange = (newLocale: string) => {
-        if (newLocale === curLocale) return;
+        if (newLocale === curLocale) {
+            return;
+        }
+
+        setLocale(newLocale);
 
         // Replace current locale with new locale in pathname
         const pathWithoutLocale = pathname.replace(`/${curLocale}`, "") || "/";
