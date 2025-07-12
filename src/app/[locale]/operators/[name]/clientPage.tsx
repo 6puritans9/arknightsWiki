@@ -57,21 +57,6 @@ const container = grid({
     },
 });
 
-// const contentWrapper = flex({
-//     flexDirection: "column",
-//     overflowY: "hidden",
-//     height: "100%",
-//     fontSize: {
-//         base: "0.8rem",
-//     },
-// });
-
-// const feedbackContainer = flex({
-//     gridArea: "feedback",
-//     flexDirection: "column",
-//     gap: "1rem",
-// });
-
 const tagsWrapper = flex({
     justifyContent: "center",
     gridArea: "tags",
